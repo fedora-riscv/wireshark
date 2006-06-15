@@ -1,0 +1,63 @@
+--- ethereal-0.10.14/epan/dissectors/packet-nfs.c.orig	2005-12-26 21:21:11.000000000 -0500
++++ ethereal-0.10.14/epan/dissectors/packet-nfs.c	2006-01-02 13:57:05.000000000 -0500
+@@ -7040,6 +7040,8 @@ dissect_nfs_argop4(tvbuff_t *tvb, int of
+ 
+ 	if (ftree == NULL) return offset;
+ 
++	proto_item_append_text(tree, ", Ops(%d):", ops);
++
+ 	for (ops_counter=0; ops_counter<ops; ops_counter++)
+ 	{
+ 		opcode = tvb_get_ntohl(tvb, offset);
+@@ -7064,6 +7066,15 @@ dissect_nfs_argop4(tvbuff_t *tvb, int of
+ 
+ 		if (newftree == NULL)	break;
+ 
++		if (opcode != NFS4_OP_PUTFH) {
++			if (check_col(pinfo->cinfo, COL_INFO)) {
++				col_append_fstr(pinfo->cinfo, COL_INFO, " %s", 
++					names_nfsv4_operation[opcode - 3].strptr);
++			}
++		}
++		proto_item_append_text(tree, " %s", 
++			names_nfsv4_operation[opcode - 3].strptr);
++
+ 		switch(opcode)
+ 		{
+ 		case NFS4_OP_ACCESS:
+@@ -7391,6 +7402,8 @@ dissect_nfs_resop4(tvbuff_t *tvb, int of
+ 
+ 	if (ftree == NULL)	return offset;		/* error adding new subtree */
+ 
++	proto_item_append_text(tree, ", Ops(%d):", ops);
++
+ 	for (ops_counter = 0; ops_counter < ops; ops_counter++)
+ 	{
+ 		opcode = tvb_get_ntohl(tvb, offset);
+@@ -7418,6 +7431,17 @@ dissect_nfs_resop4(tvbuff_t *tvb, int of
+ 
+ 		offset = dissect_nfs_nfsstat4(tvb, offset, newftree, &status);
+ 
++		if (check_col(pinfo->cinfo, COL_INFO)) {
++			if (status != NFS4_OK) {
++				col_append_fstr(pinfo->cinfo, COL_INFO, " %s(%d)", 
++					names_nfsv4_operation[opcode - 3].strptr, status);
++			} else if (opcode != NFS4_OP_PUTFH) {
++				col_append_fstr(pinfo->cinfo, COL_INFO, " %s", 
++					names_nfsv4_operation[opcode - 3].strptr);
++			}
++		}
++		proto_item_append_text(tree, " %s(%d)", 
++			names_nfsv4_operation[opcode - 3].strptr, status);
+ 		/*
+ 		 * With the exception of NFS4_OP_LOCK, NFS4_OP_LOCKT, and
+ 		 * NFS4_OP_SETATTR, all other ops do *not* return data with the
+@@ -7662,7 +7686,7 @@ static const value_string nfsv3_proc_val
+ static const vsff nfs4_proc[] = {
+ 	{ 0, "NULL",
+ 	dissect_nfs3_null_call,		dissect_nfs3_null_reply },
+-	{ 1, "COMPOUND",
++	{ 1, "COMP",
+ 	dissect_nfs4_compound_call, dissect_nfs4_compound_reply },
+ 	{ 0, NULL, NULL, NULL }
+ };

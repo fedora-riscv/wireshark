@@ -3,7 +3,7 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	0.99.1
+Version:	0.99.2
 Release: 	0.pre1
 License: 	GPL
 Group: 		Applications/Internet
@@ -13,7 +13,6 @@ Source2:	wireshark.console
 Source3:	wireshark.desktop
 Patch1:		wireshark-0.99.1-pie.patch
 Patch3:		wireshark-nfsv4-opts.patch
-Patch4:		wireshark-dialog-close.patch
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpcap-devel
@@ -57,7 +56,6 @@ Contains wireshark for Gnome 2 and desktop integration file
 %setup -q -n %{name}-%{version}pre1
 %patch1 -p1 -b .pie
 %patch3 -p1 
-%patch4 -p1 -b .close
 
 %build
 %ifarch s390 s390x
@@ -175,6 +173,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jul 11 2006 Radek Vokál <rvokal@redhat.com> 0.99.2-0.pre1
+- upgrade to 0.99.2pre1, fixes (#198242)
+
 * Tue Jun 13 2006 Radek Vokal <rvokal@redhat.com> 0.99.1-0.pre1
 - spec file changes
 

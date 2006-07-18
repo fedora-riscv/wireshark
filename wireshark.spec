@@ -4,10 +4,10 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	0.99.2
-Release: 	0.pre1.1
+Release: 	1
 License: 	GPL
 Group: 		Applications/Internet
-Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}pre1.tar.gz
+Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}.tar.gz
 Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
@@ -53,7 +53,7 @@ Contains wireshark for Gnome 2 and desktop integration file
 
 %prep
 #%setup -q -n %{name}-%{version}-SVN-%{svn_version}
-%setup -q -n %{name}-%{version}pre1
+%setup -q -n %{name}-%{version}
 %patch1 -p1 -b .pie
 %patch3 -p1 
 
@@ -173,6 +173,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jul 18 2006 Radek Vokál <rvokal@redhat.com> 0.99.2-1
+- upgrade to 0.99.2
+
 * Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> - 0.99.2-0.pre1.1
 - rebuild
 

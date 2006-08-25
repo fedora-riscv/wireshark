@@ -1,13 +1,14 @@
 %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
-%define svn_version 18188
+%define svn_version 19007
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	0.99.2
+Version:	0.99.3
 Release: 	1
 License: 	GPL
 Group: 		Applications/Internet
-Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}.tar.gz
+Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}a.tar.gz
+#Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}-SVN-%{svn_version}.tar.gz
 Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
@@ -53,7 +54,7 @@ Contains wireshark for Gnome 2 and desktop integration file
 
 %prep
 #%setup -q -n %{name}-%{version}-SVN-%{svn_version}
-%setup -q -n %{name}-%{version}
+%setup -q -n %{name}-%{version}a
 %patch1 -p1 -b .pie
 %patch3 -p1 
 
@@ -173,6 +174,13 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Aug 25 2006 Radek Vokál <rvokal@redhat.com> 0.99.3-1
+- upgrade to 0.99.3
+- Wireshark 0.99.3 fixes the following vulnerabilities:
+- the SCSI dissector could crash. Versions affected: CVE-2006-4330
+- the IPsec ESP preference parser was susceptible to off-by-one errors. CVE-2006-4331
+- a malformed packet could make the Q.2931 dissector use up available memory. CVE-2006-4333 
+
 * Tue Jul 18 2006 Radek Vokál <rvokal@redhat.com> 0.99.2-1
 - upgrade to 0.99.2
 

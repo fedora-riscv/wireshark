@@ -1,14 +1,14 @@
 %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
-%define svn_version 19007
+%define svn_version 19466
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	0.99.3
-Release: 	1
+Version:	0.99.4
+Release: 	0.pre1
 License: 	GPL
 Group: 		Applications/Internet
-Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}a.tar.gz
-#Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}-SVN-%{svn_version}.tar.gz
+#Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}a.tar.gz
+Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}-SVN-%{svn_version}.tar.gz
 Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
@@ -53,8 +53,8 @@ Contains wireshark for Gnome 2 and desktop integration file
 
 
 %prep
-#%setup -q -n %{name}-%{version}-SVN-%{svn_version}
-%setup -q -n %{name}-%{version}a
+%setup -q -n %{name}-%{version}-SVN-%{svn_version}
+#%setup -q -n %{name}-%{version}a
 %patch1 -p1 -b .pie
 %patch3 -p1 
 
@@ -174,6 +174,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Oct 10 2006 Radek Vokal <rvokal@redhat.com> 0.99.4-0.pre1
+- upgrade to 0.99.4-0.pre1
+
 * Fri Aug 25 2006 Radek Vokál <rvokal@redhat.com> 0.99.3-1
 - upgrade to 0.99.3
 - Wireshark 0.99.3 fixes the following vulnerabilities:

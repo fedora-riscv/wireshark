@@ -4,7 +4,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	0.99.4
-Release: 	1
+Release: 	1%{?dist}
 License: 	GPL
 Group: 		Applications/Internet
 Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}.tar.gz

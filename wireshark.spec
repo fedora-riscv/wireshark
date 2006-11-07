@@ -4,7 +4,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	0.99.4
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 License: 	GPL
 Group: 		Applications/Internet
 Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}.tar.gz
@@ -36,6 +36,7 @@ Group:		Applications/Internet
 Requires: 	gtk2
 Requires:	usermode >= 1.37
 Requires:	wireshark = %{version}-%{release}
+Requires:	net-snmp >= 5.3, net-snmp-libs >= 5.3
 Obsoletes:	ethereal-gnome
 Provides:	ethereal-gnome
 
@@ -174,6 +175,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Nov  7 2006 Radek Vokal <rvokal@redhat.com> 0.99.4-2.fc7
+- Requires: net-snmp for the list of MIB modules 
+
 * Wed Nov  1 2006 Radek Vokál <rvokal@redhat.com> 0.99.4-1
 - upgrade to 0.99.4 final
 

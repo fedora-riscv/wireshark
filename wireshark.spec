@@ -4,7 +4,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	0.99.4
-Release: 	2%{?dist}
+Release: 	3%{?dist}
 License: 	GPL
 Group: 		Applications/Internet
 Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}.tar.gz
@@ -26,6 +26,7 @@ BuildRequires:  elfutils-devel, krb5-devel
 BuildRequires:  python, pcre-devel, libselinux
 BuildRequires:  gnutls-devel
 BuildRequires:  desktop-file-utils, automake, libtool
+BuildRequires:	htmlview
 Obsoletes:	ethereal
 Provides:	ethereal
 
@@ -37,6 +38,7 @@ Requires: 	gtk2
 Requires:	usermode >= 1.37
 Requires:	wireshark = %{version}-%{release}
 Requires:	net-snmp >= 5.3, net-snmp-libs >= 5.3
+Requires:	htmlview
 Obsoletes:	ethereal-gnome
 Provides:	ethereal-gnome
 
@@ -175,6 +177,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Nov 23 2006 Radek Vokal <rvokal@redhat.com> 0.99.4-3
+- add htmlview to Buildrequires to be picked up by configure scripts (#216918)
+
 * Tue Nov  7 2006 Radek Vokal <rvokal@redhat.com> 0.99.4-2.fc7
 - Requires: net-snmp for the list of MIB modules 
 

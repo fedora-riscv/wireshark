@@ -4,7 +4,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	0.99.4
-Release: 	3%{?dist}
+Release: 	4%{?dist}
 License: 	GPL
 Group: 		Applications/Internet
 Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}.tar.gz
@@ -16,9 +16,9 @@ Patch1:		wireshark-0.99.1-pie.patch
 Patch3:		wireshark-nfsv4-opts.patch
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:	libpcap-devel
-BuildRequires: 	net-snmp-devel >= 5.3
-BuildRequires: 	net-snmp-utils >= 5.3
+BuildRequires:	libpcap-devel >= 0.9
+BuildRequires: 	net-snmp-devel >= 5.4
+BuildRequires: 	net-snmp-utils >= 5.4
 BuildRequires: 	zlib-devel, bzip2-devel
 BuildRequires:  openssl-devel
 BuildRequires:	glib2-devel, gtk2-devel
@@ -37,7 +37,7 @@ Group:		Applications/Internet
 Requires: 	gtk2
 Requires:	usermode >= 1.37
 Requires:	wireshark = %{version}-%{release}
-Requires:	net-snmp >= 5.3, net-snmp-libs >= 5.3
+Requires:	net-snmp >= 5.4, net-snmp-libs >= 5.4
 Requires:	htmlview
 Obsoletes:	ethereal-gnome
 Provides:	ethereal-gnome
@@ -177,6 +177,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Nov 28 2006 Radek Vokal <rvokal@redhat.com> 0.99.4-4
+- rebuilt for new libpcap and net-snmp
+
 * Thu Nov 23 2006 Radek Vokal <rvokal@redhat.com> 0.99.4-3
 - add htmlview to Buildrequires to be picked up by configure scripts (#216918)
 

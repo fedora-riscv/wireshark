@@ -4,7 +4,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	0.99.4
-Release: 	4%{?dist}
+Release: 5%{?dist}
 License: 	GPL
 Group: 		Applications/Internet
 Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}.tar.gz
@@ -177,6 +177,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Dec  7 2006 Jeremy Katz <katzj@redhat.com> - 0.99.4-5
+- rebuild for python 2.5 
+
 * Tue Nov 28 2006 Radek Vokal <rvokal@redhat.com> 0.99.4-4
 - rebuilt for new libpcap and net-snmp
 

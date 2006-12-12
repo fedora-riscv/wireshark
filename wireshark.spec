@@ -1,14 +1,18 @@
 %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
-%define svn_version 19669
+#define to 0 for final version
+%define svn_version 20123
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	0.99.4
-Release: 5%{?dist}
+Release: 	0.pre1%{?dist}
 License: 	GPL
 Group: 		Applications/Internet
+%if %{svn_version}
+Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}-SVN-%{svn_version}.tar.gz
+%else
 Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}.tar.gz
-#Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}-SVN-%{svn_version}.tar.gz
+%endif
 Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
@@ -56,8 +60,11 @@ Contains wireshark for Gnome 2 and desktop integration file
 
 
 %prep
-#%setup -q -n %{name}-%{version}-SVN-%{svn_version}
+%if %{svn_version}
+%setup -q -n %{name}-%{version}-SVN-%{svn_version}
+%else
 %setup -q -n %{name}-%{version}
+%endif
 %patch1 -p1 -b .pie
 %patch3 -p1 
 
@@ -177,6 +184,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Dec 12 2006 Radek Vokal <rvokal@redhat.com> 0.99.5-0.pre1
+- update to 0.99.5 prerelease
+
 * Thu Dec  7 2006 Jeremy Katz <katzj@redhat.com> - 0.99.4-5
 - rebuild for python 2.5 
 

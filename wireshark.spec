@@ -1,6 +1,6 @@
 %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
 #define to 0 for final version
-%define svn_version 20123
+%define svn_version 20402
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
@@ -16,7 +16,7 @@ Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}.tar.gz
 Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
-Patch1:		wireshark-0.99.1-pie.patch
+Patch1:		wireshark-0.99.5-pie.patch
 Patch3:		wireshark-nfsv4-opts.patch
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -184,6 +184,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jan 15 2007 Radek Vokal <rvokal@redhat.com> 0.99.5-0.pre2
+- another 0.99.5 prerelease, fix build bug and pie flags
+
 * Tue Dec 12 2006 Radek Vokal <rvokal@redhat.com> 0.99.5-0.pre1
 - update to 0.99.5 prerelease
 

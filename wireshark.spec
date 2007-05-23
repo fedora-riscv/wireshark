@@ -1,11 +1,11 @@
 %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
 #define to 0 for final version
-%define svn_version 0
+%define svn_version 21881
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	0.99.5
-Release: 	1%{?dist}
+Version:	0.99.6
+Release: 	0.pre1%{?dist}
 License: 	GPL
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -91,6 +91,7 @@ export LDFLAGS="$LDFLAGS -lm -lcrypto"
    --enable-gtk2 \
    --with-pic \
    --with-ssl \
+   --disable-warnings-as-errors \
    --with-plugindir=%{_libdir}/%{name}/plugins/%{version}
 time make %{?_smp_mflags}
 
@@ -184,6 +185,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed May 23 2007 Radek Vokál <rvokal@redhat.com> 0.99.6-0.pre1
+- update to pre1 of 0.99.6 release
+
 * Mon Feb  5 2007 Radek Vokál <rvokal@redhat.com> 0.99.5-1
 - multiple security issues fixed (#227140)
 - CVE-2007-0459 - The TCP dissector could hang or crash while reassembling HTTP packets

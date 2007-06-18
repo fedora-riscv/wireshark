@@ -1,11 +1,11 @@
 %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
 #define to 0 for final version
-%define svn_version 21881
+%define svn_version 22104
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	0.99.6
-Release: 	0.pre1%{?dist}
+Release: 	0.pre2%{?dist}
 License: 	GPL
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -30,7 +30,7 @@ BuildRequires:  elfutils-devel, krb5-devel
 BuildRequires:  python, pcre-devel, libselinux
 BuildRequires:  gnutls-devel
 BuildRequires:  desktop-file-utils, automake, libtool
-BuildRequires:	htmlview
+BuildRequires:	htmlview, adns-devel
 Obsoletes:	ethereal
 Provides:	ethereal
 
@@ -42,7 +42,7 @@ Requires: 	gtk2
 Requires:	usermode >= 1.37
 Requires:	wireshark = %{version}-%{release}
 Requires:	net-snmp >= 5.4, net-snmp-libs >= 5.4
-Requires:	htmlview
+Requires:	htmlview, adns
 Obsoletes:	ethereal-gnome
 Provides:	ethereal-gnome
 
@@ -90,6 +90,7 @@ export LDFLAGS="$LDFLAGS -lm -lcrypto"
    --disable-usr-local \
    --enable-gtk2 \
    --with-pic \
+   --with-adns \
    --with-ssl \
    --disable-warnings-as-errors \
    --with-plugindir=%{_libdir}/%{name}/plugins/%{version}
@@ -185,6 +186,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jun 15 2007 Radek Vokál <rvokal@redhat.com> 0.99.6-0.pre2
+- another pre-release
+- turn on ADNS support
+
 * Wed May 23 2007 Radek Vokál <rvokal@redhat.com> 0.99.6-0.pre1
 - update to pre1 of 0.99.6 release
 

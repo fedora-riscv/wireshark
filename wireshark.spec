@@ -1,11 +1,11 @@
 %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
 #define to 0 for final version
-%define svn_version 22104
+%define svn_version 0
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	0.99.6
-Release: 	0.pre2%{?dist}
+Release: 	1%{?dist}
 License: 	GPL
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -186,6 +186,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jul  9 2007 Radek Vokal <rvokal@redhat.com> 0.99.6-1
+- upgrade to 0.99.6 final
+
 * Fri Jun 15 2007 Radek Vokál <rvokal@redhat.com> 0.99.6-0.pre2
 - another pre-release
 - turn on ADNS support

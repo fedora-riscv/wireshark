@@ -91,6 +91,7 @@ export LDFLAGS="$LDFLAGS -lm -lcrypto"
    --enable-gtk2 \
    --with-pic \
    --with-ssl \
+   --disable-warnings-as-errors \
    --with-plugindir=%{_libdir}/%{name}/plugins/%{version}
 time make %{?_smp_mflags}
 

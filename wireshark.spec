@@ -4,7 +4,7 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	0.99.5
+Version:	0.99.6
 Release: 	1%{?dist}
 License: 	GPL
 Group: 		Applications/Internet
@@ -184,6 +184,14 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jul  9 2007 Radek Vokál <rvokal@redhat.com> 0.99.6-1
+- multiple security issues fixed
+- Wireshark could crash when dissecting an HTTP chunked response
+- Wireshark could crash while reading iSeries capture files
+- Wireshark could exhaust system memory while reading a
+  malformed DCP ETSI packet
+- Wireshark could loop excessively while reading a malformed SSL packet
+
 * Mon Feb  5 2007 Radek Vokál <rvokal@redhat.com> 0.99.5-1
 - multiple security issues fixed (#227140)
 - CVE-2007-0459 - The TCP dissector could hang or crash while reassembling HTTP packets

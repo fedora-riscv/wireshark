@@ -1,11 +1,11 @@
 %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
 #define to 0 for final version
-%define svn_version 0
+%define svn_version 23507
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	0.99.6
-Release: 	3%{?dist}
+Version:	0.99.7
+Release: 	0.pre1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -16,7 +16,7 @@ Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.gz
 Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
-Patch1:		wireshark-0.99.5-pie.patch
+Patch1:		wireshark-0.99.7-pie.patch
 Patch3:		wireshark-nfsv4-opts.patch
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -42,7 +42,7 @@ Requires: 	gtk2
 Requires:	usermode >= 1.37
 Requires:	wireshark = %{version}-%{release}
 Requires:	net-snmp >= 5.4, net-snmp-libs >= 5.4
-Requires:	htmlview, adns
+Requires:	xdg-utils, adns
 Obsoletes:	ethereal-gnome
 Provides:	ethereal-gnome
 
@@ -186,6 +186,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Nov 20 2007 Radek Vokal <rvokal@redhat.com> 0.99.7-0.pre1
+- upgrade to 0.99.7 pre-release
+
 * Wed Sep 19 2007 Radek Vokál <rvokal@redhat.com> 0.99.6-3
 - fixed URL
 

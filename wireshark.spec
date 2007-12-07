@@ -6,7 +6,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	0.99.7
-Release: 	0.pre2%{?dist}
+Release: 	0.pre2.1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -196,6 +196,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Dec  7 2007 Radek Vokál <rvokal@redhat.com> 0.99.7-0.pre2.1
+- rebuilt for openssl
+
 * Mon Nov 26 2007 Radek Vokal <rvokal@redhat.com> 0.99.7-0.pre2
 - switch to libsmi from net-snmp
 - disable ADNS due to its lack of Ipv6 support

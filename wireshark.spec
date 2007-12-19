@@ -1,11 +1,12 @@
 %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
 #define to 0 for final version
 %define svn_version 0
+%define with_adns 0
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	0.99.6
-Release: 	3%{?dist}
+Version:	0.99.7
+Release: 	1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -16,13 +17,12 @@ Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.gz
 Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
-Patch1:		wireshark-0.99.5-pie.patch
+Patch1:		wireshark-0.99.7-pie.patch
 Patch3:		wireshark-nfsv4-opts.patch
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpcap-devel >= 0.9
-BuildRequires: 	net-snmp-devel >= 5.4
-BuildRequires: 	net-snmp-utils >= 5.4
+BuildRequires: 	libsmi
 BuildRequires: 	zlib-devel, bzip2-devel
 BuildRequires:  openssl-devel
 BuildRequires:	glib2-devel, gtk2-devel
@@ -30,7 +30,10 @@ BuildRequires:  elfutils-devel, krb5-devel
 BuildRequires:  python, pcre-devel, libselinux
 BuildRequires:  gnutls-devel
 BuildRequires:  desktop-file-utils, automake, libtool
-BuildRequires:	htmlview, adns-devel
+BuildRequires:	xdg-utils
+%if %{with_adns}
+BuildRequires:	adns-devel
+%endif
 Obsoletes:	ethereal
 Provides:	ethereal
 
@@ -41,8 +44,11 @@ Group:		Applications/Internet
 Requires: 	gtk2
 Requires:	usermode >= 1.37
 Requires:	wireshark = %{version}-%{release}
-Requires:	net-snmp >= 5.4, net-snmp-libs >= 5.4
-Requires:	htmlview, adns
+Requires:	libsmi
+Requires:	xdg-utils
+%if %{with_adns}
+Requires:	adns
+%endif
 Obsoletes:	ethereal-gnome
 Provides:	ethereal-gnome
 
@@ -84,13 +90,17 @@ export LDFLAGS="$LDFLAGS -lm -lcrypto"
    --bindir=%{_sbindir} \
    --enable-zlib \
    --enable-ipv6 \
-   --with-net-snmp \
+   --with-libsmi \
    --with-gnu-ld \
    --disable-static \
    --disable-usr-local \
    --enable-gtk2 \
    --with-pic \
+%if %{with_adns}
    --with-adns \
+%else
+   --with-adns=no \
+%endif
    --with-ssl \
    --disable-warnings-as-errors \
    --with-plugindir=%{_libdir}/%{name}/plugins/%{version}
@@ -186,6 +196,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Dec 18 2007 Radek Vokál <rvokal@redhat.com> 0.99.7-1
+- upgrade to 0.99.7
+- switch to libsmi from net-snmp
+- disable ADNS due to its lack of Ipv6 support
+
 * Wed Sep 19 2007 Radek Vokál <rvokal@redhat.com> 0.99.6-3
 - fixed URL
 

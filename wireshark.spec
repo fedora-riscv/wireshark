@@ -6,7 +6,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	0.99.7
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -19,6 +19,7 @@ Source2:	wireshark.console
 Source3:	wireshark.desktop
 Patch1:		wireshark-0.99.7-pie.patch
 Patch3:		wireshark-nfsv4-opts.patch
+Patch4:		wireshark-0.99.7-path.patch
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpcap-devel >= 0.9
@@ -73,6 +74,7 @@ Contains wireshark for Gnome 2 and desktop integration file
 %endif
 %patch1 -p1 -b .pie
 %patch3 -p1 
+%patch4 -p1
 
 %build
 %ifarch s390 s390x
@@ -85,7 +87,7 @@ export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector/-fstack-protector-all}
 export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
 export LDFLAGS="$LDFLAGS -lm -lcrypto"
-./autogen.sh
+
 %configure \
    --bindir=%{_sbindir} \
    --enable-zlib \
@@ -196,6 +198,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Dec 19 2007 Radek Vokál <rvokal@redhat.com> 0.99.7-2
+- fix crash in unprivileged mode (#317681)
+
 * Tue Dec 18 2007 Radek Vokál <rvokal@redhat.com> 0.99.7-1
 - upgrade to 0.99.7
 

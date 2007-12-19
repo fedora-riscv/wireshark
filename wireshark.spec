@@ -4,7 +4,7 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	0.99.6
+Version:	0.99.7
 Release: 	1%{?dist}
 License: 	GPL
 Group: 		Applications/Internet
@@ -16,13 +16,13 @@ Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}.tar.gz
 Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
-Patch1:		wireshark-0.99.5-pie.patch
+Patch1:		wireshark-0.99.7-pie.patch
 Patch3:		wireshark-nfsv4-opts.patch
+Patch4:		wireshark-0.99.7-path.patch
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpcap-devel >= 0.9
-BuildRequires: 	net-snmp-devel >= 5.4
-BuildRequires: 	net-snmp-utils >= 5.4
+BuildRequires: 	libsmi-devel
 BuildRequires: 	zlib-devel, bzip2-devel
 BuildRequires:  openssl-devel
 BuildRequires:	glib2-devel, gtk2-devel
@@ -31,6 +31,7 @@ BuildRequires:  python, pcre-devel, libselinux
 BuildRequires:  gnutls-devel
 BuildRequires:  desktop-file-utils, automake, libtool
 BuildRequires:	htmlview
+Requires:   libsmi
 Obsoletes:	ethereal
 Provides:	ethereal
 
@@ -41,7 +42,7 @@ Group:		Applications/Internet
 Requires: 	gtk2
 Requires:	usermode >= 1.37
 Requires:	wireshark = %{version}-%{release}
-Requires:	net-snmp >= 5.4, net-snmp-libs >= 5.4
+Requires:	libsmi
 Requires:	htmlview
 Obsoletes:	ethereal-gnome
 Provides:	ethereal-gnome
@@ -67,6 +68,7 @@ Contains wireshark for Gnome 2 and desktop integration file
 %endif
 %patch1 -p1 -b .pie
 %patch3 -p1 
+%patch4 -p1 -b .path
 
 %build
 %ifarch s390 s390x
@@ -79,7 +81,6 @@ export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector/-fstack-protector-all}
 export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
 export LDFLAGS="$LDFLAGS -lm -lcrypto"
-./autogen.sh
 %configure \
    --bindir=%{_sbindir} \
    --enable-zlib \
@@ -185,6 +186,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Dec 19 2007 Radek Vokál <rvokal@redhat.com> 0.99.7-1
+- fix crash with consolehelper (#317681)
+- upgrade to 0.99.7 to fix multiple security issues
+
 * Mon Jul  9 2007 Radek Vokál <rvokal@redhat.com> 0.99.6-1
 - multiple security issues fixed
 - Wireshark could crash when dissecting an HTTP chunked response

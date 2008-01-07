@@ -5,7 +5,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	0.99.7
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 License: 	GPL
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -85,7 +85,7 @@ export LDFLAGS="$LDFLAGS -lm -lcrypto"
    --bindir=%{_sbindir} \
    --enable-zlib \
    --enable-ipv6 \
-   --with-net-snmp \
+   --with-libsmi \
    --with-gnu-ld \
    --disable-static \
    --disable-usr-local \
@@ -186,6 +186,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jan  7 2008 Radek Vokál <rvokal@redhat.com> 0.99.7-2
+- turn on libsmi support
+
 * Wed Dec 19 2007 Radek Vokál <rvokal@redhat.com> 0.99.7-1
 - fix crash with consolehelper (#317681)
 - upgrade to 0.99.7 to fix multiple security issues

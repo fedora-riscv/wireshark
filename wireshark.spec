@@ -6,7 +6,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	0.99.7
-Release: 	2%{?dist}
+Release: 	3%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -198,6 +198,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Feb 19 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 0.99.7-3
+- Autorebuild for GCC 4.3
+
 * Wed Dec 19 2007 Radek Vokál <rvokal@redhat.com> 0.99.7-2
 - fix crash in unprivileged mode (#317681)
 

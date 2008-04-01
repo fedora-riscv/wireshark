@@ -32,6 +32,7 @@ BuildRequires:  python, pcre-devel, libselinux
 BuildRequires:  gnutls-devel
 BuildRequires:  desktop-file-utils, automake, libtool
 BuildRequires:	xdg-utils
+BuildRequires: 	yacc, bison
 %if %{with_adns}
 BuildRequires:	adns-devel
 %endif

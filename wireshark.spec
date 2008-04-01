@@ -5,14 +5,14 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	0.99.7
-Release: 	3%{?dist}
+Version:	1.0.0
+Release: 	1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
 Source0:	http://wireshark.org/download/prerelease/%{name}-%{version}-SVN-%{svn_version}.tar.gz
 %else
-Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.gz
+Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
 %endif
 Source1:	wireshark.pam
 Source2:	wireshark.console
@@ -173,6 +173,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/randpkt
 %{_sbindir}/dumpcap
 %{_sbindir}/tethereal
+%{_sbindir}/rawshark
 %{python_sitelib}/*
 %{_libdir}/lib*
 %{_mandir}/man1/editcap.*
@@ -183,6 +184,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/capinfos.*
 %{_mandir}/man1/dumpcap.*
 %{_mandir}/man4/wireshark-filter.*
+%{_mandir}/man1/rawshark.*
 %{_libdir}/wireshark
 %config(noreplace) %{_sysconfdir}/pam.d/wireshark
 %config(noreplace) %{_sysconfdir}/security/console.apps/wireshark
@@ -198,6 +200,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Apr  1 2008 Radek Vokál <rvokal@redhat.com> 1.0.0-1
+- April Fools' day upgrade to 1.0.0
+
 * Tue Feb 19 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 0.99.7-3
 - Autorebuild for GCC 4.3
 

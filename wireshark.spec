@@ -6,7 +6,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.0.0
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -32,7 +32,7 @@ BuildRequires:  python, pcre-devel, libselinux
 BuildRequires:  gnutls-devel
 BuildRequires:  desktop-file-utils, automake, libtool
 BuildRequires:	xdg-utils
-BuildRequires: 	yacc, bison
+BuildRequires: 	yacc, bison, python
 %if %{with_adns}
 BuildRequires:	adns-devel
 %endif
@@ -201,6 +201,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Apr  1 2008 Radek Vokál <rvokal@redhat.com> 1.0.0-2
+- fix BuildRequires - python, yacc, bison
+
 * Tue Apr  1 2008 Radek Vokál <rvokal@redhat.com> 1.0.0-1
 - April Fools' day upgrade to 1.0.0
 

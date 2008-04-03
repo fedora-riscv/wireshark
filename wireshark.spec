@@ -4,14 +4,14 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	0.99.7
-Release: 	2%{?dist}
+Version:	1.0.0
+Release: 	1%{?dist}
 License: 	GPL
 Group: 		Applications/Internet
 %if %{svn_version}
 Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}-SVN-%{svn_version}.tar.gz
 %else
-Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}.tar.gz
+Source0:	http://www.wireshark.org/download/prerelease/%{name}-%{version}.tar.bz2
 %endif
 Source1:	wireshark.pam
 Source2:	wireshark.console
@@ -31,6 +31,7 @@ BuildRequires:  python, pcre-devel, libselinux
 BuildRequires:  gnutls-devel
 BuildRequires:  desktop-file-utils, automake, libtool
 BuildRequires:	htmlview
+BuildRequires: 	flex, bison
 Requires:   libsmi
 Obsoletes:	ethereal
 Provides:	ethereal
@@ -161,6 +162,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/randpkt
 %{_sbindir}/dumpcap
 %{_sbindir}/tethereal
+%{_sbindir}/rawshark
 %{python_sitelib}/*
 %{_libdir}/lib*
 %{_mandir}/man1/editcap.*
@@ -170,6 +172,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/text2pcap.*
 %{_mandir}/man1/capinfos.*
 %{_mandir}/man1/dumpcap.*
+%{_mandir}/man1/rawshark.*
 %{_mandir}/man4/wireshark-filter.*
 %{_libdir}/wireshark
 %config(noreplace) %{_sysconfdir}/pam.d/wireshark
@@ -186,6 +189,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Apr  3 2008 Radek Vokál <rvokal@redhat.com> 1.0.0-1
+- upgrade to 1.0.0
+
 * Mon Jan  7 2008 Radek Vokál <rvokal@redhat.com> 0.99.7-2
 - turn on libsmi support
 

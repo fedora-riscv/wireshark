@@ -6,7 +6,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.0.0
-Release: 	2%{?dist}
+Release: 	3%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -78,7 +78,7 @@ Contains wireshark for Gnome 2 and desktop integration file
 %patch4 -p1
 
 %build
-%ifarch s390 s390x
+%ifarch s390 s390x sparcv9 sparc64
 export PIECFLAGS="-fPIE"
 %else
 export PIECFLAGS="-fpie"
@@ -201,6 +201,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Jun 29 2008 Dennis Gilmore <dennis@ausil.us> 1.0.0-3
+- add sparc arches to -fPIE 
+
 * Tue Apr  1 2008 Radek Vokál <rvokal@redhat.com> 1.0.0-2
 - fix BuildRequires - python, yacc, bison
 

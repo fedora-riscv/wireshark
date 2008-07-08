@@ -5,14 +5,14 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.0.0
-Release: 	3%{?dist}
+Version:	1.0.1
+Release: 	1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
 Source0:	http://wireshark.org/download/prerelease/%{name}-%{version}-SVN-%{svn_version}.tar.gz
 %else
-Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
+Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.gz
 %endif
 Source1:	wireshark.pam
 Source2:	wireshark.console
@@ -201,6 +201,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jul  8 2008 Radek Vokál <rvokal@redhat.com> 1.0.1-1
+- upgrade to 1.0.1
+
 * Sun Jun 29 2008 Dennis Gilmore <dennis@ausil.us> 1.0.0-3
 - add sparc arches to -fPIE 
 - rebuild for new gnutls

@@ -17,7 +17,7 @@ Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.gz
 Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
-Patch1:		wireshark-0.99.7-pie.patch
+Patch1:		wireshark-1.0.2-pie.patch
 Patch3:		wireshark-nfsv4-opts.patch
 Patch4:		wireshark-0.99.7-path.patch
 Patch5:		wireshark-nfsv41.patch

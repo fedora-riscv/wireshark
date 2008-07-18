@@ -1,0 +1,23 @@
+commit ab3b0d2d93f02cb89713caa2a3349159cfceec93
+Author: Thijs Stuurman <t.stuurman@gmail.com>
+Date:   Wed Jun 25 13:02:21 2008 -0400
+
+    Synchronize names used by wireshark with those used in latest pnfs draft.
+
+
+diff -up wireshark-1.0.2/epan/dissectors/packet-nfs.c.orig wireshark-1.0.2/epan/dissectors/packet-nfs.c
+--- wireshark-1.0.2/epan/dissectors/packet-nfs.c.orig	2008-07-17 06:48:32.000000000 -0400
++++ wireshark-1.0.2/epan/dissectors/packet-nfs.c	2008-07-17 06:52:26.000000000 -0400
+@@ -9011,9 +9011,9 @@ static const value_string stripetype_nam
+ };
+ 
+ static const value_string layouttype_names[] = {
+-	{ 1, "LAYOUT_NFSV4_FILES"},
+-	{ 2, "LAYOUT_OSD2_OBJECTS"},
+-	{ 3, "LAYOUT_BLOCK_VOLUME"},
++	{ 1, "LAYOUT4_NFSV4_1_FILES"},
++	{ 2, "LAYOUT4_OSD2_OBJECTS"},
++	{ 3, "LAYOUT4_BLOCK_VOLUME"},
+ 	{ 0, NULL }
+ };
+ 

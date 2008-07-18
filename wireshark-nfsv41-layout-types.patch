@@ -1,0 +1,42 @@
+commit 90a3a0e14c1f14214df29f21037bd2818b178681
+Author: Tigran Mkrtchyan <tigran.mkrtchyan@desy.de>
+Date:   Mon Jun 23 10:14:19 2008 +0200
+
+    decode and display fattr4_fs_layout_types
+
+diff -up wireshark-1.0.2/epan/dissectors/packet-nfs.c.orig wireshark-1.0.2/epan/dissectors/packet-nfs.c
+--- wireshark-1.0.2/epan/dissectors/packet-nfs.c.orig	2008-07-17 06:42:09.000000000 -0400
++++ wireshark-1.0.2/epan/dissectors/packet-nfs.c	2008-07-17 06:45:14.000000000 -0400
+@@ -6346,6 +6346,21 @@ dissect_nfs_fattr4_fh_expire_type(tvbuff
+ 	return offset;
+ }
+ 
++static int
++dissect_nfs_fs_layout_type(tvbuff_t *tvb, proto_tree *tree, int offset)
++{
++	guint count, i;
++
++	count = tvb_get_ntohl(tvb, offset);
++	offset +=4;
++
++	for (i = 0; i < count; i++) {
++		offset += dissect_rpc_uint32(tvb, tree, hf_nfs_layouttype4, offset);
++	}
++
++	return offset;
++}
++
+ static const value_string names_fattr4[] = {
+ #define FATTR4_SUPPORTED_ATTRS     0
+ 	{	FATTR4_SUPPORTED_ATTRS,	"FATTR4_SUPPORTED_ATTRS"	},
+@@ -6843,6 +6858,10 @@ dissect_nfs_attributes(tvbuff_t *tvb, in
+ 						attr_vals_offset = dissect_rpc_uint64(tvb, attr_newftree, 
+ 							hf_nfs_fattr4_mounted_on_fileid, attr_vals_offset);
+ 						break;
++					case FATTR4_FS_LAYOUT_TYPE:
++						attr_vals_offset = dissect_nfs_fs_layout_type(tvb, attr_newftree,
++													attr_vals_offset);
++						break;
+ 					case FATTR4_LAYOUT_BLKSIZE:
+ 						attr_vals_offset = dissect_rpc_uint32(tvb, attr_newftree,
+ 							hf_nfs_fattr4_layout_blksize, attr_vals_offset);

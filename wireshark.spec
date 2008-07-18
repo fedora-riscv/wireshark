@@ -6,7 +6,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.0.2
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -20,6 +20,11 @@ Source3:	wireshark.desktop
 Patch1:		wireshark-0.99.7-pie.patch
 Patch3:		wireshark-nfsv4-opts.patch
 Patch4:		wireshark-0.99.7-path.patch
+Patch5:		wireshark-nfsv41.patch
+Patch6:		wireshark-nfsv41-layout-types.patch
+Patch7:		wireshark-nfsv41-layout-updates.patch
+Patch8:		wireshark-rpc-pdu-size.patch
+
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpcap-devel >= 0.9
@@ -76,6 +81,10 @@ Contains wireshark for Gnome 2 and desktop integration file
 %patch1 -p1 -b .pie
 %patch3 -p1 
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -201,6 +210,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jul 17 2008 Steve Dickson <steved@redhat.com>
+- Added patches to support NFSv4.1
+
 * Fri Jul 11 2008 Radek Vokál <rvokal@redhat.com> 1.0.2-1
 - upgrade to 1.0.2
 

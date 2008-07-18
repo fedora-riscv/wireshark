@@ -1,0 +1,24 @@
+commit 43dfeabc693fb4f4f39378291c4c81ba19b09351
+Author: J. Bruce Fields <bfields@citi.umich.edu>
+Date:   Tue Jul 8 17:19:49 2008 -0400
+
+    Use large default max_rpc_tcp_pdu_size setting
+    
+    The linux server will do up to 1M these days, so the current default is
+    very likely to discard all reads and writes from such a server.
+    
+    Thanks to Jim Rees for catching this.
+
+
+diff -up wireshark-1.0.2/epan/dissectors/packet-rpc.c.orig wireshark-1.0.2/epan/dissectors/packet-rpc.c
+--- wireshark-1.0.2/epan/dissectors/packet-rpc.c.orig	2008-07-10 13:39:24.000000000 -0400
++++ wireshark-1.0.2/epan/dissectors/packet-rpc.c	2008-07-17 06:55:49.000000000 -0400
+@@ -257,7 +257,7 @@ static dissector_handle_t rpc_handle;
+ static dissector_handle_t gssapi_handle;
+ static dissector_handle_t data_handle;
+ 
+-static guint max_rpc_tcp_pdu_size = 262144;
++static guint max_rpc_tcp_pdu_size = 16 * 1024 * 1024;
+ 
+ static const fragment_items rpc_frag_items = {
+ 	&ett_rpc_fragment,

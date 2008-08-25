@@ -6,7 +6,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.0.2
-Release: 	2%{?dist}
+Release: 	3%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -52,7 +52,7 @@ Requires: 	gtk2
 Requires:	usermode >= 1.37
 Requires:	wireshark = %{version}-%{release}
 Requires:	libsmi
-Requires:	xdg-utils
+Requires:	xdg-utils, usermode-gtk
 %if %{with_adns}
 Requires:	adns
 %endif
@@ -210,6 +210,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Aug 25 2008 Radek Vokál <rvokal@redhat.com> 1.0.2-3
+- fix requires for wireshark-gnome
+
 * Thu Jul 17 2008 Steve Dickson <steved@redhat.com> 1.0.2-2
 - Added patches to support NFSv4.1
 

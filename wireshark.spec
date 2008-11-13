@@ -5,7 +5,7 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.0.3
+Version:	1.0.4
 Release: 	1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
@@ -210,6 +210,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Nov 13 2008 Radek Vokál <rvokal@redhat.com> 1.0.4-1
+- upgrade to 1.0.4
+- varios minor security flaws were fixed
+
 * Wed Sep 10 2008 Radek Vokál <rvokal@redhat.com> 1.0.3-1
 - upgrade to 1.0.3
 - Security-related bugs in the NCP dissector, zlib compression code, and Tektronix .rf5 file parser have been fixed. 

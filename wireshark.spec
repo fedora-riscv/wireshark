@@ -5,8 +5,8 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.0.3
-Release: 	1%{?dist}
+Version:	1.1.1
+Release: 	0.pre1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -20,10 +20,6 @@ Source3:	wireshark.desktop
 Patch1:		wireshark-1.0.2-pie.patch
 Patch2:		wireshark-nfsv4-opts.patch
 Patch3:		wireshark-0.99.7-path.patch
-Patch4:		wireshark-nfsv41.patch
-Patch5:		wireshark-nfsv41-layout-types.patch
-Patch6:		wireshark-nfsv41-layout-updates.patch
-Patch7:		wireshark-rpc-pdu-size.patch
 
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -78,13 +74,9 @@ Contains wireshark for Gnome 2 and desktop integration file
 %else
 %setup -q -n %{name}-%{version}
 %endif
-%patch1 -p1 -b .pie
+#%patch1 -p1 -b .pie
 %patch2 -p1 
 %patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -97,15 +89,13 @@ export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector/-fstack-protector-all}
 export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
 export LDFLAGS="$LDFLAGS -lm -lcrypto"
-
+#./autogen.sh
 %configure \
    --bindir=%{_sbindir} \
    --enable-zlib \
    --enable-ipv6 \
    --with-libsmi \
    --with-gnu-ld \
-   --disable-static \
-   --disable-usr-local \
    --enable-gtk2 \
    --with-pic \
 %if %{with_adns}
@@ -210,6 +200,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Nov 13 2008 Radek Vokál <rvokal@redhat.com> 1.1.1-1
+- upgrade to 1.1.1 development branch
+
 * Wed Sep 10 2008 Radek Vokál <rvokal@redhat.com> 1.0.3-1
 - upgrade to 1.0.3
 - Security-related bugs in the NCP dissector, zlib compression code, and Tektronix .rf5 file parser have been fixed. 

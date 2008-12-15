@@ -5,7 +5,7 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.0.3
+Version:	1.0.5
 Release: 	1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
@@ -17,7 +17,7 @@ Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.gz
 Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
-Patch1:		wireshark-0.99.7-pie.patch
+Patch1:		wireshark-1.0.2-pie.patch
 Patch3:		wireshark-nfsv4-opts.patch
 Patch4:		wireshark-0.99.7-path.patch
 Url: 		http://www.wireshark.org/
@@ -201,6 +201,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Dec 15 2008 Radek Vokal <rvokal@redhat.com> 1.0.5-1
+- upgrade to 1.0.5
+
 * Wed Sep 10 2008 Radek Vokál <rvokal@redhat.com> 1.0.3-1
 - upgrade to 1.0.3
 - Security-related bugs in the NCP dissector, zlib compression code, and Tektronix .rf5 file parser have been fixed. 

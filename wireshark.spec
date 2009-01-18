@@ -6,7 +6,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.1.1
-Release: 	0.pre1%{?dist}.1
+Release: 	0.pre1%{?dist}.2
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -200,6 +200,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Jan 18 2009 Tomas Mraz <tmraz@redhat.com> - 1.1.1-0.pre1.2
+- rebuild with new openssl
+
 * Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 1.1.1-0.pre1.1
 - Rebuild for Python 2.6
 

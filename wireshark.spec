@@ -2,11 +2,12 @@
 #define to 0 for final version
 %define svn_version 0
 %define with_adns 0
+%define with_portaudio 1
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.1.1
-Release: 	0.pre1%{?dist}.2
+Version:	1.1.2
+Release: 	0.pre1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -37,6 +38,10 @@ BuildRequires: 	flex, bison, python
 %if %{with_adns}
 BuildRequires:	adns-devel
 %endif
+%if %{with_portaudio}
+BuildRequires: portaudio-devel
+%endif
+
 Obsoletes:	ethereal
 Provides:	ethereal
 
@@ -51,6 +56,9 @@ Requires:	libsmi
 Requires:	xdg-utils, usermode-gtk
 %if %{with_adns}
 Requires:	adns
+%endif
+%if %{with_portaudio}
+Requires:	portaudio
 %endif
 Obsoletes:	ethereal-gnome
 Provides:	ethereal-gnome
@@ -200,13 +208,17 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jan 19 2009 Radek Vokal <rvokal@redhat.com> - 1.1.2-0.pre1
+- upgrade to latest development release
+- added support for portaudio (#480195)
+
 * Sun Jan 18 2009 Tomas Mraz <tmraz@redhat.com> - 1.1.1-0.pre1.2
 - rebuild with new openssl
 
 * Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 1.1.1-0.pre1.1
 - Rebuild for Python 2.6
 
-* Thu Nov 13 2008 Radek Vokál <rvokal@redhat.com> 1.1.1-1
+* Thu Nov 13 2008 Radek Vokál <rvokal@redhat.com> 1.1.1-0.pre1
 - upgrade to 1.1.1 development branch
 
 * Wed Sep 10 2008 Radek Vokál <rvokal@redhat.com> 1.0.3-1

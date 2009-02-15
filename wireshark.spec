@@ -6,7 +6,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.0.5
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -24,6 +24,7 @@ Patch4:		wireshark-nfsv41.patch
 Patch5:		wireshark-nfsv41-layout-types.patch
 Patch6:		wireshark-nfsv41-layout-updates.patch
 Patch7:		wireshark-rpc-pdu-size.patch
+Patch8:		wireshark-1.0.5-nfs41-backchnl-decode.patch
 
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -85,6 +86,7 @@ Contains wireshark for Gnome 2 and desktop integration file
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -210,6 +212,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Feb 15 2009 Steve Dickson <steved@redhat.com> - 1.0.5-2
+- NFSv4.1: Add support for backchannel decoding
+
 * Mon Dec 15 2008 Radek Vokal <rvokal@redhat.com> 1.0.5-1
 - upgrade to 1.0.5
 

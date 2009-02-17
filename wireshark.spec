@@ -5,14 +5,14 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.0.5
-Release: 	2%{?dist}
+Version:	1.0.6
+Release: 	1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
 Source0:	http://wireshark.org/download/prerelease/%{name}-%{version}-SVN-%{svn_version}.tar.gz
 %else
-Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.gz
+Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
 %endif
 Source1:	wireshark.pam
 Source2:	wireshark.console
@@ -25,6 +25,7 @@ Patch5:		wireshark-nfsv41-layout-types.patch
 Patch6:		wireshark-nfsv41-layout-updates.patch
 Patch7:		wireshark-rpc-pdu-size.patch
 Patch8:		wireshark-1.0.5-nfs41-backchnl-decode.patch
+Patch9:		wireshark-1.0.6-netdump2.patch
 
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -79,7 +80,7 @@ Contains wireshark for Gnome 2 and desktop integration file
 %else
 %setup -q -n %{name}-%{version}
 %endif
-%patch1 -p1 -b .pie
+#%patch1 -p1 -b .pie
 %patch2 -p1 
 %patch3 -p1
 %patch4 -p1
@@ -87,6 +88,7 @@ Contains wireshark for Gnome 2 and desktop integration file
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1 -b .netdump
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -96,8 +98,8 @@ export PIECFLAGS="-fpie"
 %endif
 # FC5+ automatic -fstack-protector-all switch
 export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector/-fstack-protector-all}
-export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
-export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
+export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIEFLAGS"
+export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIEFLAGS"
 export LDFLAGS="$LDFLAGS -lm -lcrypto"
 
 %configure \
@@ -212,6 +214,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Feb 17 2009 Radek Vokal <rvokal@redhat.com> 1.0.6-1
+- add netdump2 support
+- fix SELinux issues, remove pie patch
+- upgrade to 1.0.6
+
 * Sun Feb 15 2009 Steve Dickson <steved@redhat.com> - 1.0.5-2
 - NFSv4.1: Add support for backchannel decoding
 

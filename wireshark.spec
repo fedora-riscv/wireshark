@@ -7,7 +7,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.1.2
-Release: 	2.pre1%{?dist}
+Release: 	3.pre1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -212,6 +212,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Feb 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.2-3.pre1
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+
 * Mon Feb 16 2009 Radek Vokal <rvokal@redhat.com> - 1.1.2-2.pre1
 - add netdump support
 

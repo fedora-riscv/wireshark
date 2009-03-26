@@ -7,7 +7,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.1.2
-Release: 	3.pre1%{?dist}
+Release: 	4.pre1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -27,7 +27,7 @@ Patch5:		wireshark-1.1.2-netdump.patch
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpcap-devel >= 0.9
-BuildRequires: 	libsmi
+BuildRequires: 	libsmi-devel
 BuildRequires: 	zlib-devel, bzip2-devel
 BuildRequires:  openssl-devel
 BuildRequires:	glib2-devel, gtk2-devel
@@ -212,6 +212,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Mar 26 2009 Radek Vokal <rvokal@redhat.com> - 1.1.2-4.pre1
+- fix libsmi support
+
 * Wed Feb 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.2-3.pre1
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 

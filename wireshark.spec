@@ -5,7 +5,7 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.0.6
+Version:	1.0.7
 Release: 	1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
@@ -214,6 +214,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Apr 10 2009 Radek Vokal <rvokal@redhat.com> 1.0.7-1
+- upgrade to 1.0.7
+- Several security vulnerabilities have been fixed
+ (Profinet, CPHAP and LDAP dissectors could crash)                                                                                                                                                                                                 
+
 * Tue Feb 17 2009 Radek Vokal <rvokal@redhat.com> 1.0.6-1
 - add netdump2 support
 - fix SELinux issues, remove pie patch

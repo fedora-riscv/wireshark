@@ -6,14 +6,14 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.1.3
+Version:	1.2.0
 Release: 	1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
 Source0:	http://wireshark.org/download/prerelease/%{name}-%{version}-SVN-%{svn_version}.tar.gz
 %else
-Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.gz
+Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
 %endif
 Source1:	wireshark.pam
 Source2:	wireshark.console
@@ -210,6 +210,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jun 16 2009 Radek Vokal <rvokal@redhat.com> - 1.2.0
+- upgrade to 1.2.0
+- http://www.wireshark.org/docs/relnotes/wireshark-1.2.0.html
+
 * Thu Mar 26 2009 Radek Vokal <rvokal@redhat.com> - 1.1.3-1
 - upgrade to 1.1.3
 

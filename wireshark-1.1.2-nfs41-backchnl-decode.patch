@@ -1,7 +1,7 @@
-diff -up wireshark-1.0.5/epan/dissectors/packet-nfs.c.orig wireshark-1.0.5/epan/dissectors/packet-nfs.c
---- wireshark-1.0.5/epan/dissectors/packet-nfs.c.orig	2009-02-15 08:29:01.000000000 -0500
-+++ wireshark-1.0.5/epan/dissectors/packet-nfs.c	2009-02-15 08:40:20.000000000 -0500
-@@ -642,6 +642,8 @@ static emem_tree_t *nfs_file_handles = N
+diff -up wireshark-1.1.2/epan/dissectors/packet-nfs.c.orig wireshark-1.1.2/epan/dissectors/packet-nfs.c
+--- wireshark-1.1.2/epan/dissectors/packet-nfs.c.orig	2009-02-15 08:22:57.000000000 -0500
++++ wireshark-1.1.2/epan/dissectors/packet-nfs.c	2009-02-15 08:31:28.000000000 -0500
+@@ -652,6 +652,8 @@ static emem_tree_t *nfs_file_handles = N
  
  static int dissect_nfs_stateid4(tvbuff_t *tvb, int offset, proto_tree *tree);
  
@@ -10,7 +10,7 @@ diff -up wireshark-1.0.5/epan/dissectors/packet-nfs.c.orig wireshark-1.0.5/epan/
  /* This function will store one nfs filehandle in our global tree of
   * filehandles.
   * We store all filehandles we see in this tree so that every unique
-@@ -8073,6 +8075,7 @@ dissect_nfs_argop4(tvbuff_t *tvb, int of
+@@ -8648,6 +8650,7 @@ dissect_nfs_argop4(tvbuff_t *tvb, int of
  	proto_item *fitem;
  	proto_tree *ftree = NULL;
  	proto_tree *newftree = NULL;
@@ -18,7 +18,7 @@ diff -up wireshark-1.0.5/epan/dissectors/packet-nfs.c.orig wireshark-1.0.5/epan/
  
  	ops = tvb_get_ntohl(tvb, offset+0);
  
-@@ -8388,6 +8391,8 @@ dissect_nfs_argop4(tvbuff_t *tvb, int of
+@@ -8969,6 +8972,8 @@ dissect_nfs_argop4(tvbuff_t *tvb, int of
  					hf_nfs_create_session_flags4, offset);
  			offset = dissect_rpc_chanattrs4(tvb, offset, newftree);
  			offset = dissect_rpc_chanattrs4(tvb, offset, newftree);
@@ -27,7 +27,7 @@ diff -up wireshark-1.0.5/epan/dissectors/packet-nfs.c.orig wireshark-1.0.5/epan/
  			offset = dissect_rpc_uint32(tvb, newftree,
  					hf_nfs_cb_program, offset);
  			offset = dissect_rpc_secparms4(tvb, offset, newftree);
-@@ -9024,6 +9029,313 @@ static const value_string layoutreturn_n
+@@ -9612,6 +9617,313 @@ static const value_string layoutreturn_n
  	{ 0, NULL }
  };
  
@@ -341,7 +341,7 @@ diff -up wireshark-1.0.5/epan/dissectors/packet-nfs.c.orig wireshark-1.0.5/epan/
  void
  proto_register_nfs(void)
  {
-@@ -10370,10 +10682,29 @@ proto_register_nfs(void)
+@@ -10964,10 +11276,29 @@ proto_register_nfs(void)
  		{ &hf_nfs_cachethis4, {
  			"Cache this?", "nfs.cachethis4", FT_BOOLEAN, BASE_NONE,
  			TFS(&tfs_yes_no), 0, NULL, HFILL }},
@@ -372,7 +372,7 @@ diff -up wireshark-1.0.5/epan/dissectors/packet-nfs.c.orig wireshark-1.0.5/epan/
  
  	/* Hidden field for v2, v3, and v4 status */
  		{ &hf_nfs_nfsstat, {
-@@ -10530,8 +10861,23 @@ proto_register_nfs(void)
+@@ -11132,8 +11463,23 @@ proto_register_nfs(void)
  		&ett_nfs_gid4,
  		&ett_nfs_service4,
  		&ett_nfs_sessionid4,
@@ -398,7 +398,7 @@ diff -up wireshark-1.0.5/epan/dissectors/packet-nfs.c.orig wireshark-1.0.5/epan/
  	};
  	module_t *nfs_module;
  
-@@ -10567,9 +10913,9 @@ proto_register_nfs(void)
+@@ -11169,9 +11515,9 @@ proto_register_nfs(void)
  	nfs_file_handles=se_tree_create(EMEM_TREE_TYPE_RED_BLACK, "nfs_file_handles");
  	nfs_fhandle_frame_table=se_tree_create(EMEM_TREE_TYPE_RED_BLACK, "nfs_fhandle_frame_table");
  	register_init_routine(nfs_name_snoop_init);
@@ -409,17 +409,26 @@ diff -up wireshark-1.0.5/epan/dissectors/packet-nfs.c.orig wireshark-1.0.5/epan/
  void
  proto_reg_handoff_nfs(void)
  {
-@@ -10606,7 +10952,4 @@ proto_reg_handoff_nfs(void)
- 	
+@@ -11179,7 +11525,7 @@ proto_reg_handoff_nfs(void)
+ 
+ 	/* Register the protocol as RPC */
+ 	rpc_init_prog(proto_nfs, NFS_PROGRAM, ett_nfs);
+-
++	
+ 	/* Register the procedure tables */
+ 	rpc_init_proc_table(NFS_PROGRAM, 2, nfs2_proc, hf_nfs_procedure_v2);
+ 	rpc_init_proc_table(NFS_PROGRAM, 3, nfs3_proc, hf_nfs_procedure_v3);
+@@ -11208,7 +11554,4 @@ proto_reg_handoff_nfs(void)
+ 
  	fhandle_handle=create_dissector_handle(dissect_fhandle_data_unknown, proto_nfs);
  	dissector_add("nfs_fhandle.type", FHT_UNKNOWN, fhandle_handle);
 -
 -
  }
 -
-diff -up wireshark-1.0.5/epan/dissectors/packet-nfs.h.orig wireshark-1.0.5/epan/dissectors/packet-nfs.h
---- wireshark-1.0.5/epan/dissectors/packet-nfs.h.orig	2009-02-15 08:29:01.000000000 -0500
-+++ wireshark-1.0.5/epan/dissectors/packet-nfs.h	2009-02-15 08:40:20.000000000 -0500
+diff -up wireshark-1.1.2/epan/dissectors/packet-nfs.h.orig wireshark-1.1.2/epan/dissectors/packet-nfs.h
+--- wireshark-1.1.2/epan/dissectors/packet-nfs.h.orig	2009-01-15 10:28:17.000000000 -0500
++++ wireshark-1.1.2/epan/dissectors/packet-nfs.h	2009-02-15 08:31:28.000000000 -0500
 @@ -127,6 +127,23 @@
  
  #define NFS4_OP_ILLEGAL						10044

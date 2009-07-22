@@ -5,7 +5,7 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.0.8
+Version:	1.2.1
 Release: 	1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
@@ -20,12 +20,7 @@ Source3:	wireshark.desktop
 Patch1:		wireshark-1.0.2-pie.patch
 Patch2:		wireshark-nfsv4-opts.patch
 Patch3:		wireshark-0.99.7-path.patch
-Patch4:		wireshark-nfsv41.patch
-Patch5:		wireshark-nfsv41-layout-types.patch
-Patch6:		wireshark-nfsv41-layout-updates.patch
-Patch7:		wireshark-rpc-pdu-size.patch
-Patch8:		wireshark-1.0.5-nfs41-backchnl-decode.patch
-Patch9:		wireshark-1.0.6-netdump2.patch
+Patch8:		wireshark-1.1.2-nfs41-backchnl-decode.patch
 
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -83,12 +78,7 @@ Contains wireshark for Gnome 2 and desktop integration file
 #%patch1 -p1 -b .pie
 %patch2 -p1 
 %patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
 %patch8 -p1
-%patch9 -p1 -b .netdump
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -214,6 +204,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jul 22 2009 Radek Vokal <rvokal@redhat.com> 1.2.1-1
+- upgrade to 1.2.1
+- fixes several security flaws
+- http://www.wireshark.org/docs/relnotes/wireshark-1.2.1.html
+
 * Fri May 22 2009 Radek Vokal <rvokal@redhat.com> 1.0.8-1
 - upgrade to 1.0.8
 - several security vulnerabilities have been fixed

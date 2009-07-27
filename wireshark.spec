@@ -7,7 +7,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.2.1
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -210,6 +210,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jul 27 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
 * Wed Jul 22 2009 Radek Vokal <rvokal@redhat.com> - 1.2.1
 - upgrade to 1.2.1
 - http://www.wireshark.org/docs/relnotes/wireshark-1.2.1.html

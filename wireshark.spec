@@ -7,7 +7,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.2.1
-Release: 	3%{?dist}
+Release: 	4%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -210,6 +210,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Aug 28 2009 Radek Vokal <rvokal@redhat.com> - 1.2.1-4
+- yet anohter rebuilt
+
 * Fri Aug 21 2009 Tomas Mraz <tmraz@redhat.com> - 1.2.1-3
 - rebuilt with new openssl
 

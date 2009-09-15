@@ -2,12 +2,16 @@
 #define to 0 for final version
 %define svn_version 0
 %define with_adns 0
+%if 0%{?rhel} != 0
+%define with_portaudio 0
+%else
 %define with_portaudio 1
+%endif
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.2.1
-Release: 	4%{?dist}
+Release: 	5%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -210,6 +214,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Sep 14 2009 Bill Nottingham <notting@redhat.com> - 1.2.1-5
+- do not use portaudio in RHEL
+
 * Fri Aug 28 2009 Radek Vokal <rvokal@redhat.com> - 1.2.1-4
 - yet anohter rebuilt
 

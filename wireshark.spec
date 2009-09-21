@@ -10,8 +10,8 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.2.1
-Release: 	5%{?dist}
+Version:	1.2.2
+Release: 	1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -214,6 +214,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Sep 21 2009 Radek Vokal <rvokal@redhat.com> - 1.2.2-1
+- upgrade to 1.2.2
+- http://www.wireshark.org/docs/relnotes/wireshark-1.2.2.html
+
 * Mon Sep 14 2009 Bill Nottingham <notting@redhat.com> - 1.2.1-5
 - do not use portaudio in RHEL
 

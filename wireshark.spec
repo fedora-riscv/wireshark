@@ -10,7 +10,7 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.2.2
+Version:	1.2.3
 Release: 	1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
@@ -214,6 +214,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Oct 30 2009 Radek Vokal <rvokal@redhat.com> - 1.2.3-1
+- upgrade to 1.2.3
+- http://www.wireshark.org/docs/relnotes/wireshark-1.2.3.html
+
 * Mon Sep 21 2009 Radek Vokal <rvokal@redhat.com> - 1.2.2-1
 - upgrade to 1.2.2
 - http://www.wireshark.org/docs/relnotes/wireshark-1.2.2.html

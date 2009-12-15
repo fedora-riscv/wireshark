@@ -2,6 +2,7 @@
 #define to 0 for final version
 %define svn_version 0
 %define with_adns 0
+%define with_lua 1
 %if 0%{?rhel} != 0
 %define with_portaudio 0
 %else
@@ -11,7 +12,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.2.4
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -26,6 +27,9 @@ Patch1:		wireshark-1.0.2-pie.patch
 Patch2:		wireshark-nfsv4-opts.patch
 Patch3:		wireshark-0.99.7-path.patch
 Patch4:		wireshark-1.1.2-nfs41-backchnl-decode.patch
+Patch5:		wireshark-1.2.4-filter_null.patch
+
+Patch10:	wireshark-1.2.4-enable_lua.patch
 
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -45,6 +49,9 @@ BuildRequires:	adns-devel
 %endif
 %if %{with_portaudio}
 BuildRequires: portaudio-devel
+%endif
+%if %{with_lua}
+BuildRequires:	lua-devel
 %endif
 
 Obsoletes:	ethereal
@@ -91,6 +98,11 @@ Contains wireshark for Gnome 2 and desktop integration file
 %patch2 -p1 
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+
+%if %{with_lua}
+%patch10 -p1 -b .enable_lua
+%endif
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -117,9 +129,14 @@ export LDFLAGS="$LDFLAGS -lm -lcrypto"
 %else
    --with-adns=no \
 %endif
+%if %{with_lua}
+   --with-lua \
+%else
+   --with-lua=no \
+%endif
    --with-ssl \
    --disable-warnings-as-errors \
-   --with-plugindir=%{_libdir}/%{name}/plugins/%{version}
+   --with-plugindir=%{_libdir}/%{name}/plugins/%{version} 
 time make %{?_smp_mflags}
 
 %install
@@ -203,6 +220,9 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/pam.d/wireshark
 %config(noreplace) %{_sysconfdir}/security/console.apps/wireshark
 %{_datadir}/wireshark
+%if %{with_lua}
+%config(noreplace) %{_datadir}/wireshark/init.lua
+%endif
 
 %files gnome
 %defattr(-,root,root)
@@ -214,6 +234,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Dec 14 2009 Radek Vokal <rvokal@redhat.com> - 1.2.4-2
+- enable lua support - http://wiki.wireshark.org/Lua
+- attempt to fix filter crash on 64bits
+
 * Wed Nov 18 2009 Radek Vokal <rvokal@redhat.com> - 1.2.4-1
 - upgrade to 1.2.4
 - http://www.wireshark.org/docs/relnotes/wireshark-1.2.4.html

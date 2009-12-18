@@ -2,6 +2,7 @@
 #define to 0 for final version
 %define svn_version 0
 %define with_adns 0
+%define with_lua 1
 %if 0%{?rhel} != 0
 %define with_portaudio 0
 %else
@@ -10,7 +11,7 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.2.4
+Version:	1.2.5
 Release: 	1%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
@@ -26,6 +27,9 @@ Patch1:		wireshark-1.0.2-pie.patch
 Patch2:		wireshark-nfsv4-opts.patch
 Patch3:		wireshark-0.99.7-path.patch
 Patch4:		wireshark-1.1.2-nfs41-backchnl-decode.patch
+Patch5:		wireshark-1.2.4-filter_null.patch
+Patch6:		wireshark-1.2.4-enable_lua.patch
+Patch7:		wireshark-1.2.4-disable_warning_dialog.patch
 
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -46,7 +50,9 @@ BuildRequires:	adns-devel
 %if %{with_portaudio}
 BuildRequires: portaudio-devel
 %endif
-
+%if %{with_lua}
+BuildRequires:	lua-devel
+%endif
 Obsoletes:	ethereal
 Provides:	ethereal
 
@@ -68,6 +74,11 @@ Requires:	portaudio
 Obsoletes:	ethereal-gnome
 Provides:	ethereal-gnome
 
+%package devel
+Summary:        Development headers and libraries for wireshark
+Group:		Development/Libraries
+Requires:       %{name} = %{version} glibc-devel glib2-devel
+
 
 %description
 Wireshark is a network traffic analyzer for Unix-ish operating systems.
@@ -80,6 +91,11 @@ separately to GTK+ package.
 %description gnome
 Contains wireshark for Gnome 2 and desktop integration file
 
+%description devel
+The wireshark-devel package contains the header files, developer
+documentation, and libraries required for development of wireshark scripts
+and plugins.
+
 
 %prep
 %if %{svn_version}
@@ -91,6 +107,13 @@ Contains wireshark for Gnome 2 and desktop integration file
 %patch2 -p1 
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+
+%if %{with_lua}
+%patch6 -p1 -b .enable_lua
+%endif
+
+%patch7 -p1 -b .dialog
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -117,9 +140,14 @@ export LDFLAGS="$LDFLAGS -lm -lcrypto"
 %else
    --with-adns=no \
 %endif
+%if %{with_lua}
+   --with-lua \
+%else
+   --with-lua=no \
+%endif
    --with-ssl \
    --disable-warnings-as-errors \
-   --with-plugindir=%{_libdir}/%{name}/plugins/%{version}
+   --with-plugindir=%{_libdir}/%{name}/plugins/%{version} 
 time make %{?_smp_mflags}
 
 %install
@@ -132,9 +160,6 @@ make DESTDIR=$RPM_BUILD_ROOT install
 
 #symlink tshark to tethereal
 ln -s tshark $RPM_BUILD_ROOT%{_sbindir}/tethereal
-
-#empty?!
-rm -f $RPM_BUILD_ROOT%{_sbindir}/idl2wrs
 
 # install support files for usermode, gnome and kde
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/pam.d
@@ -160,6 +185,56 @@ desktop-file-install --vendor fedora                            \
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/pixmaps
 install -m 644 image/wsicon48.png $RPM_BUILD_ROOT/%{_datadir}/pixmaps/wireshark.png
 
+#install devel files
+install -d -m 0755  $RPM_BUILD_ROOT/%{_includedir}/wireshark
+IDIR="${RPM_BUILD_ROOT}%{_includedir}/wireshark"
+mkdir -p "${IDIR}/epan"
+mkdir -p "${IDIR}/epan/ftypes"
+mkdir -p "${IDIR}/epan/dfilter"
+mkdir -p "${IDIR}/wiretap"
+install -m 644 color.h			"${IDIR}/"
+install -m 644 epan/packet.h		"${IDIR}/epan/"
+install -m 644 epan/prefs.h		"${IDIR}/epan/"
+install -m 644 epan/proto.h		"${IDIR}/epan/"
+install -m 644 epan/tvbuff.h		"${IDIR}/epan/"
+install -m 644 epan/pint.h		"${IDIR}/epan/"
+install -m 644 epan/to_str.h		"${IDIR}/epan/"
+install -m 644 epan/value_string.h	"${IDIR}/epan/"
+install -m 644 epan/column_info.h	"${IDIR}/epan/"
+install -m 644 epan/frame_data.h	"${IDIR}/epan/"
+install -m 644 epan/packet_info.h	"${IDIR}/epan/"
+install -m 644 epan/column-utils.h	"${IDIR}/epan/"
+install -m 644 epan/epan.h		"${IDIR}/epan/"
+install -m 644 epan/range.h		"${IDIR}/epan/"
+install -m 644 epan/gnuc_format_check.h	"${IDIR}/epan/"
+install -m 644 epan/ipv4.h		"${IDIR}/epan"
+install -m 644 epan/nstime.h		"${IDIR}/epan/"
+install -m 644 epan/ipv6-utils.h	"${IDIR}/epan/"
+install -m 644 epan/guid-utils.h	"${IDIR}/epan/"
+install -m 644 epan/exceptions.h	"${IDIR}/epan/"
+install -m 644 epan/address.h		"${IDIR}/epan/"
+install -m 644 epan/slab.h		"${IDIR}/epan/"
+install -m 644 epan/except.h		"${IDIR}/epan/"
+install -m 644 epan/ftypes/ftypes.h	"${IDIR}/epan/ftypes/"
+install -m 644 epan/dfilter/dfilter.h	"${IDIR}/epan/dfilter/"
+install -m 644 epan/dfilter/drange.h	"${IDIR}/epan/dfilter/"
+install -m 644 wiretap/wtap.h		"${IDIR}/wiretap/"
+
+#	Create pkg-config control file.
+mkdir -p "${RPM_BUILD_ROOT}%{_libdir}/pkgconfig"
+cat > "${RPM_BUILD_ROOT}%{_libdir}/pkgconfig/wireshark.pc" <<- "EOF"
+	prefix=%{_prefix}
+	exec_prefix=%{_prefix}
+	libdir=%{_libdir}
+	includedir=%{_includedir}
+
+	Name:		%{name}
+	Description:	Network Traffic Analyzer
+	Version:	%{version}
+	Requires:	glib-2.0
+	Libs:		-L${libdir} -lwireshark -lwiretap
+	Cflags:		-DWS_VAR_IMPORT=extern -DHAVE_STDARG_H -I${includedir}/wireshark -I${includedir}/wireshark/epan
+EOF
 
 # Remove .la files
 rm -f $RPM_BUILD_ROOT/%{_libdir}/%{name}/plugins/%{version}/*.la
@@ -189,17 +264,17 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/tethereal
 %{_sbindir}/rawshark
 %{python_sitelib}/*
-%{_libdir}/lib*
+%{_libdir}/lib*.so.*
+%{_libdir}/wireshark/plugins
 %{_mandir}/man1/editcap.*
 %{_mandir}/man1/tshark.*
-%{_mandir}/man1/idl2wrs.*
 %{_mandir}/man1/mergecap.*
 %{_mandir}/man1/text2pcap.*
 %{_mandir}/man1/capinfos.*
 %{_mandir}/man1/dumpcap.*
 %{_mandir}/man4/wireshark-filter.*
 %{_mandir}/man1/rawshark.*
-%{_libdir}/wireshark
+#%{_libdir}/wireshark
 %config(noreplace) %{_sysconfdir}/pam.d/wireshark
 %config(noreplace) %{_sysconfdir}/security/console.apps/wireshark
 %{_datadir}/wireshark
@@ -212,11 +287,34 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/wireshark
 %{_mandir}/man1/wireshark.*
 
+%files devel
+%defattr(-,root,root)
+%doc doc/README.*
+%{_includedir}/wireshark
+%{_libdir}/lib*.so
+%{_libdir}/pkgconfig/*
+%{_mandir}/man1/idl2wrs.*
+%{_sbindir}/idl2wrs
+%if %{with_lua}
+%config(noreplace) %{_datadir}/wireshark/init.lua
+%endif
 
 %changelog
-* Mon Nov 30 2009 Radek Vokal <rvokal@redhat.com> - 1.2.4-1
+* Fri Dec 18 2009 Radek Vokal <rvokal@redhat.com> - 1.2.5-1
+- upgrade to 1.2.5
+- fixes security vulnaribilities, see http://www.wireshark.org/security/wnpa-sec-2009-09.html 
+- split -devel package (#547899, #203642, #218451)
+- removing root warning dialog (#543709)
+- enable lua support - http://wiki.wireshark.org/Lua
+- attempt to fix filter crash on 64bits
+
+* Wed Nov 18 2009 Radek Vokal <rvokal@redhat.com> - 1.2.4-1
 - upgrade to 1.2.4
 - http://www.wireshark.org/docs/relnotes/wireshark-1.2.4.html
+
+* Fri Oct 30 2009 Radek Vokal <rvokal@redhat.com> - 1.2.3-1
+- upgrade to 1.2.3
+- http://www.wireshark.org/docs/relnotes/wireshark-1.2.3.html
 
 * Mon Sep 21 2009 Radek Vokal <rvokal@redhat.com> - 1.2.2-1
 - upgrade to 1.2.2

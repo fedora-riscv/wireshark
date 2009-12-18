@@ -12,7 +12,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.2.5
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -300,7 +300,7 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
-* Fri Dec 18 2009 Radek Vokal <rvokal@redhat.com> - 1.2.5-1
+* Fri Dec 18 2009 Radek Vokal <rvokal@redhat.com> - 1.2.5-2
 - upgrade to 1.2.5
 - fixes security vulnaribilities, see http://www.wireshark.org/security/wnpa-sec-2009-09.html 
 - split -devel package (#547899, #203642, #218451)

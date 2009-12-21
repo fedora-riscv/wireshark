@@ -12,7 +12,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.2.5
-Release: 	2%{?dist}
+Release: 	3%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -23,6 +23,7 @@ Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
 Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
+Source4:	wireshark-autoconf.m4
 Patch1:		wireshark-1.0.2-pie.patch
 Patch2:		wireshark-nfsv4-opts.patch
 Patch3:		wireshark-0.99.7-path.patch
@@ -193,6 +194,7 @@ mkdir -p "${IDIR}/epan/ftypes"
 mkdir -p "${IDIR}/epan/dfilter"
 mkdir -p "${IDIR}/wiretap"
 install -m 644 color.h			"${IDIR}/"
+install -m 644 register.h		"${IDIR}/"
 install -m 644 epan/packet.h		"${IDIR}/epan/"
 install -m 644 epan/prefs.h		"${IDIR}/epan/"
 install -m 644 epan/proto.h		"${IDIR}/epan/"
@@ -214,7 +216,9 @@ install -m 644 epan/guid-utils.h	"${IDIR}/epan/"
 install -m 644 epan/exceptions.h	"${IDIR}/epan/"
 install -m 644 epan/address.h		"${IDIR}/epan/"
 install -m 644 epan/slab.h		"${IDIR}/epan/"
+install -m 644 epan/tfs.h		"${IDIR}/epan/"
 install -m 644 epan/except.h		"${IDIR}/epan/"
+install -m 644 epan/emem.h		"${IDIR}/epan/"
 install -m 644 epan/ftypes/ftypes.h	"${IDIR}/epan/ftypes/"
 install -m 644 epan/dfilter/dfilter.h	"${IDIR}/epan/dfilter/"
 install -m 644 epan/dfilter/drange.h	"${IDIR}/epan/dfilter/"
@@ -231,10 +235,14 @@ cat > "${RPM_BUILD_ROOT}%{_libdir}/pkgconfig/wireshark.pc" <<- "EOF"
 	Name:		%{name}
 	Description:	Network Traffic Analyzer
 	Version:	%{version}
-	Requires:	glib-2.0
+	Requires:	glib-2.0 gmodule-2.0
 	Libs:		-L${libdir} -lwireshark -lwiretap
 	Cflags:		-DWS_VAR_IMPORT=extern -DHAVE_STDARG_H -I${includedir}/wireshark -I${includedir}/wireshark/epan
 EOF
+
+#	Install the autoconf macro.
+mkdir -p "${RPM_BUILD_ROOT}%{_datadir}/aclocal"
+cp "%{SOURCE4}" "${RPM_BUILD_ROOT}%{_datadir}/aclocal/wireshark.m4"
 
 # Remove .la files
 rm -f $RPM_BUILD_ROOT/%{_libdir}/%{name}/plugins/%{version}/*.la
@@ -293,6 +301,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/wireshark
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*
+%{_datadir}/aclocal/*
 %{_mandir}/man1/idl2wrs.*
 %{_sbindir}/idl2wrs
 %if %{with_lua}
@@ -300,6 +309,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Fri Dec 18 2009 Patrick Monnerat <pm@datasphere.ch> 1.2.5-3
+- Autoconf macro for plugin development.
+
 * Fri Dec 18 2009 Radek Vokal <rvokal@redhat.com> - 1.2.5-2
 - upgrade to 1.2.5
 - fixes security vulnaribilities, see http://www.wireshark.org/security/wnpa-sec-2009-09.html 

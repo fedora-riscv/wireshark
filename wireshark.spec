@@ -12,7 +12,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.2.5
-Release: 	3%{?dist}
+Release: 	4%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -302,17 +302,18 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(-,root,root)
 %doc doc/README.*
+%config(noreplace) %{_datadir}/wireshark/init.lua
 %{_includedir}/wireshark
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*
 %{_datadir}/aclocal/*
 %{_mandir}/man1/idl2wrs.*
 %{_sbindir}/idl2wrs
-%if %{with_lua}
-%config(noreplace) %{_datadir}/wireshark/init.lua
-%endif
 
 %changelog
+* Tue Jan 05 2010 Radek Vokál <rvokal@redhat.com> - 1.2.5-4
+- init.lua is present always and not only when lua support is enabled
+
 * Tue Jan 05 2010 Radek Vokál <rvokal@redhat.com> - 1.2.5-3
 - fix file list, init.lua is only in -devel subpackage (#552406)
 

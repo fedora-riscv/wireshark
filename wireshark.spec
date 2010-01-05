@@ -12,7 +12,7 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.2.5
-Release: 	2%{?dist}
+Release: 	3%{?dist}
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
@@ -286,6 +286,10 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/pam.d/wireshark
 %config(noreplace) %{_sysconfdir}/security/console.apps/wireshark
 %{_datadir}/wireshark
+%if %{with_lua}
+%exclude %{_datadir}/wireshark/init.lua
+%endif
+
 
 %files gnome
 %defattr(-,root,root)
@@ -309,6 +313,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Tue Jan 05 2010 Radek Vokál <rvokal@redhat.com> - 1.2.5-3
+- fix file list, init.lua is only in -devel subpackage (#552406)
+
 * Fri Dec 18 2009 Patrick Monnerat <pm@datasphere.ch> 1.2.5-2
 - Autoconf macro for plugin development.
 

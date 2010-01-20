@@ -12,11 +12,16 @@
 Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.2.5
-Release: 	4%{?dist}
+%if %{svn_version}
+Release: 	0.%{svn_version}%{?dist}
+%else
+Release: 	5%{?dist}
+%endif
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
-Source0:	http://wireshark.org/download/prerelease/%{name}-%{version}-SVN-%{svn_version}.tar.gz
+#  svn export http://anonsvn.wireshark.org/wireshark/trunk wireshark-%{version}-SVN-%{svn_version}
+Source0:	http://www.wireshark.org/download/automated/src/wireshark-%{version}-SVN-%{svn_version}.tar.bz2
 %else
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
 %endif
@@ -127,7 +132,10 @@ export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector/-fstack-protector-all}
 export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
 export LDFLAGS="$LDFLAGS -lm -lcrypto"
-#./autogen.sh
+%if %{svn_version}
+./autogen.sh
+%endif
+
 %configure \
    --bindir=%{_sbindir} \
    --enable-zlib \
@@ -311,6 +319,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Wed Jan 20 2010 Radek Vokal <rvokal@redhat.com> - 1.2.5-5
+- minor spec file tweaks for better svn checkout support (#553500)
+
 * Tue Jan 05 2010 Radek Vokál <rvokal@redhat.com> - 1.2.5-4
 - init.lua is present always and not only when lua support is enabled
 

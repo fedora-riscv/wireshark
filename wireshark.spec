@@ -11,11 +11,11 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.2.5
+Version:	1.2.6
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	5%{?dist}
+Release: 	1%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -319,6 +319,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Fri Jan 29 2010 Radek Vokal <rvokal@redhat.com> - 1.2.6-1
+- upgrade to 1.2.6
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.2.6.html 
+
 * Wed Jan 20 2010 Radek Vokal <rvokal@redhat.com> - 1.2.5-5
 - minor spec file tweaks for better svn checkout support (#553500)
 

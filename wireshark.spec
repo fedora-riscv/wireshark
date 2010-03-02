@@ -11,12 +11,17 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.2.5
-Release: 	3%{?dist}
+Version:	1.2.6
+%if %{svn_version}
+Release: 	0.%{svn_version}%{?dist}
+%else
+Release: 	1%{?dist}
+%endif
 License: 	GPL+
 Group: 		Applications/Internet
 %if %{svn_version}
-Source0:	http://wireshark.org/download/prerelease/%{name}-%{version}-SVN-%{svn_version}.tar.gz
+#  svn export http://anonsvn.wireshark.org/wireshark/trunk wireshark-%{version}-SVN-%{svn_version}
+Source0:	http://www.wireshark.org/download/automated/src/wireshark-%{version}-SVN-%{svn_version}.tar.bz2
 %else
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
 %endif
@@ -127,7 +132,10 @@ export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector/-fstack-protector-all}
 export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
 export LDFLAGS="$LDFLAGS -lm -lcrypto"
-#./autogen.sh
+%if %{svn_version}
+./autogen.sh
+%endif
+
 %configure \
    --bindir=%{_sbindir} \
    --enable-zlib \
@@ -298,6 +306,7 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(-,root,root)
 %doc doc/README.*
+%config(noreplace) %{_datadir}/wireshark/init.lua
 %{_includedir}/wireshark
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*
@@ -305,10 +314,17 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/idl2wrs.*
 %{_sbindir}/idl2wrs
 %if %{with_lua}
-%config(noreplace) %{_datadir}/wireshark/init.lua
+%exclude %{_datadir}/wireshark/init.lua
 %endif
 
+
 %changelog
+* Tue Mar 2 2010 Radek Vokal <rvokal@redhat.com> - 1.2.6-1
+- upgrade to 1.2.6
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.2.6.html 
+- minor spec file tweaks for better svn checkout support (#553500)
+- fix file list, init.lua is only in -devel subpackage (#552406)
+
 * Fri Dec 18 2009 Patrick Monnerat <pm@datasphere.ch> 1.2.5-3
 - Autoconf macro for plugin development.
 

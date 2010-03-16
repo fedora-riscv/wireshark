@@ -15,7 +15,7 @@ Version:	1.2.6
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -36,6 +36,8 @@ Patch4:		wireshark-1.1.2-nfs41-backchnl-decode.patch
 Patch5:		wireshark-1.2.4-filter_null.patch
 Patch6:		wireshark-1.2.4-enable_lua.patch
 Patch7:		wireshark-1.2.4-disable_warning_dialog.patch
+Patch8:		wireshark-1.2.6-nfs40-backchnl-decode.patch
+Patch9:		wireshark-1.2.6-smb-find-full-dir-info.patch
 
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -120,6 +122,8 @@ and plugins.
 %endif
 
 %patch7 -p1 -b .dialog
+%patch8 -p1
+%patch9 -p1
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -319,6 +323,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Mar 16 2010 Jeff Layton <jlayton@redhat.com> - 1.2.6-2
+- add patch to allow decode of NFSv4.0 callback channel
+- add patch to allow decode of more SMB FIND_FILE infolevels
+
 * Tue Mar 2 2010 Radek Vokal <rvokal@redhat.com> - 1.2.6-1
 - upgrade to 1.2.6
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.2.6.html 

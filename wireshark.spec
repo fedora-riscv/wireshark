@@ -15,7 +15,7 @@ Version:	1.2.6
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	2%{?dist}
+Release: 	3%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -29,7 +29,6 @@ Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
 Source4:	wireshark-autoconf.m4
-Patch1:		wireshark-1.0.2-pie.patch
 Patch2:		wireshark-nfsv4-opts.patch
 Patch3:		wireshark-0.99.7-path.patch
 Patch4:		wireshark-1.1.2-nfs41-backchnl-decode.patch
@@ -38,6 +37,7 @@ Patch6:		wireshark-1.2.4-enable_lua.patch
 Patch7:		wireshark-1.2.4-disable_warning_dialog.patch
 Patch8:		wireshark-1.2.6-nfs40-backchnl-decode.patch
 Patch9:		wireshark-1.2.6-smb-find-full-dir-info.patch
+Patch10:	wireshark-libtool-pie.patch
 
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -111,7 +111,6 @@ and plugins.
 %else
 %setup -q -n %{name}-%{version}
 %endif
-#%patch1 -p1 -b .pie
 %patch2 -p1 
 %patch3 -p1
 %patch4 -p1
@@ -124,6 +123,7 @@ and plugins.
 %patch7 -p1 -b .dialog
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -133,9 +133,9 @@ export PIECFLAGS="-fpie"
 %endif
 # FC5+ automatic -fstack-protector-all switch
 export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector/-fstack-protector-all}
-export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
-export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
-export LDFLAGS="$LDFLAGS -lm -lcrypto"
+export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS"
+export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS"
+export LDFLAGS="$LDFLAGS -lm -lcrypto -pie"
 %if %{svn_version}
 ./autogen.sh
 %endif
@@ -323,6 +323,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Wed Mar 24 2010 Radek Vokal <rvokal@redhat.com> - 1.2.6-3
+- bring back -pie
+
 * Tue Mar 16 2010 Jeff Layton <jlayton@redhat.com> - 1.2.6-2
 - add patch to allow decode of NFSv4.0 callback channel
 - add patch to allow decode of more SMB FIND_FILE infolevels

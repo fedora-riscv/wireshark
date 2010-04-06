@@ -15,7 +15,7 @@ Version:	1.2.7
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -52,6 +52,7 @@ BuildRequires:  gnutls-devel
 BuildRequires:  desktop-file-utils, automake, libtool
 BuildRequires:	xdg-utils
 BuildRequires: 	flex, bison, python
+BuildRequires:	GeoIP-devel
 %if %{with_adns}
 BuildRequires:	adns-devel
 %endif
@@ -73,6 +74,7 @@ Requires:	usermode >= 1.37
 Requires:	wireshark = %{version}-%{release}
 Requires:	libsmi
 Requires:	xdg-utils, usermode-gtk
+Requires:	GeoIP
 %if %{with_adns}
 Requires:	adns
 %endif
@@ -236,6 +238,7 @@ install -m 644 epan/dfilter/dfilter.h	"${IDIR}/epan/dfilter/"
 install -m 644 epan/dfilter/drange.h	"${IDIR}/epan/dfilter/"
 install -m 644 wiretap/wtap.h		"${IDIR}/wiretap/"
 
+
 #	Create pkg-config control file.
 mkdir -p "${RPM_BUILD_ROOT}%{_libdir}/pkgconfig"
 cat > "${RPM_BUILD_ROOT}%{_libdir}/pkgconfig/wireshark.pc" <<- "EOF"
@@ -323,6 +326,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Tue Apr  6 2010 Radek Vokal <rvokal@redhat.com> - 1.2.7-2
+- rebuild with GeoIP support (needs to be turned on in IP protocol preferences)
+
 * Fri Apr  2 2010 Radek Vokal <rvokal@redhat.com> - 1.2.7-1
 - upgrade to 1.2.7
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.2.7.html 

@@ -11,11 +11,11 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.2.7
+Version:	1.2.8
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	2%{?dist}
+Release: 	1%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -326,6 +326,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu May  6 2010 Radek Vokal <rvokal@redhat.com> - 1.2.8-1
+- upgrade to 1.2.8
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.2.8.html
+
 * Tue Apr  6 2010 Radek Vokal <rvokal@redhat.com> - 1.2.7-2
 - rebuild with GeoIP support (needs to be turned on in IP protocol preferences)
 

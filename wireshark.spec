@@ -1,4 +1,5 @@
-%define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
+%define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+
 #define to 0 for final version
 %define svn_version 0
 %define with_adns 0
@@ -11,11 +12,11 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.2.6
+Version:	1.2.8
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	2%{?dist}
+Release: 	1%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -29,15 +30,15 @@ Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
 Source4:	wireshark-autoconf.m4
-Patch1:		wireshark-1.0.2-pie.patch
 Patch2:		wireshark-nfsv4-opts.patch
 Patch3:		wireshark-0.99.7-path.patch
 Patch4:		wireshark-1.1.2-nfs41-backchnl-decode.patch
 Patch5:		wireshark-1.2.4-filter_null.patch
 Patch6:		wireshark-1.2.4-enable_lua.patch
-Patch7:		wireshark-1.2.4-disable_warning_dialog.patch
+Patch7:		wireshark-1.2.8-disable_warning_dialog.patch
 Patch8:		wireshark-1.2.6-nfs40-backchnl-decode.patch
 Patch9:		wireshark-1.2.6-smb-find-full-dir-info.patch
+Patch10:	wireshark-libtool-pie.patch
 
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -52,6 +53,7 @@ BuildRequires:  gnutls-devel
 BuildRequires:  desktop-file-utils, automake, libtool
 BuildRequires:	xdg-utils
 BuildRequires: 	flex, bison, python
+BuildRequires:	GeoIP-devel
 %if %{with_adns}
 BuildRequires:	adns-devel
 %endif
@@ -73,6 +75,7 @@ Requires:	usermode >= 1.37
 Requires:	wireshark = %{version}-%{release}
 Requires:	libsmi
 Requires:	xdg-utils, usermode-gtk
+Requires:	GeoIP
 %if %{with_adns}
 Requires:	adns
 %endif
@@ -111,7 +114,6 @@ and plugins.
 %else
 %setup -q -n %{name}-%{version}
 %endif
-#%patch1 -p1 -b .pie
 %patch2 -p1 
 %patch3 -p1
 %patch4 -p1
@@ -124,6 +126,7 @@ and plugins.
 %patch7 -p1 -b .dialog
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -133,9 +136,9 @@ export PIECFLAGS="-fpie"
 %endif
 # FC5+ automatic -fstack-protector-all switch
 export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector/-fstack-protector-all}
-export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
-export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS"
-export LDFLAGS="$LDFLAGS -lm -lcrypto"
+export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS"
+export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS"
+export LDFLAGS="$LDFLAGS -lm -lcrypto -pie"
 %if %{svn_version}
 ./autogen.sh
 %endif
@@ -187,8 +190,8 @@ mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man1
 install -m 644 *.1 $RPM_BUILD_ROOT/%{_mandir}/man1
 
 # Install python stuff.
-mkdir -p $RPM_BUILD_ROOT%{python_sitelib}
-install -m 644 tools/wireshark_be.py tools/wireshark_gen.py  $RPM_BUILD_ROOT%{python_sitelib}
+mkdir -p $RPM_BUILD_ROOT%{python_sitearch}
+install -m 644 tools/wireshark_be.py tools/wireshark_gen.py  $RPM_BUILD_ROOT%{python_sitearch}
 
 desktop-file-install --vendor fedora                            \
         --dir ${RPM_BUILD_ROOT}%{_datadir}/applications         \
@@ -235,6 +238,7 @@ install -m 644 epan/ftypes/ftypes.h	"${IDIR}/epan/ftypes/"
 install -m 644 epan/dfilter/dfilter.h	"${IDIR}/epan/dfilter/"
 install -m 644 epan/dfilter/drange.h	"${IDIR}/epan/dfilter/"
 install -m 644 wiretap/wtap.h		"${IDIR}/wiretap/"
+
 
 #	Create pkg-config control file.
 mkdir -p "${RPM_BUILD_ROOT}%{_libdir}/pkgconfig"
@@ -283,7 +287,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/dumpcap
 %{_sbindir}/tethereal
 %{_sbindir}/rawshark
-%{python_sitelib}/*
+%{python_sitearch}/*.py*
 %{_libdir}/lib*.so.*
 %{_libdir}/wireshark/plugins
 %{_mandir}/man1/editcap.*
@@ -294,7 +298,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/dumpcap.*
 %{_mandir}/man4/wireshark-filter.*
 %{_mandir}/man1/rawshark.*
-#%{_libdir}/wireshark
 %config(noreplace) %{_sysconfdir}/pam.d/wireshark
 %config(noreplace) %{_sysconfdir}/security/console.apps/wireshark
 %{_datadir}/wireshark
@@ -323,6 +326,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Fri May  7 2010 Radek Vokal <rvokal@redhat.com> - 1.2.8-1
+- use sitearch instead of sitelib to avoid pyo and pyc conflicts
+- upgrade to 1.2.8
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.2.8.html
+- rebuild with GeoIP support (needs to be turned on in IP protocol preferences)
+- bring back -pie
+
 * Tue Mar 16 2010 Jeff Layton <jlayton@redhat.com> - 1.2.6-2
 - add patch to allow decode of NFSv4.0 callback channel
 - add patch to allow decode of more SMB FIND_FILE infolevels

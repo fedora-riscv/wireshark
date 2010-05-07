@@ -16,7 +16,7 @@ Version:	1.2.8
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -326,6 +326,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Fri May  7 2010 Radek Vokal <rvokal@redhat.com> - 1.2.8-2
+- add libtool patch
+
 * Fri May  7 2010 Radek Vokal <rvokal@redhat.com> - 1.2.8-1
 - use sitearch instead of sitelib to avoid pyo and pyc conflicts
 - upgrade to 1.2.8

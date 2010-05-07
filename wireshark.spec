@@ -16,7 +16,7 @@ Version:	1.2.8
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	2%{?dist}
+Release: 	3%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet

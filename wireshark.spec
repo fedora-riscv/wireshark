@@ -35,7 +35,7 @@ Patch3:		wireshark-0.99.7-path.patch
 Patch4:		wireshark-1.1.2-nfs41-backchnl-decode.patch
 Patch5:		wireshark-1.2.4-filter_null.patch
 Patch6:		wireshark-1.2.4-enable_lua.patch
-Patch7:		wireshark-1.2.4-disable_warning_dialog.patch
+Patch7:		wireshark-1.2.8-disable_warning_dialog.patch
 Patch8:		wireshark-1.2.6-nfs40-backchnl-decode.patch
 Patch9:		wireshark-1.2.6-smb-find-full-dir-info.patch
 Patch10:	wireshark-libtool-pie.patch
@@ -326,6 +326,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Fri May  7 2010 Radek Vokal <rvokal@redhat.com> - 1.2.8-3
+- fix patched applied without fuzz=0
+
 * Thu May  6 2010 Radek Vokal <rvokal@redhat.com> - 1.2.8-2
 - use sitearch instead of sitelib to avoid pyo and pyc conflicts
 

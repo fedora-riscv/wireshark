@@ -1,7 +1,7 @@
-diff -up wireshark-1.2.4/gtk/main.c.dialog wireshark-1.2.4/gtk/main.c
---- wireshark-1.2.4/gtk/main.c.dialog	2009-11-16 21:30:43.000000000 +0100
-+++ wireshark-1.2.4/gtk/main.c	2009-12-16 10:53:52.000000000 +0100
-@@ -1227,11 +1227,12 @@ set_display_filename(capture_file *cf)
+diff -up wireshark-1.2.8/gtk/main.c.dialog wireshark-1.2.8/gtk/main.c
+--- wireshark-1.2.8/gtk/main.c.dialog	2010-05-05 19:11:51.000000000 +0200
++++ wireshark-1.2.8/gtk/main.c	2010-05-07 11:08:23.995327341 +0200
+@@ -1247,11 +1247,12 @@ set_display_filename(capture_file *cf)
  
  GtkWidget           *close_dlg = NULL;
  
@@ -15,8 +15,8 @@ diff -up wireshark-1.2.4/gtk/main.c.dialog wireshark-1.2.4/gtk/main.c
  
  #ifdef _WIN32
  static void
-@@ -2559,7 +2560,7 @@ main(int argc, char *argv[])
-   main_load_window_geometry(top_level);
+@@ -1795,7 +1796,7 @@ check_and_warn_user_startup(gchar *cf_na
+   gpointer             priv_warning_dialog;
  
    /* Tell the user not to run as root. */
 -  if (running_with_special_privs() && recent.privs_warn_if_elevated) {
@@ -24,7 +24,7 @@ diff -up wireshark-1.2.4/gtk/main.c.dialog wireshark-1.2.4/gtk/main.c
      cur_user = get_cur_username();
      cur_group = get_cur_groupname();
      priv_warning_dialog = simple_dialog(ESD_TYPE_WARN, ESD_BTN_OK,
-@@ -2570,6 +2571,7 @@ main(int argc, char *argv[])
+@@ -1806,6 +1807,7 @@ check_and_warn_user_startup(gchar *cf_na
      simple_dialog_check_set(priv_warning_dialog, "Don't show this message again.");
      simple_dialog_set_cb(priv_warning_dialog, priv_warning_dialog_cb, NULL);
    }

@@ -1,4 +1,5 @@
-%define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
+%define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+
 #define to 0 for final version
 %define svn_version 0
 %define with_adns 0
@@ -15,7 +16,7 @@ Version:	1.2.8
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -189,8 +190,8 @@ mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man1
 install -m 644 *.1 $RPM_BUILD_ROOT/%{_mandir}/man1
 
 # Install python stuff.
-mkdir -p $RPM_BUILD_ROOT%{python_sitelib}
-install -m 644 tools/wireshark_be.py tools/wireshark_gen.py  $RPM_BUILD_ROOT%{python_sitelib}
+mkdir -p $RPM_BUILD_ROOT%{python_sitearch}
+install -m 644 tools/wireshark_be.py tools/wireshark_gen.py  $RPM_BUILD_ROOT%{python_sitearch}
 
 desktop-file-install --vendor fedora                            \
         --dir ${RPM_BUILD_ROOT}%{_datadir}/applications         \
@@ -286,7 +287,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/dumpcap
 %{_sbindir}/tethereal
 %{_sbindir}/rawshark
-%{python_sitelib}/*
+%{python_sitearch}/*.py*
 %{_libdir}/lib*.so.*
 %{_libdir}/wireshark/plugins
 %{_mandir}/man1/editcap.*
@@ -297,7 +298,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/dumpcap.*
 %{_mandir}/man4/wireshark-filter.*
 %{_mandir}/man1/rawshark.*
-#%{_libdir}/wireshark
 %config(noreplace) %{_sysconfdir}/pam.d/wireshark
 %config(noreplace) %{_sysconfdir}/security/console.apps/wireshark
 %{_datadir}/wireshark
@@ -326,6 +326,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu May  6 2010 Radek Vokal <rvokal@redhat.com> - 1.2.8-2
+- use sitearch instead of sitelib to avoid pyo and pyc conflicts
+
 * Thu May  6 2010 Radek Vokal <rvokal@redhat.com> - 1.2.8-1
 - upgrade to 1.2.8
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.2.8.html

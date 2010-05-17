@@ -1,4 +1,4 @@
-%define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
 
 #define to 0 for final version
 %define svn_version 0
@@ -16,7 +16,7 @@ Version:	1.2.8
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	2%{?dist}
+Release: 	3%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -326,6 +326,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Mon May 17 2010 Radek Vokal <rvokal@redhat.com> - 1.2.8-3
+- removing traling bracket from python_sitearch (#592391)
+
 * Fri May  7 2010 Radek Vokal <rvokal@redhat.com> - 1.2.8-2
 - add libtool patch
 

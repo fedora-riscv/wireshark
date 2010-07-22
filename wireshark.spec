@@ -14,7 +14,7 @@ Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.2.9
 %if %{svn_version}
-Release: 	0.%{svn_version}%{?dist}
+Release: 	0.%{svn_version}%{?dist}.1
 %else
 Release: 	1%{?dist}
 %endif
@@ -324,6 +324,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 1.2.9-1
+- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
+
 * Fri Jun 11 2010 Radek Vokal <rvokal@redhat.com> - 1.2.9-1
 - upgrade to 1.2.9
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.2.9.html

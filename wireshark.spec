@@ -14,9 +14,9 @@ Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.2.9
 %if %{svn_version}
-Release: 	0.%{svn_version}%{?dist}.1
+Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	1%{?dist}
+Release: 	3%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -136,7 +136,7 @@ export PIECFLAGS="-fpie"
 export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector/-fstack-protector-all}
 export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS"
-export LDFLAGS="$LDFLAGS -lm -lcrypto -pie"
+export LDFLAGS="$LDFLAGS -pie"
 %if %{svn_version}
 ./autogen.sh
 %endif
@@ -324,7 +324,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
-* Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 1.2.9-1
+* Thu Jul 22 2010 Jan Safranek <jsafrane@redhat.com> - 1.2.9-3
+- removing useless LDFLAGS (#603224)
+
+* Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 1.2.9-2
 - Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
 * Fri Jun 11 2010 Radek Vokal <rvokal@redhat.com> - 1.2.9-1

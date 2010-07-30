@@ -12,11 +12,11 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.2.9
+Version:	1.2.10
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	4%{?dist}
+Release: 	1%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -324,6 +324,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Fri Jul 30 2010 Jan Safranek <jsafrane@redhat.com> - 1.2.10-1
+- upgrade to 1.2.10
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.2.10.html
+
 * Fri Jul 30 2010 Jan Safranek <jsafrane@redhat.com> - 1.2.9-4
 - Rebuilt again for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 

@@ -16,7 +16,7 @@ Version:	1.2.9
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	3%{?dist}
+Release: 	4%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -324,6 +324,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Fri Jul 30 2010 Jan Safranek <jsafrane@redhat.com> - 1.2.9-4
+- Rebuilt again for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
+
 * Thu Jul 22 2010 Jan Safranek <jsafrane@redhat.com> - 1.2.9-3
 - removing useless LDFLAGS (#603224)
 

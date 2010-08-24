@@ -12,11 +12,11 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.2.8
+Version:	1.2.10
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	3%{?dist}
+Release: 	1%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -33,7 +33,6 @@ Source4:	wireshark-autoconf.m4
 Patch2:		wireshark-nfsv4-opts.patch
 Patch3:		wireshark-0.99.7-path.patch
 Patch4:		wireshark-1.1.2-nfs41-backchnl-decode.patch
-Patch5:		wireshark-1.2.4-filter_null.patch
 Patch6:		wireshark-1.2.4-enable_lua.patch
 Patch7:		wireshark-1.2.8-disable_warning_dialog.patch
 Patch8:		wireshark-1.2.6-nfs40-backchnl-decode.patch
@@ -117,7 +116,6 @@ and plugins.
 %patch2 -p1 
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 %if %{with_lua}
 %patch6 -p1 -b .enable_lua
@@ -326,6 +324,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Tue Aug 24 2010 Jan Safranek <jsafrane@redhat.com> - 1.2.10-1
+- upgrade to 1.2.10
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.2.10.html
+- Resolves: #625940 CVE-2010-2287 CVE-2010-2286 CVE-2010-2284 CVE-2010-2283
+
 * Mon May 17 2010 Radek Vokal <rvokal@redhat.com> - 1.2.8-3
 - removing traling bracket from python_sitearch (#592391)
 

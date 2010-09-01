@@ -186,43 +186,20 @@ desktop-file-install --vendor fedora                            \
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/pixmaps
 install -m 644 image/wsicon48.png $RPM_BUILD_ROOT/%{_datadir}/pixmaps/wireshark.png
 
-#install devel files
+#install devel files (inspired by debian/wireshark-dev.header-files)
 install -d -m 0755  $RPM_BUILD_ROOT/%{_includedir}/wireshark
 IDIR="${RPM_BUILD_ROOT}%{_includedir}/wireshark"
 mkdir -p "${IDIR}/epan"
+mkdir -p "${IDIR}/epan/crypt"
 mkdir -p "${IDIR}/epan/ftypes"
 mkdir -p "${IDIR}/epan/dfilter"
 mkdir -p "${IDIR}/wiretap"
-install -m 644 color.h			"${IDIR}/"
-install -m 644 register.h		"${IDIR}/"
-install -m 644 epan/packet.h		"${IDIR}/epan/"
-install -m 644 epan/prefs.h		"${IDIR}/epan/"
-install -m 644 epan/proto.h		"${IDIR}/epan/"
-install -m 644 epan/tvbuff.h		"${IDIR}/epan/"
-install -m 644 epan/pint.h		"${IDIR}/epan/"
-install -m 644 epan/to_str.h		"${IDIR}/epan/"
-install -m 644 epan/value_string.h	"${IDIR}/epan/"
-install -m 644 epan/column_info.h	"${IDIR}/epan/"
-install -m 644 epan/frame_data.h	"${IDIR}/epan/"
-install -m 644 epan/packet_info.h	"${IDIR}/epan/"
-install -m 644 epan/column-utils.h	"${IDIR}/epan/"
-install -m 644 epan/epan.h		"${IDIR}/epan/"
-install -m 644 epan/range.h		"${IDIR}/epan/"
-install -m 644 epan/ipv4.h		"${IDIR}/epan"
-install -m 644 epan/nstime.h		"${IDIR}/epan/"
-install -m 644 epan/ipv6-utils.h	"${IDIR}/epan/"
-install -m 644 epan/guid-utils.h	"${IDIR}/epan/"
-install -m 644 epan/exceptions.h	"${IDIR}/epan/"
-install -m 644 epan/address.h		"${IDIR}/epan/"
-install -m 644 epan/slab.h		"${IDIR}/epan/"
-install -m 644 epan/tfs.h		"${IDIR}/epan/"
-install -m 644 epan/except.h		"${IDIR}/epan/"
-install -m 644 epan/emem.h		"${IDIR}/epan/"
-install -m 644 epan/ftypes/ftypes.h	"${IDIR}/epan/ftypes/"
-install -m 644 epan/dfilter/dfilter.h	"${IDIR}/epan/dfilter/"
-install -m 644 epan/dfilter/drange.h	"${IDIR}/epan/dfilter/"
-install -m 644 wiretap/wtap.h		"${IDIR}/wiretap/"
-
+install -m 644 color.h config.h register.h	"${IDIR}/"
+install -m 644 epan/*.h				"${IDIR}/epan/"
+install -m 644 epan/crypt/*.h			"${IDIR}/epan/crypt"
+install -m 644 epan/ftypes/*.h			"${IDIR}/epan/ftypes"
+install -m 644 epan/dfilter/*.h			"${IDIR}/epan/dfilter"
+install -m 644 wiretap/*.h			"${IDIR}/wiretap"
 
 #	Create pkg-config control file.
 mkdir -p "${RPM_BUILD_ROOT}%{_libdir}/pkgconfig"

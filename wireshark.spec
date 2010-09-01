@@ -12,7 +12,7 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.2.10
+Version:	1.4.0
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
@@ -30,14 +30,12 @@ Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
 Source4:	wireshark-autoconf.m4
-Patch2:		wireshark-nfsv4-opts.patch
-Patch3:		wireshark-0.99.7-path.patch
-Patch4:		wireshark-1.1.2-nfs41-backchnl-decode.patch
-Patch6:		wireshark-1.2.4-enable_lua.patch
-Patch7:		wireshark-1.2.8-disable_warning_dialog.patch
-Patch8:		wireshark-1.2.6-nfs40-backchnl-decode.patch
-Patch9:		wireshark-1.2.6-smb-find-full-dir-info.patch
-Patch10:	wireshark-libtool-pie.patch
+Patch1:		wireshark-nfsv4-opts.patch
+Patch2:		wireshark-0.99.7-path.patch
+Patch3:		wireshark-1.2.4-enable_lua.patch
+Patch4:		wireshark-1.2.8-disable_warning_dialog.patch
+Patch5:		wireshark-libtool-pie.patch
+Patch6:		wireshark-1.4.0-python.patch
 
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -62,9 +60,6 @@ BuildRequires: portaudio-devel
 %if %{with_lua}
 BuildRequires:	lua-devel
 %endif
-Obsoletes:	ethereal
-Provides:	ethereal
-
 
 %package	gnome
 Summary:	Gnome desktop integration for wireshark and wireshark-usermode
@@ -72,7 +67,6 @@ Group:		Applications/Internet
 Requires: 	gtk2
 Requires:	usermode >= 1.37
 Requires:	wireshark = %{version}-%{release}
-Requires:	libsmi
 Requires:	xdg-utils, usermode-gtk
 Requires:	GeoIP
 %if %{with_adns}
@@ -81,8 +75,6 @@ Requires:	adns
 %if %{with_portaudio}
 Requires:	portaudio
 %endif
-Obsoletes:	ethereal-gnome
-Provides:	ethereal-gnome
 
 %package devel
 Summary:        Development headers and libraries for wireshark
@@ -113,18 +105,16 @@ and plugins.
 %else
 %setup -q -n %{name}-%{version}
 %endif
-%patch2 -p1 
-%patch3 -p1
-%patch4 -p1
+%patch1 -p1 
+%patch2 -p1
 
 %if %{with_lua}
-%patch6 -p1 -b .enable_lua
+%patch3 -p1 -b .enable_lua
 %endif
 
-%patch7 -p1 -b .dialog
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
+%patch4 -p1 -b .dialog
+%patch5 -p1
+%patch6 -p1
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -143,11 +133,9 @@ export LDFLAGS="$LDFLAGS -pie"
 
 %configure \
    --bindir=%{_sbindir} \
-   --enable-zlib \
    --enable-ipv6 \
    --with-libsmi \
    --with-gnu-ld \
-   --enable-gtk2 \
    --with-pic \
 %if %{with_adns}
    --with-adns \
@@ -161,7 +149,13 @@ export LDFLAGS="$LDFLAGS -pie"
 %endif
    --with-ssl \
    --disable-warnings-as-errors \
-   --with-plugindir=%{_libdir}/%{name}/plugins/%{version} 
+   --with-python \
+   --with-plugins=%{_libdir}/%{name}/plugins/%{version}
+
+#remove rpath
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+
 time make %{?_smp_mflags}
 
 %install
@@ -172,9 +166,6 @@ perl -pi -e 's|-L../../epan|-L../../epan/.libs|' plugins/*/*.la
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
-#symlink tshark to tethereal
-ln -s tshark $RPM_BUILD_ROOT%{_sbindir}/tethereal
-
 # install support files for usermode, gnome and kde
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/pam.d
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/%{_sysconfdir}/pam.d/wireshark
@@ -182,10 +173,6 @@ mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/security/console.apps
 install -m 644 %{SOURCE2} $RPM_BUILD_ROOT/%{_sysconfdir}/security/console.apps/wireshark
 mkdir -p $RPM_BUILD_ROOT/%{_bindir}
 ln -s consolehelper $RPM_BUILD_ROOT/%{_bindir}/wireshark
-
-# install man
-mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man1
-install -m 644 *.1 $RPM_BUILD_ROOT/%{_mandir}/man1
 
 # Install python stuff.
 mkdir -p $RPM_BUILD_ROOT%{python_sitearch}
@@ -199,44 +186,20 @@ desktop-file-install --vendor fedora                            \
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/pixmaps
 install -m 644 image/wsicon48.png $RPM_BUILD_ROOT/%{_datadir}/pixmaps/wireshark.png
 
-#install devel files
+#install devel files (inspired by debian/wireshark-dev.header-files)
 install -d -m 0755  $RPM_BUILD_ROOT/%{_includedir}/wireshark
 IDIR="${RPM_BUILD_ROOT}%{_includedir}/wireshark"
 mkdir -p "${IDIR}/epan"
+mkdir -p "${IDIR}/epan/crypt"
 mkdir -p "${IDIR}/epan/ftypes"
 mkdir -p "${IDIR}/epan/dfilter"
 mkdir -p "${IDIR}/wiretap"
-install -m 644 color.h			"${IDIR}/"
-install -m 644 register.h		"${IDIR}/"
-install -m 644 epan/packet.h		"${IDIR}/epan/"
-install -m 644 epan/prefs.h		"${IDIR}/epan/"
-install -m 644 epan/proto.h		"${IDIR}/epan/"
-install -m 644 epan/tvbuff.h		"${IDIR}/epan/"
-install -m 644 epan/pint.h		"${IDIR}/epan/"
-install -m 644 epan/to_str.h		"${IDIR}/epan/"
-install -m 644 epan/value_string.h	"${IDIR}/epan/"
-install -m 644 epan/column_info.h	"${IDIR}/epan/"
-install -m 644 epan/frame_data.h	"${IDIR}/epan/"
-install -m 644 epan/packet_info.h	"${IDIR}/epan/"
-install -m 644 epan/column-utils.h	"${IDIR}/epan/"
-install -m 644 epan/epan.h		"${IDIR}/epan/"
-install -m 644 epan/range.h		"${IDIR}/epan/"
-install -m 644 epan/gnuc_format_check.h	"${IDIR}/epan/"
-install -m 644 epan/ipv4.h		"${IDIR}/epan"
-install -m 644 epan/nstime.h		"${IDIR}/epan/"
-install -m 644 epan/ipv6-utils.h	"${IDIR}/epan/"
-install -m 644 epan/guid-utils.h	"${IDIR}/epan/"
-install -m 644 epan/exceptions.h	"${IDIR}/epan/"
-install -m 644 epan/address.h		"${IDIR}/epan/"
-install -m 644 epan/slab.h		"${IDIR}/epan/"
-install -m 644 epan/tfs.h		"${IDIR}/epan/"
-install -m 644 epan/except.h		"${IDIR}/epan/"
-install -m 644 epan/emem.h		"${IDIR}/epan/"
-install -m 644 epan/ftypes/ftypes.h	"${IDIR}/epan/ftypes/"
-install -m 644 epan/dfilter/dfilter.h	"${IDIR}/epan/dfilter/"
-install -m 644 epan/dfilter/drange.h	"${IDIR}/epan/dfilter/"
-install -m 644 wiretap/wtap.h		"${IDIR}/wiretap/"
-
+install -m 644 color.h config.h register.h	"${IDIR}/"
+install -m 644 epan/*.h				"${IDIR}/epan/"
+install -m 644 epan/crypt/*.h			"${IDIR}/epan/crypt"
+install -m 644 epan/ftypes/*.h			"${IDIR}/epan/ftypes"
+install -m 644 epan/dfilter/*.h			"${IDIR}/epan/dfilter"
+install -m 644 wiretap/*.h			"${IDIR}/wiretap"
 
 #	Create pkg-config control file.
 mkdir -p "${RPM_BUILD_ROOT}%{_libdir}/pkgconfig"
@@ -283,7 +246,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/capinfos
 %{_sbindir}/randpkt
 %{_sbindir}/dumpcap
-%{_sbindir}/tethereal
 %{_sbindir}/rawshark
 %{python_sitearch}/*.py*
 %{_libdir}/lib*.so.*
@@ -296,12 +258,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/dumpcap.*
 %{_mandir}/man4/wireshark-filter.*
 %{_mandir}/man1/rawshark.*
+%{_mandir}/man1/dftest.*
+%{_mandir}/man1/randpkt.*
 %config(noreplace) %{_sysconfdir}/pam.d/wireshark
 %config(noreplace) %{_sysconfdir}/security/console.apps/wireshark
 %{_datadir}/wireshark
 %if %{with_lua}
 %exclude %{_datadir}/wireshark/init.lua
 %endif
+%{_libdir}/wireshark/python
 
 
 %files gnome
@@ -324,6 +289,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Tue Aug 31 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.0-1
+- upgrade to 1.4.0
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.0.html
+
 * Fri Jul 30 2010 Jan Safranek <jsafrane@redhat.com> - 1.2.10-1
 - upgrade to 1.2.10
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.2.10.html

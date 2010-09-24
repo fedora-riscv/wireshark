@@ -16,7 +16,7 @@ Version:	1.4.0
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	1%{?dist}
+Release: 	2%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -36,6 +36,7 @@ Patch3:		wireshark-1.2.4-enable_lua.patch
 Patch4:		wireshark-1.2.8-disable_warning_dialog.patch
 Patch5:		wireshark-libtool-pie.patch
 Patch6:		wireshark-1.4.0-python.patch
+Patch7:		wireshark-1.4.0-doc-path.patch
 
 Url: 		http://www.wireshark.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -115,6 +116,7 @@ and plugins.
 %patch4 -p1 -b .dialog
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -156,7 +158,7 @@ export LDFLAGS="$LDFLAGS -pie"
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
-time make %{?_smp_mflags}
+make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -289,6 +291,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Fri Sep 24 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.0-2
+- fixed generation of man pages (#635878)
+
 * Tue Aug 31 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.0-1
 - upgrade to 1.4.0
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.0.html

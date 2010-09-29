@@ -14,9 +14,9 @@ Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.4.0
 %if %{svn_version}
-Release: 	0.%{svn_version}%{?dist}.1
+Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	2%{?dist}
+Release: 	3%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet

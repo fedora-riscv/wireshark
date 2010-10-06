@@ -14,7 +14,7 @@ Summary: 	Network traffic analyzer
 Name: 		wireshark
 Version:	1.4.0
 %if %{svn_version}
-Release: 	0.%{svn_version}%{?dist}
+Release: 	0.%{svn_version}%{?dist}.1
 %else
 Release: 	2%{?dist}
 %endif
@@ -291,6 +291,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Tue Oct 05 2010 jkeating - 1.4.0-2
+- Rebuilt for gcc bug 634757
+
 * Fri Sep 24 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.0-2
 - fixed generation of man pages (#635878)
 

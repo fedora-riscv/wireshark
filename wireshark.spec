@@ -10,16 +10,16 @@
 %define with_portaudio 1
 %endif
 
-Summary: 	Network traffic analyzer
-Name: 		wireshark
+Summary:	Network traffic analyzer
+Name:		wireshark
 Version:	1.4.1
 %if %{svn_version}
-Release: 	0.%{svn_version}%{?dist}
+Release:	0.%{svn_version}%{?dist}
 %else
-Release: 	1%{?dist}
+Release:	1%{?dist}
 %endif
-License: 	GPL+
-Group: 		Applications/Internet
+License:	GPL+
+Group:		Applications/Internet
 %if %{svn_version}
 #  svn export http://anonsvn.wireshark.org/wireshark/trunk wireshark-%{version}-SVN-%{svn_version}
 Source0:	http://www.wireshark.org/download/automated/src/wireshark-%{version}-SVN-%{svn_version}.tar.bz2
@@ -44,25 +44,25 @@ Patch5:		wireshark-libtool-pie.patch
 Patch6:		wireshark-1.4.0-python.patch
 Patch7:		wireshark-1.4.0-doc-path.patch
 
-Url: 		http://www.wireshark.org/
-BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+Url:		http://www.wireshark.org/
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpcap-devel >= 0.9
-BuildRequires: 	libsmi-devel
-BuildRequires: 	zlib-devel, bzip2-devel
-BuildRequires:  openssl-devel
+BuildRequires:	libsmi-devel
+BuildRequires:	zlib-devel, bzip2-devel
+BuildRequires:	openssl-devel
 BuildRequires:	glib2-devel, gtk2-devel
-BuildRequires:  elfutils-devel, krb5-devel
-BuildRequires:  python, pcre-devel, libselinux
-BuildRequires:  gnutls-devel
-BuildRequires:  desktop-file-utils, automake, libtool
+BuildRequires:	elfutils-devel, krb5-devel
+BuildRequires:	python, pcre-devel, libselinux
+BuildRequires:	gnutls-devel
+BuildRequires:	desktop-file-utils, automake, libtool
 BuildRequires:	xdg-utils
-BuildRequires: 	flex, bison, python
+BuildRequires:	flex, bison, python
 BuildRequires:	GeoIP-devel
 %if %{with_adns}
 BuildRequires:	adns-devel
 %endif
 %if %{with_portaudio}
-BuildRequires: portaudio-devel
+BuildRequires:	portaudio-devel
 %endif
 %if %{with_lua}
 BuildRequires:	lua-devel
@@ -71,7 +71,7 @@ BuildRequires:	lua-devel
 %package	gnome
 Summary:	Gnome desktop integration for wireshark and wireshark-usermode
 Group:		Applications/Internet
-Requires: 	gtk2
+Requires:	gtk2
 Requires:	usermode >= 1.37
 Requires:	wireshark = %{version}-%{release}
 Requires:	xdg-utils, usermode-gtk
@@ -84,9 +84,9 @@ Requires:	portaudio
 %endif
 
 %package devel
-Summary:        Development headers and libraries for wireshark
+Summary:	Development headers and libraries for wireshark
 Group:		Development/Libraries
-Requires:       %{name} = %{version} glibc-devel glib2-devel
+Requires:	%{name} = %{version} glibc-devel glib2-devel
 
 
 %description
@@ -186,10 +186,10 @@ ln -s consolehelper $RPM_BUILD_ROOT/%{_bindir}/wireshark
 mkdir -p $RPM_BUILD_ROOT%{python_sitearch}
 install -m 644 tools/wireshark_be.py tools/wireshark_gen.py  $RPM_BUILD_ROOT%{python_sitearch}
 
-desktop-file-install --vendor fedora                            \
-        --dir ${RPM_BUILD_ROOT}%{_datadir}/applications         \
-        --add-category X-Fedora                                 \
-        %{SOURCE3}
+desktop-file-install --vendor fedora				\
+	--dir ${RPM_BUILD_ROOT}%{_datadir}/applications		\
+	--add-category X-Fedora					\
+	%{SOURCE3}
 
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/pixmaps
 install -m 644 image/wsicon48.png $RPM_BUILD_ROOT/%{_datadir}/pixmaps/wireshark.png
@@ -260,8 +260,8 @@ touch --no-create %{_datadir}/icons/gnome || :
 update-desktop-database &> /dev/null ||:
 update-mime-database %{_datadir}/mime &> /dev/null || :
 if [ $1 -eq 0 ] ; then
-    touch --no-create %{_datadir}/icons/gnome || :
-    %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/gnome || :
+	touch --no-create %{_datadir}/icons/gnome || :
+	%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/gnome || :
 fi
 
 %files
@@ -302,6 +302,11 @@ fi
 %defattr(-,root,root)
 %{_datadir}/applications/fedora-wireshark.desktop
 %{_datadir}/pixmaps/wireshark.png
+%{_datadir}/icons/gnome/16x16/mimetypes/application-x-pcap.png
+%{_datadir}/icons/gnome/32x32/mimetypes/application-x-pcap.png
+%{_datadir}/icons/gnome/48x48/mimetypes/application-x-pcap.png
+%{_datadir}/icons/gnome/256x256/mimetypes/application-x-pcap.png
+%{_datadir}/mime/packages/wireshark.xml
 %{_bindir}/wireshark
 %{_sbindir}/wireshark
 %{_mandir}/man1/wireshark.*

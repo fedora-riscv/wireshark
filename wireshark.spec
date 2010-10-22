@@ -30,6 +30,12 @@ Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
 Source4:	wireshark-autoconf.m4
+Source5:	wireshark-mime-package.xml
+Source6:	wiresharkdoc-16x16.png
+Source7:	wiresharkdoc-32x32.png
+Source8:	wiresharkdoc-48x48.png
+Source9:	wiresharkdoc-256x256.png
+
 Patch1:		wireshark-nfsv4-opts.patch
 Patch2:		wireshark-0.99.7-path.patch
 Patch3:		wireshark-1.2.4-enable_lua.patch
@@ -223,6 +229,14 @@ EOF
 mkdir -p "${RPM_BUILD_ROOT}%{_datadir}/aclocal"
 cp "%{SOURCE4}" "${RPM_BUILD_ROOT}%{_datadir}/aclocal/wireshark.m4"
 
+# Install desktop stuff
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/{icons/gnome/{16x16,32x32,48x48,256x256}/mimetypes,mime/packages}
+install -m 644 -T %{SOURCE5} $RPM_BUILD_ROOT/%{_datadir}/mime/packages/wireshark.xml
+install -m 644 -T %{SOURCE6} $RPM_BUILD_ROOT/%{_datadir}/icons/gnome/16x16/mimetypes/application-x-pcap.png
+install -m 644 -T %{SOURCE7} $RPM_BUILD_ROOT/%{_datadir}/icons/gnome/32x32/mimetypes/application-x-pcap.png
+install -m 644 -T %{SOURCE8} $RPM_BUILD_ROOT/%{_datadir}/icons/gnome/48x48/mimetypes/application-x-pcap.png
+install -m 644 -T %{SOURCE9} $RPM_BUILD_ROOT/%{_datadir}/icons/gnome/256x256/mimetypes/application-x-pcap.png
+
 # Remove .la files
 rm -f $RPM_BUILD_ROOT/%{_libdir}/%{name}/plugins/%{version}/*.la
 
@@ -235,6 +249,20 @@ rm -rf $RPM_BUILD_ROOT
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
+
+%post gnome
+update-desktop-database &> /dev/null ||:
+update-mime-database %{_datadir}/mime &> /dev/null || :
+touch --no-create %{_datadir}/icons/gnome || :
+%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/gnome || :
+
+%postun gnome
+update-desktop-database &> /dev/null ||:
+update-mime-database %{_datadir}/mime &> /dev/null || :
+if [ $1 -eq 0 ] ; then
+    touch --no-create %{_datadir}/icons/gnome || :
+    %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/gnome || :
+fi
 
 %files
 %defattr(-,root,root)
@@ -293,7 +321,8 @@ rm -rf $RPM_BUILD_ROOT
 * Fri Oct 22 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.1-1
 - upgrade to 1.4.1
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.1.html
-- Own the %%{_libdir}/wireshark dir
+- Own the %%{_libdir}/wireshark dir (#644508)
+- associate *.pcap files with wireshark (#641163)
 
 * Fri Sep 24 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.0-2
 - fixed generation of man pages (#635878)

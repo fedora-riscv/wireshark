@@ -251,7 +251,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/rawshark
 %{python_sitearch}/*.py*
 %{_libdir}/lib*.so.*
-%{_libdir}/wireshark/plugins
+%{_libdir}/wireshark
 %{_mandir}/man1/editcap.*
 %{_mandir}/man1/tshark.*
 %{_mandir}/man1/mergecap.*
@@ -268,7 +268,6 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with_lua}
 %exclude %{_datadir}/wireshark/init.lua
 %endif
-%{_libdir}/wireshark/python
 
 
 %files gnome
@@ -294,6 +293,7 @@ rm -rf $RPM_BUILD_ROOT
 * Fri Oct 22 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.1-1
 - upgrade to 1.4.1
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.1.html
+- Own the %%{_libdir}/wireshark dir
 
 * Wed Sep 29 2010 jkeating - 1.4.0-2
 - Rebuilt for gcc bug 634757

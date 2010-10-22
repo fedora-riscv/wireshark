@@ -12,11 +12,11 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.4.0
+Version:	1.4.1
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
-Release: 	3%{?dist}
+Release: 	1%{?dist}
 %endif
 License: 	GPL+
 Group: 		Applications/Internet
@@ -291,6 +291,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Fri Oct 22 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.1-1
+- upgrade to 1.4.1
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.1.html
+
 * Wed Sep 29 2010 jkeating - 1.4.0-2
 - Rebuilt for gcc bug 634757
 

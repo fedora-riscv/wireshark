@@ -329,6 +329,9 @@ fi
 - Own the %%{_libdir}/wireshark dir (#644508)
 - associate *.pcap files with wireshark (#641163)
 
+* Tue Oct 05 2010 jkeating - 1.4.0-2.1
+- Rebuilt for gcc bug 634757
+
 * Fri Sep 24 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.0-2
 - fixed generation of man pages (#635878)
 

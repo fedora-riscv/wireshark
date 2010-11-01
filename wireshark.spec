@@ -16,7 +16,7 @@ Version:	1.4.1
 %if %{svn_version}
 Release:	0.%{svn_version}%{?dist}
 %else
-Release:	1%{?dist}
+Release:	2%{?dist}
 %endif
 License:	GPL+
 Group:		Applications/Internet
@@ -132,8 +132,8 @@ export PIECFLAGS="-fpie"
 %endif
 # FC5+ automatic -fstack-protector-all switch
 export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector/-fstack-protector-all}
-export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS"
-export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS"
+export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
+export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
 export LDFLAGS="$LDFLAGS -pie"
 %if %{svn_version}
 ./autogen.sh
@@ -158,7 +158,8 @@ export LDFLAGS="$LDFLAGS -pie"
    --with-ssl \
    --disable-warnings-as-errors \
    --with-python \
-   --with-plugins=%{_libdir}/%{name}/plugins/%{version}
+   --with-plugins=%{_libdir}/%{name}/plugins/%{version} \
+   --with-zlib=no
 
 #remove rpath
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
@@ -323,6 +324,10 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
+* Mon Nov  1 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.1-2
+- temporarily disable zlib until
+  https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=4955 is resolved (#643461)
+  
 * Fri Oct 22 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.1-1
 - upgrade to 1.4.1
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.1.html

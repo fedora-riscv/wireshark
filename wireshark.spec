@@ -132,8 +132,8 @@ export PIECFLAGS="-fpie"
 %endif
 # FC5+ automatic -fstack-protector-all switch
 export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector/-fstack-protector-all}
-export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
-export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
+export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS"
+export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS"
 export LDFLAGS="$LDFLAGS -pie"
 %if %{svn_version}
 ./autogen.sh

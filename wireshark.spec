@@ -41,8 +41,7 @@ Patch2:		wireshark-0.99.7-path.patch
 Patch3:		wireshark-1.2.4-enable_lua.patch
 Patch4:		wireshark-1.2.8-disable_warning_dialog.patch
 Patch5:		wireshark-libtool-pie.patch
-Patch6:		wireshark-1.4.0-python.patch
-Patch7:		wireshark-1.4.0-doc-path.patch
+Patch6:		wireshark-1.4.0-doc-path.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -122,7 +121,6 @@ and plugins.
 %patch4 -p1 -b .dialog
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
 
 %build
 %ifarch s390 s390x sparcv9 sparc64

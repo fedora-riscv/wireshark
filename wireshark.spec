@@ -12,11 +12,11 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.4.1
+Version:	1.4.2
 %if %{svn_version}
 Release:	0.%{svn_version}%{?dist}
 %else
-Release:	2%{?dist}
+Release:	1%{?dist}
 %endif
 License:	GPL+
 Group:		Applications/Internet
@@ -324,6 +324,10 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
+* Mon Nov 22 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.2-1
+- upgrade to 1.4.2
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.2.html
+
 * Mon Nov  1 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.1-2
 - temporarily disable zlib until
   https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=4955 is resolved (#643461)

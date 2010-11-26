@@ -37,11 +37,10 @@ Source8:	wiresharkdoc-48x48.png
 Source9:	wiresharkdoc-256x256.png
 
 Patch1:		wireshark-nfsv4-opts.patch
-Patch2:		wireshark-0.99.7-path.patch
-Patch3:		wireshark-1.2.4-enable_lua.patch
-Patch4:		wireshark-1.2.8-disable_warning_dialog.patch
-Patch5:		wireshark-libtool-pie.patch
-Patch6:		wireshark-1.4.0-doc-path.patch
+Patch2:		wireshark-1.2.4-enable_lua.patch
+Patch3:		wireshark-libtool-pie.patch
+Patch4:		wireshark-1.4.0-doc-path.patch
+Patch5:		wireshark-1.4.2-group-msg.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -112,15 +111,14 @@ and plugins.
 %setup -q -n %{name}-%{version}
 %endif
 %patch1 -p1 
-%patch2 -p1
 
 %if %{with_lua}
-%patch3 -p1 -b .enable_lua
+%patch2 -p1 -b .enable_lua
 %endif
 
-%patch4 -p1 -b .dialog
-%patch5 -p1
-%patch6 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1 -b .group-msg
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -176,10 +174,6 @@ make DESTDIR=$RPM_BUILD_ROOT install
 # install support files for usermode, gnome and kde
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/pam.d
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/%{_sysconfdir}/pam.d/wireshark
-mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/security/console.apps
-install -m 644 %{SOURCE2} $RPM_BUILD_ROOT/%{_sysconfdir}/security/console.apps/wireshark
-mkdir -p $RPM_BUILD_ROOT/%{_bindir}
-ln -s consolehelper $RPM_BUILD_ROOT/%{_bindir}/wireshark
 
 # Install python stuff.
 mkdir -p $RPM_BUILD_ROOT%{python_sitearch}
@@ -245,6 +239,9 @@ rm -f $RPM_BUILD_ROOT/%{_libdir}/*.la
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pre
+getent group wireshark >/dev/null || groupadd wireshark
+
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
@@ -274,7 +271,7 @@ fi
 %{_sbindir}/dftest
 %{_sbindir}/capinfos
 %{_sbindir}/randpkt
-%{_sbindir}/dumpcap
+%attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=eip) %{_sbindir}/dumpcap
 %{_sbindir}/rawshark
 %{python_sitearch}/*.py*
 %{_libdir}/lib*.so.*
@@ -290,7 +287,6 @@ fi
 %{_mandir}/man1/dftest.*
 %{_mandir}/man1/randpkt.*
 %config(noreplace) %{_sysconfdir}/pam.d/wireshark
-%config(noreplace) %{_sysconfdir}/security/console.apps/wireshark
 %{_datadir}/wireshark
 %if %{with_lua}
 %exclude %{_datadir}/wireshark/init.lua
@@ -306,7 +302,6 @@ fi
 %{_datadir}/icons/gnome/48x48/mimetypes/application-x-pcap.png
 %{_datadir}/icons/gnome/256x256/mimetypes/application-x-pcap.png
 %{_datadir}/mime/packages/wireshark.xml
-%{_bindir}/wireshark
 %{_sbindir}/wireshark
 %{_mandir}/man1/wireshark.*
 
@@ -322,6 +317,10 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
+* Fri Nov 26 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.3-1
+- rework the Wireshark security (#657490). Remove the console helper and
+  allow only members of new 'wireshark' group to capture the packets.
+
 * Mon Nov 22 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.2-1
 - upgrade to 1.4.2
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.2.html

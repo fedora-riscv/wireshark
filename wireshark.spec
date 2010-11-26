@@ -16,7 +16,7 @@ Version:	1.4.2
 %if %{svn_version}
 Release:	0.%{svn_version}%{?dist}
 %else
-Release:	1%{?dist}
+Release:	2%{?dist}
 %endif
 License:	GPL+
 Group:		Applications/Internet
@@ -317,7 +317,7 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
-* Fri Nov 26 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.3-1
+* Fri Nov 26 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.2-2
 - rework the Wireshark security (#657490). Remove the console helper and
   allow only members of new 'wireshark' group to capture the packets.
 

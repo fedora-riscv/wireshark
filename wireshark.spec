@@ -1,7 +1,5 @@
 %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
 
-#define to 0 for final version
-%define svn_version 0
 %define with_adns 0
 %define with_lua 1
 %if 0%{?rhel} != 0
@@ -13,19 +11,10 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.4.2
-%if %{svn_version}
-Release:	0.%{svn_version}%{?dist}
-%else
 Release:	3%{?dist}
-%endif
 License:	GPL+
 Group:		Applications/Internet
-%if %{svn_version}
-#  svn export http://anonsvn.wireshark.org/wireshark/trunk wireshark-%{version}-SVN-%{svn_version}
-Source0:	http://www.wireshark.org/download/automated/src/wireshark-%{version}-SVN-%{svn_version}.tar.bz2
-%else
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
-%endif
 Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
@@ -52,7 +41,7 @@ BuildRequires:	glib2-devel, gtk2-devel
 BuildRequires:	elfutils-devel, krb5-devel
 BuildRequires:	python, pcre-devel, libselinux
 BuildRequires:	gnutls-devel
-BuildRequires:	desktop-file-utils, automake, libtool
+BuildRequires:	desktop-file-utils
 BuildRequires:	xdg-utils
 BuildRequires:	flex, bison, python
 BuildRequires:	GeoIP-devel
@@ -105,11 +94,7 @@ and plugins.
 
 
 %prep
-%if %{svn_version}
-%setup -q -n %{name}-%{version}-SVN-%{svn_version}
-%else
 %setup -q -n %{name}-%{version}
-%endif
 %patch1 -p1 
 
 %if %{with_lua}
@@ -131,9 +116,6 @@ export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector/-fstack-protector-all}
 export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
 export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
 export LDFLAGS="$LDFLAGS -pie"
-%if %{svn_version}
-./autogen.sh
-%endif
 
 %configure \
    --bindir=%{_sbindir} \

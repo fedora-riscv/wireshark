@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.4.2
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -176,12 +176,14 @@ mkdir -p "${IDIR}/epan"
 mkdir -p "${IDIR}/epan/crypt"
 mkdir -p "${IDIR}/epan/ftypes"
 mkdir -p "${IDIR}/epan/dfilter"
+mkdir -p "${IDIR}/epan/dissectors"
 mkdir -p "${IDIR}/wiretap"
 install -m 644 color.h config.h register.h	"${IDIR}/"
 install -m 644 epan/*.h				"${IDIR}/epan/"
 install -m 644 epan/crypt/*.h			"${IDIR}/epan/crypt"
 install -m 644 epan/ftypes/*.h			"${IDIR}/epan/ftypes"
 install -m 644 epan/dfilter/*.h			"${IDIR}/epan/dfilter"
+install -m 644 epan/dissectors/*.h		"${IDIR}/epan/dissectors"
 install -m 644 wiretap/*.h			"${IDIR}/wiretap"
 
 #	Create pkg-config control file.
@@ -299,6 +301,9 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
+* Wed Dec 15 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.2-4
+- added epan/dissectors/*.h to -devel subpackage (#662969)
+
 * Mon Dec  6 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.2-3
 - fixed generation of man pages again (#635878)
 

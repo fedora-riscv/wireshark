@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.4.2
-Release:	4%{?dist}
+Release:	5%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -30,6 +30,7 @@ Patch2:		wireshark-1.2.4-enable_lua.patch
 Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.4.0-doc-path.patch
 Patch5:		wireshark-1.4.2-group-msg.patch
+Patch6:		wireshark-1.4.2-enttec-overflow.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -104,6 +105,7 @@ and plugins.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1 -b .group-msg
+%patch6 -p1 -b .enttec-overflow
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -301,6 +303,9 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
+* Wed Jan  5 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.2-5
+- fixed buffer overflow in ENTTEC dissector (#666897)
+
 * Wed Dec 15 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.2-4
 - added epan/dissectors/*.h to -devel subpackage (#662969)
 

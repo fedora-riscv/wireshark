@@ -12,11 +12,11 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.4.2
+Version:	1.4.3
 %if %{svn_version}
 Release:	0.%{svn_version}%{?dist}
 %else
-Release:	2%{?dist}
+Release:	1%{?dist}
 %endif
 License:	GPL+
 Group:		Applications/Internet
@@ -42,7 +42,6 @@ Patch3:		wireshark-1.2.4-enable_lua.patch
 Patch4:		wireshark-1.2.8-disable_warning_dialog.patch
 Patch5:		wireshark-libtool-pie.patch
 Patch6:		wireshark-1.4.0-doc-path.patch
-Patch7:		wireshark-1.4.2-enttec-overflow.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -122,7 +121,6 @@ and plugins.
 %patch4 -p1 -b .dialog
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1 -b .enttec-overflow
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -324,6 +322,10 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
+* Mon Jan 17 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.2-3
+- upgrade to 1.4.3
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.3.html
+
 * Wed Jan  5 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.2-2
 - fixed buffer overflow in ENTTEC dissector (#666897)
 

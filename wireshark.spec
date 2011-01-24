@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.4.3
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -178,13 +178,17 @@ mkdir -p "${IDIR}/epan/ftypes"
 mkdir -p "${IDIR}/epan/dfilter"
 mkdir -p "${IDIR}/epan/dissectors"
 mkdir -p "${IDIR}/wiretap"
+mkdir -p "${IDIR}/wsutil"
 install -m 644 color.h config.h register.h	"${IDIR}/"
+install -m 644 cfile.h file.h			"${IDIR}/"
+install -m 644 packet-range.h print.h   	"${IDIR}/"
 install -m 644 epan/*.h				"${IDIR}/epan/"
 install -m 644 epan/crypt/*.h			"${IDIR}/epan/crypt"
 install -m 644 epan/ftypes/*.h			"${IDIR}/epan/ftypes"
 install -m 644 epan/dfilter/*.h			"${IDIR}/epan/dfilter"
 install -m 644 epan/dissectors/*.h		"${IDIR}/epan/dissectors"
 install -m 644 wiretap/*.h			"${IDIR}/wiretap"
+install -m 644 wsutil/*.h			"${IDIR}/wsutil"
 
 #	Create pkg-config control file.
 mkdir -p "${RPM_BUILD_ROOT}%{_libdir}/pkgconfig"
@@ -224,7 +228,7 @@ rm -f $RPM_BUILD_ROOT/%{_libdir}/*.la
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-getent group wireshark >/dev/null || groupadd wireshark
+getent group wireshark >/dev/null || groupadd -r wireshark
 
 %post -p /sbin/ldconfig
 
@@ -301,7 +305,11 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
-* Thu Jan 13 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.3
+* Mon Jan 17 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.3-2
+- create the 'wireshark' group as system, not user
+- add few additional header files to -devel subpackage (#671997)
+
+* Thu Jan 13 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.3-1
 - upgrade to 1.4.3
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.3.html
 

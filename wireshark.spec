@@ -12,7 +12,7 @@
 
 Summary: 	Network traffic analyzer
 Name: 		wireshark
-Version:	1.2.14
+Version:	1.2.15
 %if %{svn_version}
 Release: 	0.%{svn_version}%{?dist}
 %else
@@ -324,6 +324,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu Mar  3 2011 Jan Safranek <jsafrane@redhat.com> - 1.2.15-1
+- upgrade to 1.2.15
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.2.15.html
+
 * Mon Jan 17 2011 Jan Safranek <jsafrane@redhat.com> - 1.2.14-1
 - upgrade to 1.2.14
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.2.14.html

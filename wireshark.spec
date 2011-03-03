@@ -10,8 +10,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.4.3
-Release:	3%{?dist}
+Version:	1.4.4
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -305,6 +305,10 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu Mar  3 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.4-4
+- upgrade to 1.4.4
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.4.html
+
 * Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.3-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 

@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.4.4
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -63,6 +63,7 @@ Requires:	usermode >= 1.37
 Requires:	wireshark = %{version}-%{release}
 Requires:	xdg-utils, usermode-gtk
 Requires:	GeoIP
+Requires:       hicolor-icon-theme
 %if %{with_adns}
 Requires:	adns
 %endif
@@ -166,8 +167,13 @@ desktop-file-install --vendor fedora				\
 	--add-category X-Fedora					\
 	%{SOURCE3}
 
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/pixmaps
-install -m 644 image/wsicon48.png $RPM_BUILD_ROOT/%{_datadir}/pixmaps/wireshark.png
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/{16x16,32x32,48x48,64x64,256x256}/apps
+
+install -m 644 image/wsicon16.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/16x16/apps/wireshark.png
+install -m 644 image/wsicon32.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/32x32/apps/wireshark.png
+install -m 644 image/wsicon48.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/48x48/apps/wireshark.png
+install -m 644 image/wsicon64.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/64x64/apps/wireshark.png
+install -m 644 image/wsicon256.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/256x256/apps/wireshark.png
 
 #install devel files (inspired by debian/wireshark-dev.header-files)
 install -d -m 0755  $RPM_BUILD_ROOT/%{_includedir}/wireshark
@@ -239,6 +245,7 @@ update-desktop-database &> /dev/null ||:
 update-mime-database %{_datadir}/mime &> /dev/null || :
 touch --no-create %{_datadir}/icons/gnome || :
 %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/gnome || :
+%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
 
 %postun gnome
 update-desktop-database &> /dev/null ||:
@@ -246,6 +253,11 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 if [ $1 -eq 0 ] ; then
 	touch --no-create %{_datadir}/icons/gnome || :
 	%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/gnome || :
+fi
+
+if [ $1 -eq 0 ] ; then
+	touch --no-create %{_datadir}/icons/hicolor || :
+	%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
 fi
 
 %files
@@ -284,7 +296,11 @@ fi
 %files gnome
 %defattr(-,root,root)
 %{_datadir}/applications/fedora-wireshark.desktop
-%{_datadir}/pixmaps/wireshark.png
+%{_datadir}/icons/hicolor/16x16/apps/wireshark.png
+%{_datadir}/icons/hicolor/32x32/apps/wireshark.png
+%{_datadir}/icons/hicolor/48x48/apps/wireshark.png
+%{_datadir}/icons/hicolor/64x64/apps/wireshark.png
+%{_datadir}/icons/hicolor/256x256/apps/wireshark.png
 %{_datadir}/icons/gnome/16x16/mimetypes/application-x-pcap.png
 %{_datadir}/icons/gnome/32x32/mimetypes/application-x-pcap.png
 %{_datadir}/icons/gnome/48x48/mimetypes/application-x-pcap.png
@@ -305,7 +321,10 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
-* Thu Mar  3 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.4-4
+* Sun Apr 03 2011 Cosimo Cecchi <cosimoc@redhat.com> - 1.4.4-2
+- Use hi-res icons
+
+* Thu Mar  3 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.4-1
 - upgrade to 1.4.4
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.4.html
 

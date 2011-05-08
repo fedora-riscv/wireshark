@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.4.6
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -243,22 +243,23 @@ getent group wireshark >/dev/null || groupadd -r wireshark
 %post gnome
 update-desktop-database &> /dev/null ||:
 update-mime-database %{_datadir}/mime &> /dev/null || :
-touch --no-create %{_datadir}/icons/gnome || :
-%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/gnome || :
-%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
+touch --no-create %{_datadir}/icons/gnome &>/dev/null || :
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 
 %postun gnome
 update-desktop-database &> /dev/null ||:
 update-mime-database %{_datadir}/mime &> /dev/null || :
 if [ $1 -eq 0 ] ; then
-	touch --no-create %{_datadir}/icons/gnome || :
-	%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/gnome || :
+	touch --no-create %{_datadir}/icons/gnome &>/dev/null
+	gtk-update-icon-cache %{_datadir}/icons/gnome &>/dev/null || :
+
+	touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+	gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
 
-if [ $1 -eq 0 ] ; then
-	touch --no-create %{_datadir}/icons/hicolor || :
-	%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
-fi
+%posttrans
+gtk-update-icon-cache %{_datadir}/icons/gnome &>/dev/null || :
+gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files
 %defattr(-,root,root)
@@ -321,6 +322,9 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
+* Sat May 07 2011 Christopher Aillon <caillon@redhat.com> - 1.4.6-2
+- Update icon cache scriptlet
+
 * Tue Apr 19 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.6-1
 - upgrade to 1.4.6
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.6.html

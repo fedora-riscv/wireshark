@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.4.6
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -25,7 +25,7 @@ Source7:	wiresharkdoc-32x32.png
 Source8:	wiresharkdoc-48x48.png
 Source9:	wiresharkdoc-256x256.png
 
-Patch1:		wireshark-nfsv4-opts.patch
+Patch1:		wireshark-nfsv41-cleanup.patch
 Patch2:		wireshark-1.2.4-enable_lua.patch
 Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.4.0-doc-path.patch
@@ -322,6 +322,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu May 19 2011 Steve Dickson <steved@redhat.com> - 1.4.6-3
+- Improved the NFS4.1 patcket dissectors
+
 * Sat May 07 2011 Christopher Aillon <caillon@redhat.com> - 1.4.6-2
 - Update icon cache scriptlet
 

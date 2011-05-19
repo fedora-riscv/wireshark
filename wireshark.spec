@@ -13,7 +13,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.4.6
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 %if %{svn_version}
@@ -32,7 +32,7 @@ Source7:	wiresharkdoc-32x32.png
 Source8:	wiresharkdoc-48x48.png
 Source9:	wiresharkdoc-256x256.png
 
-Patch1:		wireshark-nfsv4-opts.patch
+Patch1:		wireshark-nfsv41-cleanup.patch
 Patch2:		wireshark-0.99.7-path.patch
 Patch3:		wireshark-1.2.4-enable_lua.patch
 Patch4:		wireshark-1.2.8-disable_warning_dialog.patch
@@ -318,6 +318,9 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu May 19 2011 Steve Dickson <steved@redhat.com> - 1.4.6-2
+- Improved the NFS4.1 patcket dissectors
+
 * Tue Apr 19 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.6-1
 - upgrade to 1.4.6
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.6.html

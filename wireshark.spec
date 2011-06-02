@@ -12,8 +12,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.4.6
-Release:	2%{?dist}
+Version:	1.4.7
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 %if %{svn_version}
@@ -318,6 +318,10 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu Jun  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.7-1
+- upgrade to 1.4.7
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.7.html
+
 * Thu May 19 2011 Steve Dickson <steved@redhat.com> - 1.4.6-2
 - Improved the NFS4.1 patcket dissectors
 

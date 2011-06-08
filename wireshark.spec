@@ -10,7 +10,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.4.7
+Version:	1.6.0
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -28,8 +28,7 @@ Source9:	wiresharkdoc-256x256.png
 Patch1:		wireshark-nfsv41-cleanup.patch
 Patch2:		wireshark-1.2.4-enable_lua.patch
 Patch3:		wireshark-libtool-pie.patch
-Patch4:		wireshark-1.4.0-doc-path.patch
-Patch5:		wireshark-1.4.2-group-msg.patch
+Patch4:		wireshark-1.4.2-group-msg.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -96,15 +95,15 @@ and plugins.
 
 %prep
 %setup -q -n %{name}-%{version}
-%patch1 -p1 
+# disable NFS patch for now, remove if steved@redhat.com does not complain
+#%patch1 -p1 
 
 %if %{with_lua}
 %patch2 -p1 -b .enable_lua
 %endif
 
 %patch3 -p1
-%patch4 -p1
-%patch5 -p1 -b .group-msg
+%patch4 -p1 -b .group-msg
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -322,6 +321,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Wed Jun  8 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.0-1
+- upgrade to 1.6.0
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.0.html
+
 * Thu Jun  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.7-1
 - upgrade to 1.4.7
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.7.html

@@ -42,7 +42,7 @@ BuildRequires:	python, pcre-devel, libselinux
 BuildRequires:	gnutls-devel
 BuildRequires:	desktop-file-utils
 BuildRequires:	xdg-utils
-BuildRequires:	flex, bison, python
+BuildRequires:	flex, bison, python, python-devel
 BuildRequires:	GeoIP-devel
 %if %{with_adns}
 BuildRequires:	adns-devel

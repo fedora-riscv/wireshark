@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.6.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -29,6 +29,7 @@ Patch1:		wireshark-nfsv41-cleanup.patch
 Patch2:		wireshark-1.2.4-enable_lua.patch
 Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.4.2-group-msg.patch
+Patch5:		wireshark-1.6.0-soname.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -104,6 +105,7 @@ and plugins.
 
 %patch3 -p1
 %patch4 -p1 -b .group-msg
+%patch5 -p1 -b .soname
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -137,7 +139,9 @@ export LDFLAGS="$LDFLAGS -pie"
    --disable-warnings-as-errors \
    --with-python \
    --with-plugins=%{_libdir}/%{name}/plugins/%{version} \
-   --with-zlib=no
+   --with-dumpcap-group="wireshark" \
+   --enable-setcap-install \
+   --enable-airpcap
 
 #remove rpath
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
@@ -228,6 +232,9 @@ rm -f $RPM_BUILD_ROOT/%{_libdir}/%{name}/plugins/%{version}/*.la
 
 # Remove .la files in libdir
 rm -f $RPM_BUILD_ROOT/%{_libdir}/*.la
+
+# add wspy_dissectors directory for plugins
+mkdir -p $RPM_BUILD_ROOT/%{_libdir}/%{name}/python/%{version}/wspy_dissectors
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -321,6 +328,13 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu Jun  9 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.0-2
+- added wspy_dissectors directory to the package
+  - other packages can add Python plugins there
+  - as side effect, removed following message:
+    [Errno 2] No such file or directory: '/usr/lib64/wireshark/python/1.6.0/wspy_dissectors'
+- enabled zlib support
+
 * Wed Jun  8 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.0-1
 - upgrade to 1.6.0
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.6.0.html

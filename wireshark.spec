@@ -328,6 +328,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu Jun 16 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.0-3
+- fixed Fedora-specific message when user is not part of 'wireshark' group
+  - now it does not contain '<' and '>' characters (#713545)
+
 * Thu Jun  9 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.0-2
 - added wspy_dissectors directory to the package
   - other packages can add Python plugins there

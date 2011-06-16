@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.4.7
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -322,6 +322,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu Jun 16 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.7-2
+- fixed Fedora-specific message when user is not part of 'wireshark' group
+  - now it does not contain '<' and '>' characters (#713545)
+
 * Thu Jun  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.7-1
 - upgrade to 1.4.7
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.7.html

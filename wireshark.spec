@@ -10,8 +10,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.4.7
-Release:	2%{?dist}
+Version:	1.4.8
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -29,7 +29,7 @@ Patch1:		wireshark-nfsv41-cleanup.patch
 Patch2:		wireshark-1.2.4-enable_lua.patch
 Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.4.0-doc-path.patch
-Patch5:		wireshark-1.4.2-group-msg.patch
+Patch5:		wireshark-1.4.8-group-msg.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -322,6 +322,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu Jul 21 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.8.1
+- upgrade to 1.4.8
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.8.html
+
 * Thu Jun 16 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.7-2
 - fixed Fedora-specific message when user is not part of 'wireshark' group
   - now it does not contain '<' and '>' characters (#713545)

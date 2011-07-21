@@ -12,7 +12,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.4.7
+Version:	1.4.8
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -318,6 +318,10 @@ fi
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu Jun  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.8-1
+- upgrade to 1.4.8
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.8.html
+
 * Thu Jun  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.7-1
 - upgrade to 1.4.7
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.7.html

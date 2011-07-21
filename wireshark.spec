@@ -10,8 +10,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.6.0
-Release:	4%{?dist}
+Version:	1.6.1
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -28,7 +28,7 @@ Source9:	wiresharkdoc-256x256.png
 Patch1:		wireshark-nfsv41-cleanup.patch
 Patch2:		wireshark-1.2.4-enable_lua.patch
 Patch3:		wireshark-libtool-pie.patch
-Patch4:		wireshark-1.4.2-group-msg.patch
+Patch4:		wireshark-1.6.1-group-msg.patch
 Patch5:		wireshark-1.6.0-soname.patch
 
 Url:		http://www.wireshark.org/
@@ -328,6 +328,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu Jul 21 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.1-1
+- upgrade to 1.6.1
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.1.html
+
 * Thu Jun 16 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.0-4
 - fixed previous incomplete fix
 

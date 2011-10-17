@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.6.2
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -30,6 +30,7 @@ Patch2:		wireshark-1.2.4-enable_lua.patch
 Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.6.1-group-msg.patch
 Patch5:		wireshark-1.6.0-soname.patch
+Patch6:		wireshark-1.6.2-nfsv41-addstatus.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -103,9 +104,10 @@ and plugins.
 %patch2 -p1 -b .enable_lua
 %endif
 
-%patch3 -p1
+%patch3 -p1 -b .v4cleanup
 %patch4 -p1 -b .group-msg
 %patch5 -p1 -b .soname
+%patch6 -p1 -b .v4staus
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -328,6 +330,11 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Mon Oct 17 2011 Steve Dickson <steved@redhat.com> - 1.6.2-2
+- Fixed a regression introduce by upstream patch r38306
+    which caused v4.1 traffic not to be displayed.
+- Added v4 error status to packet detail window.
+
 * Fri Sep  9 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.2-1
 - upgrade to 1.6.2
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.6.2.html

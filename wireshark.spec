@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.6.2
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -214,7 +214,7 @@ cat > "${RPM_BUILD_ROOT}%{_libdir}/pkgconfig/wireshark.pc" <<- "EOF"
 	Version:	%{version}
 	Requires:	glib-2.0 gmodule-2.0
 	Libs:		-L${libdir} -lwireshark -lwiretap
-	Cflags:		-DWS_VAR_IMPORT=extern -DHAVE_STDARG_H -I${includedir}/wireshark -I${includedir}/wireshark/epan
+	Cflags:		-DWS_VAR_IMPORT=extern -DHAVE_STDARG_H -DWS_MSVC_NORETURN= -I${includedir}/wireshark -I${includedir}/wireshark/epan
 EOF
 
 #	Install the autoconf macro.
@@ -330,6 +330,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Fri Oct 21 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.2-3
+- updated autoconf macros and pkgconfig file in wireshark-devel to reflect
+  current config.h (#746655)
+
 * Mon Oct 17 2011 Steve Dickson <steved@redhat.com> - 1.6.2-2
 - Fixed a regression introduce by upstream patch r38306
     which caused v4.1 traffic not to be displayed.

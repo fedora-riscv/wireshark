@@ -10,7 +10,7 @@ AC_DEFUN([AM_PATH_WIRESHARK],[
 	wireshark_found=no
 	if test "$wireshark_config_prefix" != "" ; then
 		AM_PATH_GLIB_2_0(,,,[gmodule])
-		WIRESHARK_CFLAGS="-DWS_VAR_IMPORT=extern -I$wireshark_config_prefix/include/wireshark -I$wireshark_config_prefix/include/wireshark/epan -I/usr/include/wireshark -I/usr/include/wireshark/epan $GLIB_CFLAGS"
+		WIRESHARK_CFLAGS="-DWS_VAR_IMPORT=extern -DWS_MSVC_NORETURN= -I$wireshark_config_prefix/include/wireshark -I$wireshark_config_prefix/include/wireshark/epan -I/usr/include/wireshark -I/usr/include/wireshark/epan $GLIB_CFLAGS"
 		WIRESHARK_LIBS="-L$wireshark_config_prefix/lib -lwireshark -lwiretap $GLIB_LIBS"
 		wireshark_found=yes
 	else

@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.6.2
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -330,6 +330,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Wed Oct 26 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.6.2-4
+- Rebuilt for glibc bug#747377
+
 * Fri Oct 21 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.2-3
 - updated autoconf macros and pkgconfig file in wireshark-devel to reflect
   current config.h (#746655)

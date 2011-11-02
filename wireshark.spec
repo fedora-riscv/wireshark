@@ -10,7 +10,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.4.9
+Version:	1.4.10
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -322,6 +322,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Wed Nov  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.10-1
+- upgrade to 1.4.10
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.10.html
+
 * Fri Sep  9 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.9-1
 - upgrade to 1.4.9
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.9.html

@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.6.3
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2

@@ -11,11 +11,10 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.6.3
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
-Source1:	wireshark.pam
 Source2:	wireshark.console
 Source3:	wireshark.desktop
 Source4:	wireshark-autoconf.m4
@@ -56,18 +55,20 @@ BuildRequires:	portaudio-devel
 BuildRequires:	lua-devel
 %endif
 
-%package	gnome
-Summary:	Gnome desktop integration for wireshark and wireshark-usermode
-Group:		Applications/Internet
-Requires:	gtk2
-Requires:	usermode >= 1.37
-Requires:	wireshark = %{version}-%{release}
-Requires:	xdg-utils, usermode-gtk
-Requires:	GeoIP
-Requires:       hicolor-icon-theme
+Requires(pre):	shadow-utils
 %if %{with_adns}
 Requires:	adns
 %endif
+
+%package	gnome
+Summary:	Gnome desktop integration for wireshark
+Group:		Applications/Internet
+Requires:	gtk2
+Requires:	wireshark = %{version}-%{release}
+Requires:	xdg-utils
+Requires:	GeoIP
+Requires:	hicolor-icon-theme
+
 %if %{with_portaudio}
 Requires:	portaudio
 %endif
@@ -158,10 +159,6 @@ rm -rf $RPM_BUILD_ROOT
 perl -pi -e 's|-L../../epan|-L../../epan/.libs|' plugins/*/*.la
 
 make DESTDIR=$RPM_BUILD_ROOT install
-
-# install support files for usermode, gnome and kde
-mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/pam.d
-install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/%{_sysconfdir}/pam.d/wireshark
 
 # Install python stuff.
 mkdir -p $RPM_BUILD_ROOT%{python_sitearch}
@@ -295,7 +292,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/rawshark.*
 %{_mandir}/man1/dftest.*
 %{_mandir}/man1/randpkt.*
-%config(noreplace) %{_sysconfdir}/pam.d/wireshark
 %{_datadir}/wireshark
 %if %{with_lua}
 %exclude %{_datadir}/wireshark/init.lua
@@ -330,6 +326,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Mon Nov 14 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.3-2
+- added dependency on shadow-utils (#753293)
+- removed usermode support
+
 * Wed Nov  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.3-1
 - upgrade to 1.6.3
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.6.3.html

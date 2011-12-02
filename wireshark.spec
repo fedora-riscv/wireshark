@@ -331,6 +331,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Fri Dec  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.4-1
+- upgrade to 1.6.4
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.4.html
+- build with c-ares and libpcap (#759305)
+- fixed display of error message boxes on startup in gnome3 (#752559)
+
 * Mon Nov 14 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.3-2
 - added dependency on shadow-utils (#753293)
 - removed usermode support

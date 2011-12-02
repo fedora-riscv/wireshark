@@ -10,8 +10,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.6.3
-Release:	2%{?dist}
+Version:	1.6.4
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -30,6 +30,7 @@ Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.6.1-group-msg.patch
 Patch5:		wireshark-1.6.0-soname.patch
 Patch6:		wireshark-1.6.2-nfsv41-addstatus.patch
+Patch7:		wireshark-gnome3-msgbox.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -45,8 +46,11 @@ BuildRequires:	desktop-file-utils
 BuildRequires:	xdg-utils
 BuildRequires:	flex, bison, python, python-devel
 BuildRequires:	GeoIP-devel
+BuildRequires:	libcap-devel
 %if %{with_adns}
 BuildRequires:	adns-devel
+%else
+BuildRequires:	c-ares-devel
 %endif
 %if %{with_portaudio}
 BuildRequires:	portaudio-devel
@@ -109,6 +113,7 @@ and plugins.
 %patch4 -p1 -b .group-msg
 %patch5 -p1 -b .soname
 %patch6 -p1 -b .v4staus
+%patch7 -p1 -b .gnome3
 
 %build
 %ifarch s390 s390x sparcv9 sparc64

@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.4.10
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -30,6 +30,7 @@ Patch2:		wireshark-1.2.4-enable_lua.patch
 Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.4.0-doc-path.patch
 Patch5:		wireshark-1.4.8-group-msg.patch
+Patch6:		wireshark-gnome3-msgbox.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -105,6 +106,7 @@ and plugins.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1 -b .group-msg
+%patch6 -p1 -b .gnome3
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -322,6 +324,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Fri Dec  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.10-2
+- fixed display of error message boxes on startup in gnome3 (#752559)
+
 * Wed Nov  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.10-1
 - upgrade to 1.4.10
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.4.10.html

@@ -10,8 +10,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.4.10
-Release:	2%{?dist}
+Version:	1.4.11
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -324,6 +324,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Wed Jan 11 2012 Jan Safranek <jsafrane@redhat.com> - 1.4.11-1
+- upgrade to 1.4.11
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.11.html
+
 * Fri Dec  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.10-2
 - fixed display of error message boxes on startup in gnome3 (#752559)
 

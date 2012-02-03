@@ -1,11 +1,11 @@
-%define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
+%global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
 
-%define with_adns 0
-%define with_lua 1
+%global with_adns 0
+%global with_lua 1
 %if 0%{?rhel} != 0
-%define with_portaudio 0
+%global with_portaudio 0
 %else
-%define with_portaudio 1
+%global with_portaudio 1
 %endif
 
 Summary:	Network traffic analyzer
@@ -142,6 +142,11 @@ export LDFLAGS="$LDFLAGS -pie"
    --with-lua \
 %else
    --with-lua=no \
+%endif
+%if %{with_portaudio}
+   --with-portaudio \
+%else
+  --with-portaudio=no \
 %endif
    --with-ssl \
    --disable-warnings-as-errors \

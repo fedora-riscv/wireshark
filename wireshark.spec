@@ -11,7 +11,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.6.5
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -31,6 +31,7 @@ Patch4:		wireshark-1.6.1-group-msg.patch
 Patch5:		wireshark-1.6.0-soname.patch
 Patch6:		wireshark-1.6.2-nfsv41-addstatus.patch
 Patch7:		wireshark-gnome3-msgbox.patch
+Patch8:		wireshark-import-crash.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -114,6 +115,7 @@ and plugins.
 %patch5 -p1 -b .soname
 %patch6 -p1 -b .v4staus
 %patch7 -p1 -b .gnome3
+%patch8 -p1 -b .import
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -336,6 +338,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Fri Mar  9 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.5-2
+- fixed wireshark crashing when using combo box in import dialog (#773290)
+
 * Wed Jan 11 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.5-1
 - upgrade to 1.6.5
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.6.5.html

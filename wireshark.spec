@@ -32,6 +32,7 @@ Patch5:		wireshark-1.6.0-soname.patch
 Patch6:		wireshark-1.6.2-nfsv41-addstatus.patch
 Patch7:		wireshark-gnome3-msgbox.patch
 Patch8:		wireshark-import-crash.patch
+Patch9:		wireshark-netlogon-aes.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -116,6 +117,7 @@ and plugins.
 %patch6 -p1 -b .v4staus
 %patch7 -p1 -b .gnome3
 %patch8 -p1 -b .import
+%patch9 -p1 -b .aes
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -340,6 +342,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %changelog
 * Fri Mar  9 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.5-2
 - fixed wireshark crashing when using combo box in import dialog (#773290)
+- added AES support into netlogon dissector
 
 * Wed Jan 11 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.5-1
 - upgrade to 1.6.5

@@ -4,14 +4,16 @@
 %global with_lua 1
 %if 0%{?rhel} != 0
 %global with_portaudio 0
+%global with_GeoIP 0
 %else
 %global with_portaudio 1
+%global with_GeoIP 1
 %endif
 
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.6.7
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -47,8 +49,10 @@ BuildRequires:	gnutls-devel
 BuildRequires:	desktop-file-utils
 BuildRequires:	xdg-utils
 BuildRequires:	flex, bison, python, python-devel
-BuildRequires:	GeoIP-devel
 BuildRequires:	libcap-devel
+%if %{with_GeoIP}
+BuildRequires:	GeoIP-devel
+%endif
 %if %{with_adns}
 BuildRequires:	adns-devel
 %else
@@ -151,6 +155,11 @@ export LDFLAGS="$LDFLAGS -pie"
    --with-portaudio \
 %else
   --with-portaudio=no \
+%endif
+%if %{with_GeoIP}
+   --with-geoip \
+%else
+   --with-geoip=no \
 %endif
    --with-ssl \
    --disable-warnings-as-errors \
@@ -340,6 +349,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Mon May 21 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.7-2
+- Removed dependency on GeoIP on RHEL.
+
 * Tue Apr 10 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.7-1
 - upgrade to 1.6.7
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.6.7.html

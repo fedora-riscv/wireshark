@@ -12,8 +12,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.6.7
-Release:	2%{?dist}
+Version:	1.6.8
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -349,6 +349,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Wed May 23 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.8-1
+- upgrade to 1.6.8
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.8.html
+
 * Mon May 21 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.7-2
 - Removed dependency on GeoIP on RHEL.
 

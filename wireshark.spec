@@ -12,7 +12,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.6.8
+Version:	1.8.0
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -31,10 +31,6 @@ Patch2:		wireshark-1.2.4-enable_lua.patch
 Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.6.1-group-msg.patch
 Patch5:		wireshark-1.6.0-soname.patch
-Patch6:		wireshark-1.6.2-nfsv41-addstatus.patch
-Patch7:		wireshark-gnome3-msgbox.patch
-Patch8:		wireshark-import-crash.patch
-Patch9:		wireshark-netlogon-aes.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -64,6 +60,10 @@ BuildRequires:	portaudio-devel
 %if %{with_lua}
 BuildRequires:	lua-devel
 %endif
+
+# Temporary hack - wireshark-1.8.0 is not compilable with upstream
+# Makefile.in / configure, they need to be regenerated
+BuildRequires: libtool, automake, autoconf
 
 Requires(pre):	shadow-utils
 %if %{with_adns}
@@ -118,10 +118,6 @@ and plugins.
 %patch3 -p1 -b .v4cleanup
 %patch4 -p1 -b .group-msg
 %patch5 -p1 -b .soname
-%patch6 -p1 -b .v4staus
-%patch7 -p1 -b .gnome3
-%patch8 -p1 -b .import
-%patch9 -p1 -b .aes
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -135,12 +131,17 @@ export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
 export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
 export LDFLAGS="$LDFLAGS -pie"
 
+# Temporary hack - wireshark-1.8.0 is not compilable with upstream
+# Makefile.in / configure, they need to be regenerated
+./autogen.sh
+
 %configure \
    --bindir=%{_sbindir} \
    --enable-ipv6 \
    --with-libsmi \
    --with-gnu-ld \
    --with-pic \
+   --with-gtk3 \
 %if %{with_adns}
    --with-adns \
 %else
@@ -293,7 +294,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README* 
 %{_sbindir}/editcap
-#%{_sbindir}/idl2wrs
 %{_sbindir}/tshark
 %{_sbindir}/mergecap
 %{_sbindir}/text2pcap
@@ -345,10 +345,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*
 %{_datadir}/aclocal/*
-%{_mandir}/man1/idl2wrs.*
-%{_sbindir}/idl2wrs
 
 %changelog
+* Mon Jun 25 2012 Jan Safranek <jsafrane@redhat.com> - 1.8.0
+- upgrade to 1.8.0
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.8.0.html
+
 * Wed May 23 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.8-1
 - upgrade to 1.6.8
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.6.8.html

@@ -38,7 +38,7 @@ BuildRequires:	libpcap-devel >= 0.9
 BuildRequires:	libsmi-devel
 BuildRequires:	zlib-devel, bzip2-devel
 BuildRequires:	openssl-devel
-BuildRequires:	glib2-devel, gtk2-devel
+BuildRequires:	glib2-devel, gtk3-devel
 BuildRequires:	elfutils-devel, krb5-devel
 BuildRequires:	python, pcre-devel, libselinux
 BuildRequires:	gnutls-devel
@@ -73,7 +73,7 @@ Requires:	adns
 %package	gnome
 Summary:	Gnome desktop integration for wireshark
 Group:		Applications/Internet
-Requires:	gtk2
+Requires:	gtk3
 Requires:	wireshark = %{version}-%{release}
 Requires:	xdg-utils
 Requires:	GeoIP

@@ -12,8 +12,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.8.1
-Release:	2%{?dist}
+Version:	1.8.2
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -347,6 +347,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Aug 16 2012 Jan Safranek <jsafrane@redhat.com> - 1.8.2-1
+- upgrade to 1.8.2
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.8.2.html
+
 * Fri Jul 27 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 

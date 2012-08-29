@@ -34,7 +34,6 @@ Patch5:		wireshark-1.6.0-soname.patch
 Patch6:		wireshark-1.8.2-python-symbols.patch
 
 Url:		http://www.wireshark.org/
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpcap-devel >= 0.9
 BuildRequires:	libsmi-devel
 BuildRequires:	zlib-devel, bzip2-devel
@@ -179,8 +178,6 @@ sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{?_smp_mflags}
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
 # The evil plugins hack
 perl -pi -e 's|-L../../epan|-L../../epan/.libs|' plugins/*/*.la
 
@@ -261,9 +258,6 @@ rm -f $RPM_BUILD_ROOT/%{_libdir}/*.la
 # add wspy_dissectors directory for plugins
 mkdir -p $RPM_BUILD_ROOT/%{_libdir}/%{name}/python/%{version}/wspy_dissectors
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %pre
 getent group wireshark >/dev/null || groupadd -r wireshark
 
@@ -293,7 +287,6 @@ gtk-update-icon-cache %{_datadir}/icons/gnome &>/dev/null || :
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files
-%defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README* 
 %{_sbindir}/editcap
 %{_sbindir}/tshark
@@ -324,7 +317,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %files gnome
-%defattr(-,root,root)
 %{_datadir}/applications/fedora-wireshark.desktop
 %{_datadir}/icons/hicolor/16x16/apps/wireshark.png
 %{_datadir}/icons/hicolor/32x32/apps/wireshark.png
@@ -340,7 +332,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/wireshark.*
 
 %files devel
-%defattr(-,root,root)
 %doc doc/README.*
 %config(noreplace) %{_datadir}/wireshark/init.lua
 %{_includedir}/wireshark

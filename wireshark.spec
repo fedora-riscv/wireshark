@@ -2,18 +2,26 @@
 
 %global with_adns 0
 %global with_lua 1
+%global with_gtk2 0
+
 %if 0%{?rhel} != 0
-%global with_portaudio 0
-%global with_GeoIP 0
+#RHEL:
+    %global with_portaudio 0
+    %global with_GeoIP 0
+    %if 0%{?rhel} <= 6
+        # RHEL6: use GTK2
+       %global with_gtk2 1
+    %endif
 %else
-%global with_portaudio 1
-%global with_GeoIP 1
+    %global with_portaudio 1
+    %global with_GeoIP 1
 %endif
+
 
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.8.2
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -38,7 +46,7 @@ BuildRequires:	libpcap-devel >= 0.9
 BuildRequires:	libsmi-devel
 BuildRequires:	zlib-devel, bzip2-devel
 BuildRequires:	openssl-devel
-BuildRequires:	glib2-devel, gtk3-devel
+BuildRequires:	glib2-devel
 BuildRequires:	elfutils-devel, krb5-devel
 BuildRequires:	python, pcre-devel, libselinux
 BuildRequires:	gnutls-devel
@@ -60,6 +68,11 @@ BuildRequires:	portaudio-devel
 %if %{with_lua}
 BuildRequires:	lua-devel
 %endif
+%if %{with_gtk2}
+BuildRequires:	gtk2-devel
+%else
+BuildRequires:	gtk3-devel
+%endif
 
 # Temporary hack - wireshark-1.8.0 is not compilable with upstream
 # Makefile.in / configure, they need to be regenerated
@@ -73,14 +86,19 @@ Requires:	adns
 %package	gnome
 Summary:	Gnome desktop integration for wireshark
 Group:		Applications/Internet
-Requires:	gtk3
 Requires:	wireshark = %{version}-%{release}
 Requires:	xdg-utils
-Requires:	GeoIP
 Requires:	hicolor-icon-theme
-
+%if %{with_gtk2}
+Requires:	gtk2
+%else
+Requires:	gtk3
+%endif
 %if %{with_portaudio}
 Requires:	portaudio
+%endif
+%if %{with_GeoIP}
+Requires:	GeoIP
 %endif
 
 %package devel
@@ -142,7 +160,11 @@ export LDFLAGS="$LDFLAGS -pie"
    --with-libsmi \
    --with-gnu-ld \
    --with-pic \
-   --with-gtk3 \
+%if %{with_gtk2}
+   --with-gtk2 \
+%else
+    --with-gtk3 \
+%endif
 %if %{with_adns}
    --with-adns \
 %else
@@ -340,6 +362,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Sep  4 2012 Jan Safranek <jsafrane@redhat.com> - 1.8.2-3
+- added back compatibility with RHEL6
+- GeoIP build dependency made also conditional on with_GeoIP variable
+
 * Wed Aug 29 2012 Jan Safranek <jsafrane@redhat.com> - 1.8.2-2
 - fixed "libwireshark.so.1: cannot open shared object file" error
   message on startup

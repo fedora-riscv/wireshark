@@ -13,7 +13,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.8.3
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -76,7 +76,9 @@ Group:		Applications/Internet
 Requires:	gtk3
 Requires:	wireshark = %{version}-%{release}
 Requires:	xdg-utils
+%if %{with_GeoIP}
 Requires:	GeoIP
+%endif
 Requires:	hicolor-icon-theme
 
 %if %{with_portaudio}
@@ -347,6 +349,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Oct 22 2012 Peter Hatina <phatina@redhat.com> - 1.8.3-2
+- conditional GeoIP dependency fix
+
 * Thu Oct 11 2012 Peter Hatina <phatina@redhat.com> - 1.8.3-1
 - upgrade to 1.8.3
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.8.3.html

@@ -13,7 +13,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.8.3
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -32,6 +32,7 @@ Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.6.1-group-msg.patch
 Patch5:		wireshark-1.6.0-soname.patch
 Patch6:		wireshark-dissector-table.patch
+Patch7:		wireshark-1.8.2-python-symbols.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -122,6 +123,7 @@ and plugins.
 %patch4 -p1 -b .group-msg
 %patch5 -p1 -b .soname
 %patch6 -p1 -b .dtls
+%patch7 -p1 -b .python-symbols
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -351,6 +353,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Nov 19 2012 Peter Hatina <phatina@redhat.com> - 1.8.3-4
+- fixed "libwireshark.so.1: cannot open shared object file" error
+
 * Mon Oct 29 2012 Peter Hatina <phatina@redhat.com> - 1.8.3-3
 - backport dissector table fix
 - TODO: remove this after new release

@@ -20,8 +20,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.8.3
-Release:	2%{?dist}
+Version:	1.8.4
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -40,7 +40,6 @@ Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.6.1-group-msg.patch
 Patch5:		wireshark-1.6.0-soname.patch
 Patch6:		wireshark-1.8.2-python-symbols.patch
-Patch7:		wireshark-dissector-table.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -138,7 +137,6 @@ and plugins.
 %patch4 -p1 -b .group-msg
 %patch5 -p1 -b .soname
 %patch6 -p1 -b .python-symbols
-%patch7 -p1 -b .dtls
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -364,6 +362,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Dec 03 2012 Peter Hatina <phatina@redhat.com> - 1.8.4-1
+- upgrade to 1.8.4
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.8.4.html
+
 * Tue Oct 16 2012 Peter Hatina <phatina@redhat.com> - 1.8.3-2
 - backport dissector table fix
 - TODO: remove this after new release

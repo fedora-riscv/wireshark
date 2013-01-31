@@ -12,7 +12,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.8.4
+Version:	1.8.5
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -351,6 +351,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Jan 31 2013 Peter Hatina <phatina@redhat.com> - 1.8.5-1
+- upgrade to 1.8.5
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.8.5.html
+
 * Mon Dec 03 2012 Peter Hatina <phatina@redhat.com> - 1.8.4-1
 - upgrade to 1.8.4
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.8.4.html

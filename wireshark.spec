@@ -12,7 +12,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.6.12
+Version:	1.6.13
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -349,6 +349,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Thu Jan 31 2013 Peter Hatina <phatina@redhat.com> - 1.6.13-1
+- upgrade to 1.6.13
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.13.html
+
 * Mon Dec 03 2012 Peter Hatina <phatina@redhat.com> - 1.6.12-1
 - upgrade to 1.6.12
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.6.12.html

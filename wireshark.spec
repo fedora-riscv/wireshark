@@ -54,6 +54,7 @@ BuildRequires:	desktop-file-utils
 BuildRequires:	xdg-utils
 BuildRequires:	flex, bison, python, python-devel
 BuildRequires:	libcap-devel
+BuildRequires:	perl-podlators
 %if %{with_GeoIP}
 BuildRequires:	GeoIP-devel
 %endif

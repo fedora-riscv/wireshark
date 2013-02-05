@@ -13,7 +13,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.8.5
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -32,6 +32,7 @@ Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.6.1-group-msg.patch
 Patch5:		wireshark-1.6.0-soname.patch
 Patch6:		wireshark-1.8.2-python-symbols.patch
+Patch7:		wireshark-1.8.x-gtk3-layouts.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -122,6 +123,7 @@ and plugins.
 %patch4 -p1 -b .group-msg
 %patch5 -p1 -b .soname
 %patch6 -p1 -b .python-symbols
+%patch7 -p1 -b .gtk3-layouts
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -351,6 +353,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Feb 05 2013 Peter Hatina <phatina@redhat.com> - 1.8.5-2
+- fix gtk3 layout issues
+- NOTE: there may be some windows with broken layouts left
+
 * Thu Jan 31 2013 Peter Hatina <phatina@redhat.com> - 1.8.5-1
 - upgrade to 1.8.5
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.8.5.html

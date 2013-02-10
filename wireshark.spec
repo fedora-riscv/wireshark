@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.8.5
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -212,7 +212,7 @@ make DESTDIR=$RPM_BUILD_ROOT install
 mkdir -p $RPM_BUILD_ROOT%{python_sitearch}
 install -m 644 tools/wireshark_be.py tools/wireshark_gen.py  $RPM_BUILD_ROOT%{python_sitearch}
 
-desktop-file-install --vendor fedora				\
+desktop-file-install 				\
 	--dir ${RPM_BUILD_ROOT}%{_datadir}/applications		\
 	--add-category X-Fedora					\
 	%{SOURCE3}
@@ -342,7 +342,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %files gnome
-%{_datadir}/applications/fedora-wireshark.desktop
+%{_datadir}/applications/wireshark.desktop
 %{_datadir}/icons/hicolor/16x16/apps/wireshark.png
 %{_datadir}/icons/hicolor/32x32/apps/wireshark.png
 %{_datadir}/icons/hicolor/48x48/apps/wireshark.png
@@ -365,6 +365,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Sun Feb 10 2013 Parag Nemade <paragn AT fedoraproject DOT org> - 1.8.5-3
+- Remove vendor tag from desktop file as per https://fedorahosted.org/fesco/ticket/1077
+
 * Tue Feb 05 2013 Peter Hatina <phatina@redhat.com> - 1.8.5-2
 - fix gtk3 layout issues
 - NOTE: there may be some windows with broken layouts left

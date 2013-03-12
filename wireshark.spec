@@ -20,8 +20,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.8.5
-Release:	3%{?dist}
+Version:	1.8.6
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -365,6 +365,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Mar 12 2013 Peter Hatina <phatina@redhat.com> 1.8.6-1
+- upgrade to 1.8.6
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.8.6.html
+
 * Sun Feb 10 2013 Parag Nemade <paragn AT fedoraproject DOT org> - 1.8.5-3
 - Remove vendor tag from desktop file as per https://fedorahosted.org/fesco/ticket/1077
 

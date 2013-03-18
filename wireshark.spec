@@ -2,6 +2,7 @@
 
 %global with_adns 0
 %global with_lua 1
+%global with_gtk2 1
 %if 0%{?rhel} != 0
 %global with_portaudio 0
 %global with_GeoIP 0
@@ -13,7 +14,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.8.6
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -32,7 +33,6 @@ Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.6.1-group-msg.patch
 Patch5:		wireshark-1.6.0-soname.patch
 Patch6:		wireshark-1.8.2-python-symbols.patch
-Patch7:		wireshark-1.8.x-gtk3-layouts.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -40,7 +40,7 @@ BuildRequires:	libpcap-devel >= 0.9
 BuildRequires:	libsmi-devel
 BuildRequires:	zlib-devel, bzip2-devel
 BuildRequires:	openssl-devel
-BuildRequires:	glib2-devel, gtk3-devel
+BuildRequires:	glib2-devel
 BuildRequires:	elfutils-devel, krb5-devel
 BuildRequires:	python, pcre-devel, libselinux
 BuildRequires:	gnutls-devel
@@ -62,6 +62,11 @@ BuildRequires:	portaudio-devel
 %if %{with_lua}
 BuildRequires:	lua-devel
 %endif
+%if %{with_gtk2}
+BuildRequires:	gtk2-devel
+%else
+BuildRequires:	gtk3-devel
+%endif
 
 # Temporary hack - wireshark-1.8.0 is not compilable with upstream
 # Makefile.in / configure, they need to be regenerated
@@ -82,6 +87,11 @@ Requires:	xdg-utils
 Requires:	GeoIP
 %endif
 Requires:	hicolor-icon-theme
+%if %{with_gtk2}
+Requires:	gtk2
+%else
+Requires:	gtk3
+%endif
 
 %if %{with_portaudio}
 Requires:	portaudio
@@ -123,7 +133,6 @@ and plugins.
 %patch4 -p1 -b .group-msg
 %patch5 -p1 -b .soname
 %patch6 -p1 -b .python-symbols
-%patch7 -p1 -b .gtk3-layouts
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -147,7 +156,11 @@ export LDFLAGS="$LDFLAGS -pie"
    --with-libsmi \
    --with-gnu-ld \
    --with-pic \
+%if %{with_gtk2}
+   --with-gtk2 \
+%else
    --with-gtk3 \
+%endif
 %if %{with_adns}
    --with-adns \
 %else
@@ -353,6 +366,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Mar 18 2013 Peter Hatina <phatina@redhat.com> 1.8.6-2
+- return to gtk2, stable branch 1.8 is not gtk3 ready
+
 * Tue Mar 12 2013 Peter Hatina <phatina@redhat.com> - 1.8.6-1
 - upgrade to 1.8.6
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.8.6.html

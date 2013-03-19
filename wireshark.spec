@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.8.6
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -40,6 +40,7 @@ Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.6.1-group-msg.patch
 Patch5:		wireshark-1.6.0-soname.patch
 Patch6:		wireshark-1.8.2-python-symbols.patch
+Patch7:		wireshark-1.8.x-dns-cleanup.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -138,6 +139,7 @@ and plugins.
 %patch4 -p1 -b .group-msg
 %patch5 -p1 -b .soname
 %patch6 -p1 -b .python-symbols
+%patch7 -p1 -b .dns-cleanup
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -363,6 +365,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Mar 19 2013 Peter Hatina <phatina@redhat.com> 1.8.6-3
+- fix dns resolving crash (#908211)
+
 * Mon Mar 18 2013 Peter Hatina <phatina@redhat.com> 1.8.6-2
 - return to gtk2, stable branch 1.8 is not gtk3 ready
 

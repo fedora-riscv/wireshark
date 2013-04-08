@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.8.6
-Release:	4%{?dist}
+Release:	5%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -42,6 +42,7 @@ Patch5:		wireshark-1.6.0-soname.patch
 Patch6:		wireshark-1.8.2-python-symbols.patch
 Patch7:		wireshark-1.8.x-dns-cleanup.patch
 Patch8:		wireshark-1.8.x-capture-crash.patch
+Patch9:		wireshark-1.8.x-pod2man-encoding.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -142,6 +143,7 @@ and plugins.
 %patch6 -p1 -b .python-symbols
 %patch7 -p1 -b .dns-cleanup
 %patch8 -p1 -b .capture-crash
+%patch9 -p1 -b .pod2man
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -367,6 +369,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Apr 04 2013 Peter Hatina <phatina@redhat.com> 1.8.6-5
+- fix documentation build error
+
 * Wed Mar 27 2013 Peter Hatina <phatina@redhat.com> 1.8.6-4
 - fix capture crash (#894753)
 

@@ -13,7 +13,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.6.16
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -35,6 +35,7 @@ Patch6:		wireshark-1.6.2-nfsv41-addstatus.patch
 Patch7:		wireshark-gnome3-msgbox.patch
 Patch8:		wireshark-import-crash.patch
 Patch9:		wireshark-netlogon-aes.patch
+Patch10:		wireshark-1.6.x-flow-graph-crash.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -122,6 +123,7 @@ and plugins.
 %patch7 -p1 -b .gnome3
 %patch8 -p1 -b .import
 %patch9 -p1 -b .aes
+%patch10 -p1 -b .flow-graph-crash
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -349,6 +351,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/idl2wrs
 
 %changelog
+* Mon Jun 17 2013 Peter Hatina <phatina@redhat.com> - 1.6.16-2
+- fix flow graph crash
+
 * Mon Jun 17 2013 Peter Hatina <phatina@redhat.com> - 1.6.16-1
 - upgrade to 1.6.16
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.6.16.html

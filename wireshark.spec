@@ -20,8 +20,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.8.6
-Release:	5%{?dist}
+Version:	1.10.0
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -39,10 +39,7 @@ Patch2:		wireshark-1.2.4-enable_lua.patch
 Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.6.1-group-msg.patch
 Patch5:		wireshark-1.6.0-soname.patch
-Patch6:		wireshark-1.8.2-python-symbols.patch
-Patch7:		wireshark-1.8.x-dns-cleanup.patch
-Patch8:		wireshark-1.8.x-capture-crash.patch
-Patch9:		wireshark-1.8.x-pod2man-encoding.patch
+Patch6:		wireshark-1.8.x-pod2man-encoding.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -140,10 +137,7 @@ and plugins.
 %patch3 -p1 -b .v4cleanup
 %patch4 -p1 -b .group-msg
 %patch5 -p1 -b .soname
-%patch6 -p1 -b .python-symbols
-%patch7 -p1 -b .dns-cleanup
-%patch8 -p1 -b .capture-crash
-%patch9 -p1 -b .pod2man
+%patch6 -p1 -b .pod2man
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -324,6 +318,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/dftest
 %{_sbindir}/capinfos
 %{_sbindir}/randpkt
+%{_sbindir}/reordercap
 %attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=eip) %{_sbindir}/dumpcap
 %{_sbindir}/rawshark
 %{python_sitearch}/*.py*
@@ -339,6 +334,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/rawshark.*
 %{_mandir}/man1/dftest.*
 %{_mandir}/man1/randpkt.*
+%{_mandir}/man1/reordercap.*
 %{_datadir}/wireshark
 %if %{with_lua}
 %exclude %{_datadir}/wireshark/init.lua
@@ -369,6 +365,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Jun 17 2013 Peter Hatina <phatina@redhat.com> 1.10.0-1
+- upgrade to 1.10.0
+- see http://www.wireshark.org/docs/relnotes/wireshark-1.10.0.html
+
 * Mon Apr 04 2013 Peter Hatina <phatina@redhat.com> 1.8.6-5
 - fix documentation build error
 

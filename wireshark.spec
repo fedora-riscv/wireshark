@@ -14,7 +14,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.8.8
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -35,6 +35,7 @@ Patch5:		wireshark-1.6.0-soname.patch
 Patch6:		wireshark-1.8.2-python-symbols.patch
 Patch7:		wireshark-1.8.x-dns-cleanup.patch
 Patch8:		wireshark-1.8.x-capture-crash.patch
+Patch9:		wireshark-1.8.x-flow-graph-crash.patch
 
 Url:		http://www.wireshark.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -137,6 +138,7 @@ and plugins.
 %patch6 -p1 -b .python-symbols
 %patch7 -p1 -b .dns-cleanup
 %patch8 -p1 -b .capture-crash
+%patch9 -p1 -b .flow-graph-crash
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -370,6 +372,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Jun 17 2013 Peter Hatina <phatina@redhat.com> 1.8.8-2
+- fix flow graph crash
+
 * Mon Jun 17 2013 Peter Hatina <phatina@redhat.com> 1.8.8-1
 - upgrade to 1.8.8
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.8.8.html

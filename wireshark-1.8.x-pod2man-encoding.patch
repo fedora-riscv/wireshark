@@ -1,5 +1,23 @@
+diff --git a/doc/asn2deb.pod b/doc/asn2deb.pod
+index 0baa50e..a1e483a 100644
+--- a/doc/asn2deb.pod
++++ b/doc/asn2deb.pod
+@@ -1,3 +1,4 @@
++=encoding utf8
+ 
+ =head1 NAME
+ 
+diff --git a/doc/idl2deb.pod b/doc/idl2deb.pod
+index 9a43c7f..80ae2b5 100644
+--- a/doc/idl2deb.pod
++++ b/doc/idl2deb.pod
+@@ -1,3 +1,4 @@
++=encoding utf8
+ 
+ =head1 NAME
+ 
 diff --git a/doc/wireshark.pod.template b/doc/wireshark.pod.template
-index b946c34..7b97eea 100644
+index 363d999..09350b4 100644
 --- a/doc/wireshark.pod.template
 +++ b/doc/wireshark.pod.template
 @@ -1,3 +1,4 @@

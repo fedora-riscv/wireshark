@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.0
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -367,6 +367,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Jun 24 2013 Peter Hatina <phatina@redhat.com> 1.10.0-4
+- fix pod2man build error
+
 * Mon Jun 24 2013 Peter Hatina <phatina@redhat.com> 1.10.0-3
 - fix bogus date
 

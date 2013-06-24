@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -367,6 +367,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Jun 24 2013 Peter Hatina <phatina@redhat.com> 1.10.0-3
+- fix bogus date
+
 * Mon Jun 17 2013 Peter Hatina <phatina@redhat.com> 1.10.0-2
 - fix flow graph crash
 
@@ -374,7 +377,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 - upgrade to 1.10.0
 - see http://www.wireshark.org/docs/relnotes/wireshark-1.10.0.html
 
-* Mon Apr 04 2013 Peter Hatina <phatina@redhat.com> 1.8.6-5
+* Mon Apr 08 2013 Peter Hatina <phatina@redhat.com> 1.8.6-5
 - fix documentation build error
 
 * Wed Mar 27 2013 Peter Hatina <phatina@redhat.com> 1.8.6-4

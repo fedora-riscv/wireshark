@@ -42,6 +42,7 @@ Patch5:		wireshark-1.6.0-soname.patch
 Patch6:		wireshark-1.8.x-flow-graph-crash.patch
 Patch7:		wireshark-1.8.x-dcom-string-overrun.patch
 Patch8:		wireshark-1.8.x-sctp-bytes-graph-crash.patch
+Patch9:		wireshark-1.8.x-tap-iostat-overflow.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -142,6 +143,7 @@ and plugins.
 %patch6 -p1 -b .flow-graph-crash
 %patch7 -p1 -b .dcom-overrun
 %patch8 -p1 -b .sctp-bytes-graph-crash
+%patch9 -p1 -b .tap-iostat-overflow
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -369,6 +371,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Sep 03 2013 Peter Hatina <phatina@redhat.com> 1.10.0-5
+- fix tap iostat overflow
+
 * Tue Sep 03 2013 Peter Hatina <phatina@redhat.com> 1.10.0-4
 - fix sctp bytes graph crash
 

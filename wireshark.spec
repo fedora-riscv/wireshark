@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -40,6 +40,7 @@ Patch3:		wireshark-libtool-pie.patch
 Patch4:		wireshark-1.6.1-group-msg.patch
 Patch5:		wireshark-1.6.0-soname.patch
 Patch6:		wireshark-1.8.x-flow-graph-crash.patch
+Patch7:		wireshark-1.8.x-dcom-string-overrun.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -138,6 +139,7 @@ and plugins.
 %patch4 -p1 -b .group-msg
 %patch5 -p1 -b .soname
 %patch6 -p1 -b .flow-graph-crash
+%patch7 -p1 -b .dcom-overrun
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -365,6 +367,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Sep 03 2013 Peter Hatina <phatina@redhat.com> 1.10.0-3
+- fix string overrin in plugins/profinet
+
 * Mon Jun 17 2013 Peter Hatina <phatina@redhat.com> 1.10.0-2
 - fix flow graph crash
 

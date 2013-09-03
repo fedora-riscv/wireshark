@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.0
-Release:	5%{?dist}
+Release:	6%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -148,7 +148,7 @@ export PIECFLAGS="-fPIE"
 export PIECFLAGS="-fpie"
 %endif
 # FC5+ automatic -fstack-protector-all switch
-export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector/-fstack-protector-all}
+export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector-strong/-fstack-protector-all}
 export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
 export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
 export LDFLAGS="$LDFLAGS -pie"
@@ -367,6 +367,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Sep 03 2013 Peter Hatina <phatina@redhat.com> - 1.10.0-6
+- fix build parameter -fstack-protector-all
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.10.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 

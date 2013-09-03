@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.0
-Release:	6%{?dist}
+Release:	7%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -56,6 +56,7 @@ BuildRequires:	xdg-utils
 BuildRequires:	flex, bison, python, python-devel
 BuildRequires:	libcap-devel
 BuildRequires:	perl-podlators
+BuildRequires:	libgcrypt-devel
 %if %{with_GeoIP}
 BuildRequires:	GeoIP-devel
 %endif
@@ -367,6 +368,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Sep 03 2013 Peter Hatina <phatina@redhat.com> - 1.10.0-7
+- fix BuildRequires - libgcrypt-devel
+
 * Tue Sep 03 2013 Peter Hatina <phatina@redhat.com> - 1.10.0-6
 - fix build parameter -fstack-protector-all
 

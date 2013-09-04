@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.0
-Release:	9%{?dist}
+Release:	10%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -43,6 +43,7 @@ Patch6:		wireshark-1.8.x-pod2man-encoding.patch
 Patch7:		wireshark-1.8.x-flow-graph-crash.patch
 Patch8:		wireshark-1.8.x-dcom-string-overrun.patch
 Patch9:		wireshark-1.8.x-sctp-bytes-graph-crash.patch
+Patch10:		wireshark-1.8.x-tap-iostat-overflow.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -145,6 +146,7 @@ and plugins.
 %patch7 -p1 -b .flow-graph-crash
 %patch8 -p1 -b .dcom-overrun
 %patch9 -p1 -b .sctp-bytes-graph-crash
+%patch10 -p1 -b .tap-iostat-overflow
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -372,6 +374,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Wed Sep 04 2013 Peter Hatina <phatina@redhat.com> - 1.10.0-10
+- fix tap iostat overflow
+
 * Wed Sep 04 2013 Peter Hatina <phatina@redhat.com> - 1.10.0-9
 - fix sctp bytes graph crash
 

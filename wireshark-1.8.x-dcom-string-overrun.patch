@@ -1,0 +1,13 @@
+diff --git a/plugins/profinet/packet-dcom-cba.c b/plugins/profinet/packet-dcom-cba.c
+index 967b8e6..cbb628c 100644
+--- a/plugins/profinet/packet-dcom-cba.c
++++ b/plugins/profinet/packet-dcom-cba.c
+@@ -553,7 +553,7 @@ dissect_ICBAPhysicalDevice_get_LogicalDevice_rqst(tvbuff_t *tvb, int offset,
+     packet_info *pinfo, proto_tree *tree, guint8 *drep)
+ {
+     guint32      u32Pointer;
+-    gchar        szStr[1000];
++    gchar        szStr[1000] = "";
+     guint32      u32MaxStr = sizeof(szStr);
+     dcerpc_info *info      = (dcerpc_info *) pinfo->private_data;
+     gchar       *call;

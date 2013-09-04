@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.0
-Release:	4%{?dist}
+Release:	5%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -249,6 +249,7 @@ install -m 644 epan/dfilter/*.h			"${IDIR}/epan/dfilter"
 install -m 644 epan/dissectors/*.h		"${IDIR}/epan/dissectors"
 install -m 644 wiretap/*.h			"${IDIR}/wiretap"
 install -m 644 wsutil/*.h			"${IDIR}/wsutil"
+install -m 644 ws_symbol_export.h               "${IDIR}/"
 
 #	Create pkg-config control file.
 mkdir -p "${RPM_BUILD_ROOT}%{_libdir}/pkgconfig"
@@ -371,6 +372,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Wed Sep 04 2013 Peter Hatina <phatina@redhat.com> 1.10.0-6
+- fix missing ws_symbol_export.h
+
 * Tue Sep 03 2013 Peter Hatina <phatina@redhat.com> 1.10.0-5
 - fix tap iostat overflow
 

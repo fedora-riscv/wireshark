@@ -20,12 +20,11 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.10.1
+Version:	1.10.2
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
-Source2:	wireshark.console
 Source3:	wireshark.desktop
 Source4:	wireshark-autoconf.m4
 Source5:	wireshark-mime-package.xml
@@ -44,8 +43,6 @@ Patch4:		wireshark-0004-fix-documentation-build-error.patch
 Patch5:		wireshark-0005-fix-string-overrun-in-plugins-profinet.patch
 # backported from upstream. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=8326
 Patch6:		wireshark-0006-From-Peter-Lemenkov-via-https-bugs.wireshark.org-bug.patch
-# backported from upstream commit, svn path=/trunk/; revision=49436
-Patch7:		wireshark-0007-Fix-.-reordercap.pod-unterminated-list-s-at-head-in-.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -144,7 +141,6 @@ and plugins.
 %patch4 -p1 -b .pod2man
 %patch5 -p1 -b .profinet_crash
 %patch6 -p1 -b .rtpproxy
-%patch7 -p1 -b .add_end
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -371,6 +367,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Wed Sep 11 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10-2-1
+- Ver. 1.10.2
+- Actually remove the console helper
+
 * Mon Sep 09 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.1-1
 - Ver. 1.10.1
 - Backported rtpproxy dissector module

@@ -1,7 +1,7 @@
-From 24b762c8073ef2b823dfe74292f5201582fe5656 Mon Sep 17 00:00:00 2001
+From 3c9d2b8cefb0204bf2b83ac925e80e775945e57f Mon Sep 17 00:00:00 2001
 From: Evan Huus <eapache@gmail.com>
 Date: Sun, 18 Aug 2013 19:49:08 +0000
-Subject: [PATCH 6/7] From Peter Lemenkov via
+Subject: [PATCH 6/6] From Peter Lemenkov via
  https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=8326
 
 Dissector for the Sippy RTPproxy controlling protocol. RTPproxy is a well-known
@@ -10,9 +10,6 @@ text-based protocol. There are several competing products but all of them
 implements it (sometimes slightly extending).
 
 svn path=/trunk/; revision=51417
-
-Conflicts:
-	AUTHORS
 
 Add a cast to try and fix
 packet-rtpproxy.c:226: warning: implicit conversion shortens 64-bit value into
@@ -45,19 +42,19 @@ svn path=/trunk/; revision=51430
  create mode 100644 epan/dissectors/packet-rtpproxy.c
 
 diff --git a/AUTHORS b/AUTHORS
-index 820ba7e..fdb3b9a 100644
+index aa446db..ac40c25 100644
 --- a/AUTHORS
 +++ b/AUTHORS
-@@ -3731,6 +3731,7 @@ Alexander Chemeris	<alexander.chemeris[AT]gmail.com>
- Ivan Klyuchnikov	<kluchnikovi[AT]gmail.com>
- Max Baker		<max[AT]warped.org>
+@@ -3733,6 +3733,7 @@ Max Baker		<max[AT]warped.org>
  Mike Garratt		<mg.wireshark[AT]evn.co.nz>
+ Bart Van Assche		<bvanassche[AT]acm.org>
+ Karl Beldan			<karl.beldan[AT]gmail.com>
 +Peter Lemenkov		<lemenkov[AT]gmail.com>
  
- 
  Dan Lasley <dlasley[AT]promus.com> gave permission for his
+ dumpit() hex-dump routine to be used.
 diff --git a/epan/CMakeLists.txt b/epan/CMakeLists.txt
-index 9b8d4d9..3dfa974 100644
+index 69eb75f..610cea7 100644
 --- a/epan/CMakeLists.txt
 +++ b/epan/CMakeLists.txt
 @@ -1083,6 +1083,7 @@ set(DISSECTOR_SRC

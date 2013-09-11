@@ -1,7 +1,7 @@
-From 245cae76f4501ed44d1c9261a502e6ed35f48f2f Mon Sep 17 00:00:00 2001
+From 5dab288d99b6847ca5ecd98ae5bdb95402fa5cd0 Mon Sep 17 00:00:00 2001
 From: Peter Hatina <phatina@redhat.com>
 Date: Mon, 8 Apr 2013 13:03:24 +0200
-Subject: [PATCH 4/7] fix documentation build error
+Subject: [PATCH 4/6] fix documentation build error
 
 ---
  doc/asn2deb.pod | 1 +

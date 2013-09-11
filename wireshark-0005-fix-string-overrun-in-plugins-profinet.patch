@@ -1,7 +1,7 @@
-From df227f91183e56ef1fe66da5b891a150da8ebe3d Mon Sep 17 00:00:00 2001
+From 396979b80d273319cd69084e262567aae0024b25 Mon Sep 17 00:00:00 2001
 From: Peter Hatina <phatina@redhat.com>
 Date: Wed, 4 Sep 2013 10:03:57 +0200
-Subject: [PATCH 5/7] fix string overrun in plugins/profinet
+Subject: [PATCH 5/6] fix string overrun in plugins/profinet
 
 ---
  plugins/profinet/packet-dcom-cba.c | 2 +-

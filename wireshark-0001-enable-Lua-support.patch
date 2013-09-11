@@ -1,7 +1,7 @@
-From 31e5f281628f586e7f08b4792c391cf7eb387078 Mon Sep 17 00:00:00 2001
+From e8be5a7c24830ce686cec89dac060b3c0495b70e Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Radek=20Vok=C3=A1l?= <rvokal@fedoraproject.org>
 Date: Tue, 15 Dec 2009 08:36:27 +0000
-Subject: [PATCH 1/7] enable Lua support
+Subject: [PATCH 1/6] enable Lua support
 
 ---
  epan/wslua/template-init.lua | 2 +-

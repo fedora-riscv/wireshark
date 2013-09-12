@@ -21,17 +21,11 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.2
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
-Source3:	wireshark.desktop
-Source4:	wireshark-autoconf.m4
-Source5:	wireshark-mime-package.xml
-Source6:	wiresharkdoc-16x16.png
-Source7:	wiresharkdoc-32x32.png
-Source8:	wiresharkdoc-48x48.png
-Source9:	wiresharkdoc-256x256.png
+Source1:	wireshark-autoconf.m4
 
 # Fedora-specific
 Patch1:		wireshark-0001-enable-Lua-support.patch
@@ -211,23 +205,13 @@ make %{?_smp_mflags}
 perl -pi -e 's|-L../../epan|-L../../epan/.libs|' plugins/*/*.la
 
 make DESTDIR=%{buildroot} install
+make DESTDIR=%{buildroot} install_desktop_files
 
 # Install python stuff.
 mkdir -p %{buildroot}%{python_sitearch}
 install -m 644 tools/wireshark_be.py tools/wireshark_gen.py  %{buildroot}%{python_sitearch}
 
-desktop-file-install				\
-	--dir %{buildroot}%{_datadir}/applications		\
-	--add-category X-Fedora					\
-	%{SOURCE3}
-
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/{16x16,32x32,48x48,64x64,256x256}/apps
-
-install -m 644 image/wsicon16.png %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/wireshark.png
-install -m 644 image/wsicon32.png %{buildroot}%{_datadir}/icons/hicolor/32x32/apps/wireshark.png
-install -m 644 image/wsicon48.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/wireshark.png
-install -m 644 image/wsicon64.png %{buildroot}%{_datadir}/icons/hicolor/64x64/apps/wireshark.png
-install -m 644 image/wsicon256.png %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/wireshark.png
+desktop-file-validate %{buildroot}%{_datadir}/applications/wireshark.desktop
 
 #install devel files (inspired by debian/wireshark-dev.header-files)
 install -d -m 0755  %{buildroot}%{_includedir}/wireshark
@@ -269,15 +253,7 @@ EOF
 
 #	Install the autoconf macro.
 mkdir -p "%{buildroot}%{_datadir}/aclocal"
-cp "%{SOURCE4}" "%{buildroot}%{_datadir}/aclocal/wireshark.m4"
-
-# Install desktop stuff
-mkdir -p %{buildroot}%{_datadir}/{icons/gnome/{16x16,32x32,48x48,256x256}/mimetypes,mime/packages}
-install -m 644 -T %{SOURCE5} %{buildroot}%{_datadir}/mime/packages/wireshark.xml
-install -m 644 -T %{SOURCE6} %{buildroot}%{_datadir}/icons/gnome/16x16/mimetypes/application-x-pcap.png
-install -m 644 -T %{SOURCE7} %{buildroot}%{_datadir}/icons/gnome/32x32/mimetypes/application-x-pcap.png
-install -m 644 -T %{SOURCE8} %{buildroot}%{_datadir}/icons/gnome/48x48/mimetypes/application-x-pcap.png
-install -m 644 -T %{SOURCE9} %{buildroot}%{_datadir}/icons/gnome/256x256/mimetypes/application-x-pcap.png
+cp "%{SOURCE1}" "%{buildroot}%{_datadir}/aclocal/wireshark.m4"
 
 # Remove .la files
 rm -f %{buildroot}%{_libdir}/%{name}/plugins/%{version}/*.la
@@ -351,14 +327,19 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %files gnome
 %{_datadir}/applications/wireshark.desktop
 %{_datadir}/icons/hicolor/16x16/apps/wireshark.png
+%{_datadir}/icons/hicolor/24x24/apps/wireshark.png
 %{_datadir}/icons/hicolor/32x32/apps/wireshark.png
 %{_datadir}/icons/hicolor/48x48/apps/wireshark.png
 %{_datadir}/icons/hicolor/64x64/apps/wireshark.png
+%{_datadir}/icons/hicolor/128x128/apps/wireshark.png
 %{_datadir}/icons/hicolor/256x256/apps/wireshark.png
-%{_datadir}/icons/gnome/16x16/mimetypes/application-x-pcap.png
-%{_datadir}/icons/gnome/32x32/mimetypes/application-x-pcap.png
-%{_datadir}/icons/gnome/48x48/mimetypes/application-x-pcap.png
-%{_datadir}/icons/gnome/256x256/mimetypes/application-x-pcap.png
+%{_datadir}/icons/hicolor/16x16/mimetypes/application-wireshark-doc.png
+%{_datadir}/icons/hicolor/24x24/mimetypes/application-wireshark-doc.png
+%{_datadir}/icons/hicolor/32x32/mimetypes/application-wireshark-doc.png
+%{_datadir}/icons/hicolor/48x48/mimetypes/application-wireshark-doc.png
+%{_datadir}/icons/hicolor/64x64/mimetypes/application-wireshark-doc.png
+%{_datadir}/icons/hicolor/128x128/mimetypes/application-wireshark-doc.png
+%{_datadir}/icons/hicolor/256x256/mimetypes/application-wireshark-doc.png
 %{_datadir}/mime/packages/wireshark.xml
 %{_sbindir}/wireshark
 %{_mandir}/man1/wireshark.*
@@ -372,6 +353,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Sep 12 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.2-4
+- Enhance desktop integration (*.desktop and MIME-related files)
+
 * Thu Sep 12 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.2-3
 - Fix building on Fedora 18 (no perl-podlators)
 

@@ -1,7 +1,7 @@
 From ec02325332d4e198b1ccd6955ed6a489a5a7c826 Mon Sep 17 00:00:00 2001
 From: Jan Safranek <jsafrane@redhat.com>
 Date: Thu, 9 Jun 2011 14:56:59 +0200
-Subject: [PATCH 3/6] Load correct shared object name in python.
+Subject: [PATCH 3/7] Load correct shared object name in python.
 
 This fixes following error message shown by wireshark/tshark when wireshark-devel
 was not installed:

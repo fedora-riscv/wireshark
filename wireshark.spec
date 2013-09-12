@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.2
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -59,7 +59,9 @@ BuildRequires:	desktop-file-utils
 BuildRequires:	xdg-utils
 BuildRequires:	flex, bison, python, python-devel
 BuildRequires:	libcap-devel
+%if 0%{?fedora} > 18
 BuildRequires:	perl-podlators
+%endif
 BuildRequires:	libgcrypt-devel
 %if %{with_GeoIP}
 BuildRequires:	GeoIP-devel
@@ -370,6 +372,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Sep 12 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.2-3
+- Fix building on Fedora 18 (no perl-podlators)
+
 * Thu Sep 12 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.2-2
 - Add an OpenFlow dissector
 

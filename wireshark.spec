@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.2
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -41,8 +41,10 @@ Patch2:		wireshark-0002-Customize-permission-denied-error.patch
 Patch3:		wireshark-0003-Load-correct-shared-object-name-in-python.patch
 Patch4:		wireshark-0004-fix-documentation-build-error.patch
 Patch5:		wireshark-0005-fix-string-overrun-in-plugins-profinet.patch
-# backported from upstream. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=8326
+# Backported from upstream. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=8326
 Patch6:		wireshark-0006-From-Peter-Lemenkov-via-https-bugs.wireshark.org-bug.patch
+# Backported from upstream. See also https://bugzilla.redhat.com/1007139
+Patch7:		wireshark-0007-The-beginning-of-an-openflow-dissector.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -141,6 +143,7 @@ and plugins.
 %patch4 -p1 -b .pod2man
 %patch5 -p1 -b .profinet_crash
 %patch6 -p1 -b .rtpproxy
+%patch7 -p1 -b .openflow
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -367,6 +370,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Sep 12 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.2-2
+- Add an OpenFlow dissector
+
 * Wed Sep 11 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10-2-1
 - Ver. 1.10.2
 - Actually remove the console helper

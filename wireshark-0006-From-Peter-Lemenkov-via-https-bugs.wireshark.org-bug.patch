@@ -1,7 +1,7 @@
 From 3c9d2b8cefb0204bf2b83ac925e80e775945e57f Mon Sep 17 00:00:00 2001
 From: Evan Huus <eapache@gmail.com>
 Date: Sun, 18 Aug 2013 19:49:08 +0000
-Subject: [PATCH 6/6] From Peter Lemenkov via
+Subject: [PATCH 6/7] From Peter Lemenkov via
  https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=8326
 
 Dissector for the Sippy RTPproxy controlling protocol. RTPproxy is a well-known

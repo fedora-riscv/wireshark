@@ -21,12 +21,10 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.2
-Release:	4%{?dist}
+Release:	5%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
-Source1:	wireshark-autoconf.m4
-
 # Fedora-specific
 Patch1:		wireshark-0001-enable-Lua-support.patch
 # Fedora-specific
@@ -39,6 +37,14 @@ Patch5:		wireshark-0005-fix-string-overrun-in-plugins-profinet.patch
 Patch6:		wireshark-0006-From-Peter-Lemenkov-via-https-bugs.wireshark.org-bug.patch
 # Backported from upstream. See also https://bugzilla.redhat.com/1007139
 Patch7:		wireshark-0007-The-beginning-of-an-openflow-dissector.patch
+# Will be proposed upstream
+Patch8:		wireshark-0008-adds-autoconf-macro-file.patch
+# Fedora-specific
+Patch9:		wireshark-0009-Restore-Fedora-specific-groups.patch
+# Will be proposed upstream
+Patch10:	wireshark-0010-Add-pkgconfig-entry.patch
+# Will be proposed upstream
+Patch11:	wireshark-0011-Install-autoconf-related-file.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -113,9 +119,9 @@ Requires:	%{name} = %{version} glibc-devel glib2-devel
 %description
 Wireshark is a network traffic analyzer for Unix-ish operating systems.
 
-This package lays base for libpcap, a packet capture and filtering 
-library, contains command-line utilities, contains plugins and 
-documentation for wireshark. A graphical user interface is packaged 
+This package lays base for libpcap, a packet capture and filtering
+library, contains command-line utilities, contains plugins and
+documentation for wireshark. A graphical user interface is packaged
 separately to GTK+ package.
 
 %description gnome
@@ -140,6 +146,10 @@ and plugins.
 %patch5 -p1 -b .profinet_crash
 %patch6 -p1 -b .rtpproxy
 %patch7 -p1 -b .openflow
+%patch8 -p1 -b .add_autoconf
+%patch9 -p1 -b .restore_group
+%patch10 -p1 -b .add_pkgconfig
+%patch11 -p1 -b .install_autoconf
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -225,6 +235,7 @@ mkdir -p "${IDIR}/wiretap"
 mkdir -p "${IDIR}/wsutil"
 install -m 644 color.h config.h register.h	"${IDIR}/"
 install -m 644 cfile.h file.h			"${IDIR}/"
+install -m 644 frame_data_sequence.h		"${IDIR}/"
 install -m 644 packet-range.h print.h		"${IDIR}/"
 install -m 644 epan/*.h				"${IDIR}/epan/"
 install -m 644 epan/crypt/*.h			"${IDIR}/epan/crypt"
@@ -234,26 +245,6 @@ install -m 644 epan/dissectors/*.h		"${IDIR}/epan/dissectors"
 install -m 644 wiretap/*.h			"${IDIR}/wiretap"
 install -m 644 wsutil/*.h			"${IDIR}/wsutil"
 install -m 644 ws_symbol_export.h               "${IDIR}/"
-
-#	Create pkg-config control file.
-mkdir -p "%{buildroot}%{_libdir}/pkgconfig"
-cat > "%{buildroot}%{_libdir}/pkgconfig/wireshark.pc" <<- "EOF"
-	prefix=%{_prefix}
-	exec_prefix=%{_prefix}
-	libdir=%{_libdir}
-	includedir=%{_includedir}
-
-	Name:		%{name}
-	Description:	Network Traffic Analyzer
-	Version:	%{version}
-	Requires:	glib-2.0 gmodule-2.0
-	Libs:		-L${libdir} -lwireshark -lwiretap
-	Cflags:		-DWS_VAR_IMPORT=extern -DHAVE_STDARG_H -DWS_MSVC_NORETURN= -I${includedir}/wireshark -I${includedir}/wireshark/epan
-EOF
-
-#	Install the autoconf macro.
-mkdir -p "%{buildroot}%{_datadir}/aclocal"
-cp "%{SOURCE1}" "%{buildroot}%{_datadir}/aclocal/wireshark.m4"
 
 # Remove .la files
 rm -f %{buildroot}%{_libdir}/%{name}/plugins/%{version}/*.la
@@ -353,6 +344,11 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Fri Sep 13 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.2-5
+- Convert automake/pkgconfig files into patches (better upstream integration)
+- Restored category in the *.desktop file
+- Install another one necessary header file - frame_data_sequence.h
+
 * Thu Sep 12 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.2-4
 - Enhance desktop integration (*.desktop and MIME-related files)
 

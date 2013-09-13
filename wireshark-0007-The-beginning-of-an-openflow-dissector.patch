@@ -1,7 +1,7 @@
 From 876cb9d160cd8cd4042cdc7a01981d0ae2dbee06 Mon Sep 17 00:00:00 2001
 From: Anders Broman <anders.broman@ericsson.com>
 Date: Thu, 11 Jul 2013 21:13:27 +0000
-Subject: [PATCH 7/7] The beginning of an openflow dissector.
+Subject: [PATCH 07/11] The beginning of an openflow dissector.
 
 svn path=/trunk/; revision=50513
 

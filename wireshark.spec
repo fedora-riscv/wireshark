@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.2
-Release:	5%{?dist}
+Release:	6%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -45,6 +45,8 @@ Patch9:		wireshark-0009-Restore-Fedora-specific-groups.patch
 Patch10:	wireshark-0010-Add-pkgconfig-entry.patch
 # Will be proposed upstream
 Patch11:	wireshark-0011-Install-autoconf-related-file.patch
+# Fedora-specific
+Patch12:	wireshark-0012-tmp-dir.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -150,6 +152,7 @@ and plugins.
 %patch9 -p1 -b .restore_group
 %patch10 -p1 -b .add_pkgconfig
 %patch11 -p1 -b .install_autoconf
+%patch12 -p1 -b .tmp_dir
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -344,6 +347,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Sep 17 2013 Peter Hatina <phatina@redhat.com> - 1.10.2-6
+- move default temporary directory to /var/tmp
+
 * Fri Sep 13 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.2-5
 - Convert automake/pkgconfig files into patches (better upstream integration)
 - Restored category in the *.desktop file

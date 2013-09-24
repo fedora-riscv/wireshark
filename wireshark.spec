@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.2
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -45,6 +45,8 @@ Patch5:		wireshark-0005-fix-string-overrun-in-plugins-profinet.patch
 Patch6:		wireshark-0006-From-Peter-Lemenkov-via-https-bugs.wireshark.org-bug.patch
 # Backported from upstream. See also https://bugzilla.redhat.com/1007139
 Patch7:		wireshark-0007-The-beginning-of-an-openflow-dissector.patch
+# Fedora specific
+Patch8:		wireshark-0008-tmp-dir.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -146,6 +148,7 @@ and plugins.
 %patch5 -p1 -b .profinet_crash
 %patch6 -p1 -b .rtpproxy
 %patch7 -p1 -b .openflow
+%patch8 -p1 -b .tmp_dir
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -372,6 +375,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Sep 24 2013 Peter Hatina <phatina@redhat.com> - 1.10.2-4
+- move default temporary directory to /var/tmp
+
 * Thu Sep 12 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.2-3
 - Fix building on Fedora 18 (no perl-podlators)
 

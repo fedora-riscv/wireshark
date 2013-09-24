@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.2
-Release:	6%{?dist}
+Release:	7%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -47,6 +47,7 @@ Patch10:	wireshark-0010-Add-pkgconfig-entry.patch
 Patch11:	wireshark-0011-Install-autoconf-related-file.patch
 # Fedora-specific
 Patch12:	wireshark-0012-tmp-dir.patch
+Patch13:	wireshark-0013-dirent-symbols-clash.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -153,6 +154,7 @@ and plugins.
 %patch10 -p1 -b .add_pkgconfig
 %patch11 -p1 -b .install_autoconf
 %patch12 -p1 -b .tmp_dir
+%patch13 -p1 -b .dirent_clash
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -347,6 +349,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Sep 24 2013 Peter Hatina <phatina@redhat.com> - 1.10.2-7
+- fix build error caused by symbols clash
+
 * Tue Sep 17 2013 Peter Hatina <phatina@redhat.com> - 1.10.2-6
 - move default temporary directory to /var/tmp
 

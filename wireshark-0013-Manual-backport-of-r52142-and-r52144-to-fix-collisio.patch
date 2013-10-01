@@ -1,5 +1,17 @@
+From fc0f3e37918f727956df096fc301a0e62926c1c0 Mon Sep 17 00:00:00 2001
+From: Evan Huus <eapache@gmail.com>
+Date: Sun, 22 Sep 2013 16:42:21 +0000
+Subject: [PATCH 13/14] Manual backport of r52142 and r52144 to fix collision
+ between gluster defines and system header dirent.h
+
+svn path=/trunk-1.10/; revision=52173
+---
+ epan/dissectors/packet-gluster.h   | 18 +++++++++---------
+ epan/dissectors/packet-glusterfs.c | 18 +++++++++---------
+ 2 files changed, 18 insertions(+), 18 deletions(-)
+
 diff --git a/epan/dissectors/packet-gluster.h b/epan/dissectors/packet-gluster.h
-index f023f62..d0d4651 100644
+index e3c43d1..fc69e6c 100644
 --- a/epan/dissectors/packet-gluster.h
 +++ b/epan/dissectors/packet-gluster.h
 @@ -356,15 +356,15 @@ enum gf_fop_procnum {
@@ -28,7 +40,7 @@ index f023f62..d0d4651 100644
  
  
 diff --git a/epan/dissectors/packet-glusterfs.c b/epan/dissectors/packet-glusterfs.c
-index 5f18258..299e783 100644
+index 56f9093..29ff0dc 100644
 --- a/epan/dissectors/packet-glusterfs.c
 +++ b/epan/dissectors/packet-glusterfs.c
 @@ -2002,15 +2002,15 @@ static value_string_ext glusterfs3_1_fop_proc_vals_ext = VALUE_STRING_EXT_INIT(g
@@ -56,3 +68,6 @@ index 5f18258..299e783 100644
  	{ 0, NULL }
  };
  static value_string_ext glusterfs_entry_type_names_ext = VALUE_STRING_EXT_INIT(glusterfs_entry_type_names);
+-- 
+1.8.3.1
+

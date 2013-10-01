@@ -1,7 +1,7 @@
 From a6168e1f1bdb639c0ffd15a5f4eed864814e0bce Mon Sep 17 00:00:00 2001
 From: Jan Safranek <jsafrane@redhat.com>
 Date: Fri, 26 Nov 2010 14:30:45 +0300
-Subject: [PATCH 02/11] Customize 'permission denied' error.
+Subject: [PATCH 02/14] Customize 'permission denied' error.
 
 Add Fedora-specific message to error output when dumpcap cannot be started
 because of permissions.

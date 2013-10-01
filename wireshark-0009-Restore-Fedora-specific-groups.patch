@@ -1,7 +1,7 @@
 From f49769f56e1e6a22ca235e8f2b73337309ddcfa2 Mon Sep 17 00:00:00 2001
 From: Peter Lemenkov <lemenkov@gmail.com>
 Date: Fri, 13 Sep 2013 14:36:55 +0400
-Subject: [PATCH 09/11] Restore Fedora-specific groups
+Subject: [PATCH 09/14] Restore Fedora-specific groups
 
 Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
 ---

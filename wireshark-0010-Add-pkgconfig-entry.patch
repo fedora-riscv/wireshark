@@ -1,7 +1,7 @@
 From 224cd146ec71d0ff7bdff3e8d7707ca603220410 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Radek=20Vok=C3=A1l?= <rvokal@fedoraproject.org>
 Date: Thu, 17 Dec 2009 09:17:07 +0000
-Subject: [PATCH 10/11] Add pkgconfig entry
+Subject: [PATCH 10/14] Add pkgconfig entry
 
 ---
  Makefile.am     |  3 +++

@@ -1,7 +1,7 @@
 From fa0c546efa38a9f112257b3b3a1be15ba4cb3d4b Mon Sep 17 00:00:00 2001
 From: Peter Lemenkov <lemenkov@gmail.com>
 Date: Fri, 13 Sep 2013 15:25:12 +0400
-Subject: [PATCH 11/11] Install autoconf-related file
+Subject: [PATCH 11/14] Install autoconf-related file
 
 ---
  Makefile.am           |   3 ++

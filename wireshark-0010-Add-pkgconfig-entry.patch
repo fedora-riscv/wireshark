@@ -1,7 +1,7 @@
-From 224cd146ec71d0ff7bdff3e8d7707ca603220410 Mon Sep 17 00:00:00 2001
+From a5f6e0766675cf2e6f7104a04d9d73eca2c6796d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Radek=20Vok=C3=A1l?= <rvokal@fedoraproject.org>
 Date: Thu, 17 Dec 2009 09:17:07 +0000
-Subject: [PATCH 10/14] Add pkgconfig entry
+Subject: [PATCH 10/13] Add pkgconfig entry
 
 ---
  Makefile.am     |  3 +++
@@ -25,7 +25,7 @@ index eb735a5..2844c90 100644
  # Wireshark configuration files are put in $(pkgdatadir).
  #
 diff --git a/configure.ac b/configure.ac
-index cfa8f05..a9f77a7 100644
+index 6c05883..5cae378 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -2543,6 +2543,7 @@ AC_CONFIG_HEADERS(config.h)

@@ -1,7 +1,7 @@
-From 3c9d2b8cefb0204bf2b83ac925e80e775945e57f Mon Sep 17 00:00:00 2001
+From b516cc6516b505b264bd75ef5e574490f22912e5 Mon Sep 17 00:00:00 2001
 From: Evan Huus <eapache@gmail.com>
 Date: Sun, 18 Aug 2013 19:49:08 +0000
-Subject: [PATCH 06/14] From Peter Lemenkov via
+Subject: [PATCH 06/13] From Peter Lemenkov via
  https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=8326
 
 Dissector for the Sippy RTPproxy controlling protocol. RTPproxy is a well-known
@@ -34,25 +34,28 @@ Fix Coverity CID 1063335: Unused pointer value.
 
 svn path=/trunk/; revision=51430
 ---
- AUTHORS                           |   1 +
+ AUTHORS                           |   2 +-
  epan/CMakeLists.txt               |   1 +
  epan/dissectors/Makefile.common   |   1 +
  epan/dissectors/packet-rtpproxy.c | 808 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 811 insertions(+)
+ 4 files changed, 811 insertions(+), 1 deletion(-)
  create mode 100644 epan/dissectors/packet-rtpproxy.c
 
 diff --git a/AUTHORS b/AUTHORS
-index aa446db..ac40c25 100644
+index 10782b0..4c77f60 100644
 --- a/AUTHORS
 +++ b/AUTHORS
-@@ -3733,6 +3733,7 @@ Max Baker		<max[AT]warped.org>
+@@ -3733,9 +3733,9 @@ Max Baker		<max[AT]warped.org>
  Mike Garratt		<mg.wireshark[AT]evn.co.nz>
  Bart Van Assche		<bvanassche[AT]acm.org>
  Karl Beldan			<karl.beldan[AT]gmail.com>
 +Peter Lemenkov		<lemenkov[AT]gmail.com>
+ Masayuki Takemura	<masayuki.takemura[AT]gmail.com>
  
+-
  Dan Lasley <dlasley[AT]promus.com> gave permission for his
  dumpit() hex-dump routine to be used.
+ 
 diff --git a/epan/CMakeLists.txt b/epan/CMakeLists.txt
 index 69eb75f..610cea7 100644
 --- a/epan/CMakeLists.txt

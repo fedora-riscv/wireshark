@@ -1,7 +1,7 @@
-From af2f5b8cf5af44ab721ff55b3fd826d3067fe3b4 Mon Sep 17 00:00:00 2001
+From ce5c6e5de39f4af8b76dad77d2c237064e0930eb Mon Sep 17 00:00:00 2001
 From: Peter Lemenkov <lemenkov@gmail.com>
 Date: Tue, 1 Oct 2013 13:35:57 +0400
-Subject: [PATCH 14/14] Added basic conversation support
+Subject: [PATCH 13/13] Added basic conversation support
 
 Loosely based on a work done by Pascal Quantin <pascal.quantin@gmail.com> (see
 svn rev. 52306).

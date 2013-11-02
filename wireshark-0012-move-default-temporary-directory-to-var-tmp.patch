@@ -1,5 +1,21 @@
+From aaf8ad314b952c61c9b569ac22c2765f5e6653d7 Mon Sep 17 00:00:00 2001
+From: Peter Hatina <phatina@redhat.com>
+Date: Tue, 24 Sep 2013 10:55:09 +0200
+Subject: [PATCH 12/13] move default temporary directory to /var/tmp
+
+---
+ epan/filesystem.c      |  4 ++-
+ tempfile.c             |  7 ++---
+ ui/gtk/proto_help.c    |  4 ++-
+ wsutil/Makefile.common |  6 +++--
+ wsutil/wstmpdir.c      | 70 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ wsutil/wstmpdir.h      | 39 ++++++++++++++++++++++++++++
+ 6 files changed, 123 insertions(+), 7 deletions(-)
+ create mode 100644 wsutil/wstmpdir.c
+ create mode 100644 wsutil/wstmpdir.h
+
 diff --git a/epan/filesystem.c b/epan/filesystem.c
-index 89edb8a..00acdd9 100644
+index 053711d..adf3b91 100644
 --- a/epan/filesystem.c
 +++ b/epan/filesystem.c
 @@ -74,6 +74,8 @@
@@ -21,7 +37,7 @@ index 89edb8a..00acdd9 100644
  
  /*
 diff --git a/tempfile.c b/tempfile.c
-index 9a236df..ab6d1dc 100644
+index 2fab0df..10ab3e6 100644
 --- a/tempfile.c
 +++ b/tempfile.c
 @@ -50,6 +50,7 @@
@@ -60,7 +76,7 @@ index 9a236df..ab6d1dc 100644
  	while (g_snprintf(td_path[idx], td_path_len[idx], "%s%c%s" TMP_FILE_SUFFIX, tmp_dir, G_DIR_SEPARATOR, pfx) > td_path_len[idx]) {
  		td_path_len[idx] *= 2;
 diff --git a/ui/gtk/proto_help.c b/ui/gtk/proto_help.c
-index 16dc24e..fe12c81 100644
+index bbf5fe0..9998a22 100644
 --- a/ui/gtk/proto_help.c
 +++ b/ui/gtk/proto_help.c
 @@ -44,6 +44,8 @@
@@ -82,7 +98,7 @@ index 16dc24e..fe12c81 100644
  
  	for (i = 0; i < PH_CONF_DIRS; i++) {
 diff --git a/wsutil/Makefile.common b/wsutil/Makefile.common
-index 93efa0f..ab8ce7d 100644
+index 570dbe6..7a33f5b 100644
 --- a/wsutil/Makefile.common
 +++ b/wsutil/Makefile.common
 @@ -43,7 +43,8 @@ LIBWSUTIL_SRC = 	\
@@ -223,3 +239,6 @@ index 0000000..021b615
 +#endif // __cplusplus
 +
 +#endif // __WS_TMP_DIR_H__
+-- 
+1.8.3.1
+

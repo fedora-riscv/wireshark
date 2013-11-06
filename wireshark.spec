@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.3
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -300,7 +300,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/capinfos
 %{_sbindir}/randpkt
 %{_sbindir}/reordercap
-%attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=eip) %{_sbindir}/dumpcap
+%attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=ep) %{_sbindir}/dumpcap
 %{_sbindir}/rawshark
 %{python_sitearch}/*.py*
 %{_libdir}/lib*.so.*
@@ -351,6 +351,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Wed Nov 06 2013 Peter Hatina <phatina@redhat.com> - 1.10.3-2
+- harden dumpcap capabilities
+
 * Sat Nov 02 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.3-1
 - Ver. 1.10.3
 - Dropped upsteamed patch no. 13

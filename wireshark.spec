@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.3
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -100,7 +100,7 @@ Requires:	adns
 %package	gnome
 Summary:	Gnome desktop integration for wireshark
 Group:		Applications/Internet
-Requires:	wireshark = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 Requires:	xdg-utils
 Requires:	hicolor-icon-theme
 %if %{with_gtk2}
@@ -118,7 +118,7 @@ Requires:	GeoIP
 %package devel
 Summary:	Development headers and libraries for wireshark
 Group:		Development/Libraries
-Requires:	%{name} = %{version} glibc-devel glib2-devel
+Requires:	%{name} = %{version}-%{release} glibc-devel glib2-devel
 
 
 %description
@@ -351,6 +351,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Nov 07 2013 Peter Hatina <phatina@redhat.com> - 1.10.3-3
+- fix subpackage requires
+
 * Wed Nov 06 2013 Peter Hatina <phatina@redhat.com> - 1.10.3-2
 - harden dumpcap capabilities
 

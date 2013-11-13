@@ -1,7 +1,7 @@
-From b516cc6516b505b264bd75ef5e574490f22912e5 Mon Sep 17 00:00:00 2001
+From 1b67a9195503e6f22429a46e98def1dd31a05451 Mon Sep 17 00:00:00 2001
 From: Evan Huus <eapache@gmail.com>
 Date: Sun, 18 Aug 2013 19:49:08 +0000
-Subject: [PATCH 06/13] From Peter Lemenkov via
+Subject: [PATCH] From Peter Lemenkov via
  https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=8326
 
 Dissector for the Sippy RTPproxy controlling protocol. RTPproxy is a well-known
@@ -33,28 +33,63 @@ svn path=/trunk/; revision=51421
 Fix Coverity CID 1063335: Unused pointer value.
 
 svn path=/trunk/; revision=51430
----
- AUTHORS                           |   2 +-
- epan/CMakeLists.txt               |   1 +
- epan/dissectors/Makefile.common   |   1 +
- epan/dissectors/packet-rtpproxy.c | 808 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 811 insertions(+), 1 deletion(-)
- create mode 100644 epan/dissectors/packet-rtpproxy.c
+
+From Peter Lemenkov via https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9211 :
+Add basic conversation support for rtpproxy dissector
+
+svn path=/trunk/; revision=52331
+
+Let's please fix-encoding-args.pl
+
+svn path=/trunk/; revision=52334
+
+Make RTPProxy a newstyle dissector.
+
+svn path=/trunk/; revision=52476
+
+Try to fix
+packet-rtpproxy.c:217: warning: comparison between signed and unsigned
+
+svn path=/trunk/; revision=52477
+
+Fix signed vs. unsigned comparison warnings.
+
+svn path=/trunk/; revision=52483
+
+Add response time to the rtpproxy dissector. Bug 9380 (https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9380)
+
+From Peter Lemenkov.
+
+svn path=/trunk/; revision=53115
+
+Decode more error replies in RTPproxy dissector.  Bug 9408 (https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9408)
+
+From Peter Lemenkov
+
+svn path=/trunk/; revision=53245
+
+From Peter Lemenkov
+display a text description for the RTPProxy version request
+
+https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9416
+
+svn path=/trunk/; revision=53249
+
+replace proto_tree_add_string_format_value() with proto_tree_add_item()
+
+svn path=/trunk/; revision=53261
 
 diff --git a/AUTHORS b/AUTHORS
-index 10782b0..4c77f60 100644
+index 10782b0..e7b3c18 100644
 --- a/AUTHORS
 +++ b/AUTHORS
-@@ -3733,9 +3733,9 @@ Max Baker		<max[AT]warped.org>
+@@ -3733,6 +3733,7 @@ Max Baker		<max[AT]warped.org>
  Mike Garratt		<mg.wireshark[AT]evn.co.nz>
  Bart Van Assche		<bvanassche[AT]acm.org>
  Karl Beldan			<karl.beldan[AT]gmail.com>
 +Peter Lemenkov		<lemenkov[AT]gmail.com>
  Masayuki Takemura	<masayuki.takemura[AT]gmail.com>
  
--
- Dan Lasley <dlasley[AT]promus.com> gave permission for his
- dumpit() hex-dump routine to be used.
  
 diff --git a/epan/CMakeLists.txt b/epan/CMakeLists.txt
 index 69eb75f..610cea7 100644
@@ -82,10 +117,10 @@ index 937f522..73217d7 100644
  	packet-rudp.c		\
 diff --git a/epan/dissectors/packet-rtpproxy.c b/epan/dissectors/packet-rtpproxy.c
 new file mode 100644
-index 0000000..7148d58
+index 0000000..f606abb
 --- /dev/null
 +++ b/epan/dissectors/packet-rtpproxy.c
-@@ -0,0 +1,808 @@
+@@ -0,0 +1,959 @@
 +/* packet-rtpproxy.c
 + * RTPproxy command protocol dissector
 + * Copyright 2013, Peter Lemenkov <lemenkov@gmail.com>
@@ -118,8 +153,11 @@ index 0000000..7148d58
 +
 +#include "config.h"
 +
++#include <ctype.h>
++
 +#include <epan/packet.h>
 +#include <epan/prefs.h>
++#include <epan/conversation.h>
 +
 +static int proto_rtpproxy = -1;
 +
@@ -147,6 +185,35 @@ index 0000000..7148d58
 +static int hf_rtpproxy_reply = -1;
 +static int hf_rtpproxy_version_request = -1;
 +static int hf_rtpproxy_version_supported = -1;
++
++/* Request/response tracking */
++static int hf_rtpproxy_request_in = -1;
++static int hf_rtpproxy_response_in = -1;
++static int hf_rtpproxy_response_time = -1;
++
++typedef struct _rtpproxy_info {
++	guint32 req_frame;
++	guint32 resp_frame;
++	nstime_t req_time;
++} rtpproxy_info_t;
++
++typedef struct _rtpproxy_conv_info {
++	emem_tree_t *trans;
++} rtpproxy_conv_info_t;
++
++
++static const string_string versiontypenames[] = {
++	{ "20040107", "Basic RTP proxy functionality" },
++	{ "20050322", "Support for multiple RTP streams and MOH" },
++	{ "20060704", "Support for extra parameter in the V command" },
++	{ "20071116", "Support for RTP re-packetization" },
++	{ "20071218", "Support for forking (copying) RTP stream" },
++	{ "20080403", "Support for RTP statistics querying" },
++	{ "20081102", "Support for setting codecs in the update/lookup command" },
++	{ "20081224", "Support for session timeout notifications" },
++	{ "20090810", "Support for automatic bridging" },
++	{ 0, NULL }
++};
 +
 +static const value_string commandtypenames[] = {
 +	{ 'V', "Handshake/Ping" },
@@ -180,10 +247,21 @@ index 0000000..7148d58
 +	{ 0, NULL }
 +};
 +
-+static const value_string errortypenames[] = {
-+	{ '1', "Syntax" },	/* E1 */
-+	{ '7', "Software" },	/* E7 */
-+	{ '8', "Not Found" },	/* E8 */
++static const string_string errortypenames[] = {
++	{ "E0", "Syntax error" },
++	{ "E1", "Syntax error" },
++	{ "E2", "Syntax error" },
++	{ "E3", "Unknown command" },
++	{ "E4", "Syntax error" },
++	{ "E5", "Out of memory" },
++	{ "E6", "<no description>" },
++	{ "E7", "Software error (can't create listener)" },
++	{ "E8", "Not Found" },
++	{ "E10", "Software error (can't create listener)" },
++	{ "E11", "Out of memory" },
++	{ "E12", "Out of memory" },
++	{ "E13", "Out of memory" },
++	{ "E14", "Out of memory" },
 +	{ 0, NULL }
 +};
 +
@@ -238,17 +316,67 @@ index 0000000..7148d58
 +	return (end == realsize ? -1 : (gint)end);
 +}
 +
-+static void
-+dissect_rtpproxy(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree)
++void
++rtpproxy_add_tid(gboolean is_request, tvbuff_t *tvb, packet_info *pinfo, proto_tree *rtpproxy_tree, rtpproxy_conv_info_t *rtpproxy_conv, gchar* cookie)
++{
++	rtpproxy_info_t *rtpproxy_info;
++	proto_item *pi;
++
++	if (!PINFO_FD_VISITED(pinfo)) {
++		if (is_request){
++			rtpproxy_info = se_new(rtpproxy_info_t);
++			rtpproxy_info->req_frame = PINFO_FD_NUM(pinfo);
++			rtpproxy_info->resp_frame = 0;
++			rtpproxy_info->req_time = pinfo->fd->abs_ts;
++			se_tree_insert_string(rtpproxy_conv->trans, cookie, rtpproxy_info, 0);
++		} else {
++			rtpproxy_info = (rtpproxy_info_t *)se_tree_lookup_string(rtpproxy_conv->trans, cookie, 0);
++			if (rtpproxy_info) {
++				rtpproxy_info->resp_frame = PINFO_FD_NUM(pinfo);
++			}
++		}
++	} else {
++		rtpproxy_info = (rtpproxy_info_t *)se_tree_lookup_string(rtpproxy_conv->trans, cookie, 0);
++		if (rtpproxy_info && (is_request ? rtpproxy_info->resp_frame : rtpproxy_info->req_frame)) {
++			nstime_t ns;
++
++			pi = proto_tree_add_uint(rtpproxy_tree, is_request ? hf_rtpproxy_response_in : hf_rtpproxy_request_in, tvb, 0, 0, is_request ? rtpproxy_info->resp_frame : rtpproxy_info->req_frame);
++			PROTO_ITEM_SET_GENERATED(pi);
++
++			/* If reply then calculate response time */
++			if (!is_request){
++				nstime_delta(&ns, &pinfo->fd->abs_ts, &rtpproxy_info->req_time);
++				pi = proto_tree_add_time(rtpproxy_tree, hf_rtpproxy_response_time, tvb, 0, 0, &ns);
++				PROTO_ITEM_SET_GENERATED(pi);
++			}
++		}
++	}
++}
++
++static int
++dissect_rtpproxy(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree, void *data _U_)
 +{
 +	gboolean has_lf = FALSE;
-+	guint offset = 0;
++	gint offset = 0;
 +	gint new_offset = 0;
 +	guint tmp;
-+	guint realsize = 0;
++	gint realsize = 0;
 +	guint8* rawstr;
++	guint8* tmpstr;
 +	proto_item *ti;
 +	proto_tree *rtpproxy_tree;
++	conversation_t *conversation;
++	rtpproxy_conv_info_t *rtpproxy_conv;
++	gchar* cookie = NULL;
++
++	/* If it does not start with a printable character it's not RTPProxy */
++	if(!isprint(tvb_get_guint8(tvb, 0)))
++		return 0;
++
++	/* Extract Cookie */
++	offset = tvb_find_guint8(tvb, offset, -1, ' ');
++	if(offset == -1)
++		return 0;
 +
 +	/* Clear out stuff in the info column - we''l set it later */
 +	col_clear(pinfo->cinfo, COL_INFO);
@@ -256,9 +384,8 @@ index 0000000..7148d58
 +	ti = proto_tree_add_item(tree, proto_rtpproxy, tvb, 0, -1, ENC_NA);
 +	rtpproxy_tree = proto_item_add_subtree(ti, ett_rtpproxy);
 +
-+	/* Extract Cookie */
-+	offset = tvb_find_guint8(tvb, offset, -1, ' ');
 +	proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_cookie, tvb, 0, offset, ENC_ASCII | ENC_NA);
++	cookie = tvb_get_ephemeral_string(tvb, 0, offset);
 +
 +	/* Skip whitespace */
 +	offset = tvb_skip_wsp(tvb, offset+1, -1);
@@ -276,6 +403,15 @@ index 0000000..7148d58
 +	else
 +		col_set_str(pinfo->cinfo, COL_PROTOCOL, "RTPproxy (no LF)");
 +
++	/* Try to create conversation */
++	conversation = find_or_create_conversation(pinfo);
++	rtpproxy_conv = (rtpproxy_conv_info_t *)conversation_get_proto_data(conversation, proto_rtpproxy);
++	if (!rtpproxy_conv) {
++		rtpproxy_conv = se_new(rtpproxy_conv_info_t);
++		rtpproxy_conv->trans = se_tree_create_non_persistent(EMEM_TREE_TYPE_RED_BLACK, "rtpproxy transactions");;
++		conversation_add_proto_data(conversation, proto_rtpproxy, rtpproxy_conv);
++	}
++
 +	/* Get payload string */
 +	rawstr = tvb_get_ephemeral_string(tvb, offset, realsize - offset);
 +
@@ -286,12 +422,13 @@ index 0000000..7148d58
 +		case 's':
 +			/* A specific case - long statistics answer */
 +			/* %COOKIE% sessions created %NUM0% active sessions: %NUM1% */
++			rtpproxy_add_tid(FALSE, tvb, pinfo, rtpproxy_tree, rtpproxy_conv, cookie);
 +			if ('e' == tvb_get_guint8(tvb, offset+1)){
 +				col_add_fstr(pinfo->cinfo, COL_INFO, "Reply: %s", rawstr);
 +				ti = proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_reply, tvb, offset, -1, ENC_NA);
 +
 +				rtpproxy_tree = proto_item_add_subtree(ti, ett_rtpproxy_reply);
-+				proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_status, tvb, offset, realsize - offset, ENC_NA);
++				proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_status, tvb, offset, realsize - offset, ENC_ASCII | ENC_NA);
 +				break;
 +			}
 +		case 'i':
@@ -304,15 +441,18 @@ index 0000000..7148d58
 +		case 'r':
 +		case 'c':
 +		case 'q':
++			rtpproxy_add_tid(TRUE, tvb, pinfo, rtpproxy_tree, rtpproxy_conv, cookie);
 +			col_add_fstr(pinfo->cinfo, COL_INFO, "Request: %s", rawstr);
 +			ti = proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_request, tvb, offset, -1, ENC_NA);
 +			rtpproxy_tree = proto_item_add_subtree(ti, ett_rtpproxy_request);
 +
 +			/* A specific case - version request */
-+			if ((tmp == 'v') && (offset + strlen("VF YYYMMDD") + 1 == realsize)){
++			if ((tmp == 'v') && (offset + (gint)strlen("VF YYYMMDD") + 1 == realsize)){
 +				/* Skip whitespace */
 +				new_offset = tvb_skip_wsp(tvb, offset + ((guint)strlen("VF") + 1), -1);
-+				proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_version_request, tvb, new_offset, (gint)strlen("YYYYMMDD"), ENC_ASCII | ENC_NA);
++				ti = proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_version_request, tvb, new_offset, (gint)strlen("YYYYMMDD"), ENC_ASCII | ENC_NA);
++				tmpstr = tvb_get_ephemeral_string(tvb, new_offset, (gint)strlen("YYYYMMDD"));
++				proto_item_append_text(ti, " (%s)", str_to_str(tmpstr, versiontypenames, "Unknown"));
 +				break;
 +			}
 +
@@ -329,9 +469,9 @@ index 0000000..7148d58
 +
 +			/* Extract parameters */
 +			/* Parameters should be right after the command and before EOL (in case of Info command) or before whitespace */
-+			new_offset = (tmp == 'i' ? (gint)(realsize - 1 > offset ? offset + strlen("Ib") : offset + strlen("I")) : tvb_find_guint8(tvb, offset, -1, ' '));
++			new_offset = (tmp == 'i' ? (realsize - 1 > offset ? offset + (gint)strlen("Ib") : offset + (gint)strlen("I")) : tvb_find_guint8(tvb, offset, -1, ' '));
 +
-+			if (new_offset != (gint)offset + 1){
++			if (new_offset != offset + 1){
 +				rtpproxy_tree = proto_item_add_subtree(ti, ett_rtpproxy_command);
 +				proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_command_parameters, tvb, offset+1, new_offset - (offset+1), ENC_ASCII | ENC_NA);
 +				rtpproxy_tree = proto_item_get_parent(ti);
@@ -408,7 +548,7 @@ index 0000000..7148d58
 +			/* Extract Notification address */
 +			if (tmp == 'u'){
 +				new_offset = tvb_find_guint8(tvb, offset, -1, ' ');
-+				ti = proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_notify, tvb, offset, realsize - offset, ENC_NA);
++				ti = proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_notify, tvb, offset, realsize - offset, ENC_ASCII | ENC_NA);
 +				proto_item_set_text(ti, "Notify");
 +				rtpproxy_tree = proto_item_add_subtree(ti, ett_rtpproxy_notify);
 +				if(new_offset == -1){
@@ -446,6 +586,7 @@ index 0000000..7148d58
 +		case '7':
 +		case '8':
 +		case '9':
++			rtpproxy_add_tid(FALSE, tvb, pinfo, rtpproxy_tree, rtpproxy_conv, cookie);
 +			if (tmp == 'e')
 +				col_add_fstr(pinfo->cinfo, COL_INFO, "Error reply: %s", rawstr);
 +			else
@@ -455,25 +596,28 @@ index 0000000..7148d58
 +			rtpproxy_tree = proto_item_add_subtree(ti, ett_rtpproxy_reply);
 +
 +			if (tmp == 'e'){
-+				proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_error, tvb, offset+1, 1, ENC_ASCII | ENC_NA);
++				tmp = tvb_find_line_end(tvb, offset, -1, &new_offset, FALSE);
++				tmpstr = tvb_get_ephemeral_string(tvb, offset, tmp);
++				ti = proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_error, tvb, offset, (gint)strlen(tmpstr), ENC_ASCII | ENC_NA);
++				proto_item_append_text(ti, " (%s)", str_to_str(tmpstr, errortypenames, "Unknown"));
 +				break;
 +			}
 +
 +			if (tmp == 'a'){
 +				/* A specific case - short statistics answer */
 +				/* %COOKIE% active sessions: %NUM1% */
-+				proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_status, tvb, offset, realsize - offset, ENC_NA);
++				proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_status, tvb, offset, realsize - offset, ENC_ASCII | ENC_NA);
 +				break;
 +			}
-+			if ((tmp == '0')&& ((tvb_reported_length(tvb) == offset+1)||(tvb_reported_length(tvb) == offset+2))){
++			if ((tmp == '0')&& ((tvb_reported_length(tvb) == (guint)(offset+1))||(tvb_reported_length(tvb) == (guint)(offset+2)))){
 +				proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_ok, tvb, offset, 1, ENC_ASCII | ENC_NA);
 +				break;
 +			}
-+			if ((tmp == '1') && ((tvb_reported_length(tvb) == offset+1)||(tvb_reported_length(tvb) == offset+2))){
++			if ((tmp == '1') && ((tvb_reported_length(tvb) == (guint)(offset+1))||(tvb_reported_length(tvb) == (guint)(offset+2)))){
 +				proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_ok, tvb, offset, 1, ENC_ASCII | ENC_NA);
 +				break;
 +			}
-+			if (tvb_reported_length(tvb) == offset+9){
++			if (tvb_reported_length(tvb) == (guint)(offset+9)){
 +				proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_version_supported, tvb, offset, 8, ENC_ASCII | ENC_NA);
 +				break;
 +			}
@@ -496,6 +640,8 @@ index 0000000..7148d58
 +	}
 +	if (has_lf)
 +		proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_lf, tvb, realsize, 1, ENC_NA);
++
++	return tvb_length(tvb);
 +}
 +
 +void
@@ -548,9 +694,9 @@ index 0000000..7148d58
 +			{
 +				"Error",
 +				"rtpproxy.error",
-+				FT_UINT8,
-+				BASE_DEC,
-+				VALS(errortypenames),
++				FT_STRING,
++				BASE_NONE,
++				NULL,
 +				0x0,
 +				NULL,
 +				HFILL
@@ -816,6 +962,46 @@ index 0000000..7148d58
 +				HFILL
 +			}
 +		},
++		{
++			&hf_rtpproxy_request_in,
++			{
++				"Request In",
++				"rtpproxy.request_in",
++				FT_FRAMENUM,
++				BASE_NONE,
++				NULL,
++				0x0,
++				NULL,
++				HFILL
++			}
++
++		},
++		{
++			&hf_rtpproxy_response_in,
++			{
++				"Response In",
++				"rtpproxy.response_in",
++				FT_FRAMENUM,
++				BASE_NONE,
++				NULL,
++				0x0,
++				NULL,
++				HFILL
++			}
++		},
++		{
++			&hf_rtpproxy_response_time,
++			{
++				"Response Time",
++				"rtpproxy.response_time",
++				FT_RELATIVE_TIME,
++				BASE_NONE,
++				NULL,
++				0x0,
++				"The time between the Request and the Reply",
++				HFILL
++			 }
++		}
 +	};
 +
 +	/* Setup protocol subtree array */
@@ -862,8 +1048,8 @@ index 0000000..7148d58
 +	static dissector_handle_t rtpproxy_tcp_handle, rtpproxy_udp_handle;
 +
 +	if(!rtpproxy_initialized){
-+		rtpproxy_tcp_handle = create_dissector_handle(dissect_rtpproxy, proto_rtpproxy);
-+		rtpproxy_udp_handle = create_dissector_handle(dissect_rtpproxy, proto_rtpproxy);
++		rtpproxy_tcp_handle = new_create_dissector_handle(dissect_rtpproxy, proto_rtpproxy);
++		rtpproxy_udp_handle = new_create_dissector_handle(dissect_rtpproxy, proto_rtpproxy);
 +		rtpproxy_initialized = TRUE;
 +	}
 +
@@ -894,6 +1080,3 @@ index 0000000..7148d58
 + * vi: set shiftwidth=8 tabstop=8 noexpandtab:
 + * :indentSize=8:tabSize=8:noTabs=false:
 + */
--- 
-1.8.3.1
-

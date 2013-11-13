@@ -1,7 +1,7 @@
-From 9bad0b9e84deabc2b65cee6a650b68866d7d70f3 Mon Sep 17 00:00:00 2001
+From 1904600d69fb059c768170d12d636137f3b19de0 Mon Sep 17 00:00:00 2001
 From: Anders Broman <anders.broman@ericsson.com>
 Date: Thu, 11 Jul 2013 21:13:27 +0000
-Subject: [PATCH 07/13] The beginning of an openflow dissector.
+Subject: [PATCH] The beginning of an openflow dissector.
 
 svn path=/trunk/; revision=50513
 
@@ -51,12 +51,6 @@ svn path=/trunk/; revision=51737
 Fix "malformed packet" and tidy up a bit.
 
 svn path=/trunk/; revision=51740
----
- epan/CMakeLists.txt               |    1 +
- epan/dissectors/Makefile.common   |    1 +
- epan/dissectors/packet-openflow.c | 1430 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 1432 insertions(+)
- create mode 100644 epan/dissectors/packet-openflow.c
 
 diff --git a/epan/CMakeLists.txt b/epan/CMakeLists.txt
 index 610cea7..83e975d 100644
@@ -1518,6 +1512,3 @@ index 0000000..cc71824
 + * vi: set shiftwidth=4 tabstop=8 expandtab:
 + * :indentSize=4:tabSize=8:noTabs=true:
 + */
--- 
-1.8.3.1
-

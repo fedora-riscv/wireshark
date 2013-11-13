@@ -1,14 +1,11 @@
 From 0d0f937fcbb73fb36a44bd7061817ff1cdac0032 Mon Sep 17 00:00:00 2001
 From: Jan Safranek <jsafrane@redhat.com>
 Date: Thu, 9 Jun 2011 14:56:59 +0200
-Subject: [PATCH 03/13] Load correct shared object name in python.
+Subject: [PATCH] Load correct shared object name in python.
 
 This fixes following error message shown by wireshark/tshark when wireshark-devel
 was not installed:
    libwireshark.so: cannot open shared object file: No such file or directory
----
- epan/wspython/wspy_libws.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/epan/wspython/wspy_libws.py b/epan/wspython/wspy_libws.py
 index a293a17..73ce012 100755
@@ -23,6 +20,3 @@ index a293a17..73ce012 100755
  
  def get_libws_handle():
    global __libwireshark
--- 
-1.8.3.1
-

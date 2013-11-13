@@ -1,12 +1,9 @@
-From 8e0c0df6291f9e8948d6653230bdc59692803890 Mon Sep 17 00:00:00 2001
+From 1022a03e6f71efdff1b91c87b2426a229a24791d Mon Sep 17 00:00:00 2001
 From: Peter Lemenkov <lemenkov@gmail.com>
 Date: Fri, 13 Sep 2013 14:36:55 +0400
-Subject: [PATCH 09/13] Restore Fedora-specific groups
+Subject: [PATCH] Restore Fedora-specific groups
 
 Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
----
- wireshark.desktop | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/wireshark.desktop b/wireshark.desktop
 index b0fe1ae..d275887 100644
@@ -18,6 +15,3 @@ index b0fe1ae..d275887 100644
  # http://standards.freedesktop.org/menu-spec/1.0/
 -Categories=System;Monitor;GTK;
 +Categories=Application;Network;GTK;
--- 
-1.8.3.1
-

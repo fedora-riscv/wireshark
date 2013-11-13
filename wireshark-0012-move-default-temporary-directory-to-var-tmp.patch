@@ -1,18 +1,8 @@
-From aaf8ad314b952c61c9b569ac22c2765f5e6653d7 Mon Sep 17 00:00:00 2001
+From 0ecd119162d513c50e37206846f4238257fde247 Mon Sep 17 00:00:00 2001
 From: Peter Hatina <phatina@redhat.com>
 Date: Tue, 24 Sep 2013 10:55:09 +0200
-Subject: [PATCH 12/13] move default temporary directory to /var/tmp
+Subject: [PATCH] move default temporary directory to /var/tmp
 
----
- epan/filesystem.c      |  4 ++-
- tempfile.c             |  7 ++---
- ui/gtk/proto_help.c    |  4 ++-
- wsutil/Makefile.common |  6 +++--
- wsutil/wstmpdir.c      | 70 ++++++++++++++++++++++++++++++++++++++++++++++++++
- wsutil/wstmpdir.h      | 39 ++++++++++++++++++++++++++++
- 6 files changed, 123 insertions(+), 7 deletions(-)
- create mode 100644 wsutil/wstmpdir.c
- create mode 100644 wsutil/wstmpdir.h
 
 diff --git a/epan/filesystem.c b/epan/filesystem.c
 index 053711d..adf3b91 100644
@@ -239,6 +229,3 @@ index 0000000..021b615
 +#endif // __cplusplus
 +
 +#endif // __WS_TMP_DIR_H__
--- 
-1.8.3.1
-

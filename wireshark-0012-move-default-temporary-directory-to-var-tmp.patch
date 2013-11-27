@@ -1,4 +1,3 @@
-From 0ecd119162d513c50e37206846f4238257fde247 Mon Sep 17 00:00:00 2001
 From: Peter Hatina <phatina@redhat.com>
 Date: Tue, 24 Sep 2013 10:55:09 +0200
 Subject: [PATCH] move default temporary directory to /var/tmp

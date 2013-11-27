@@ -1,4 +1,3 @@
-From 0d0f937fcbb73fb36a44bd7061817ff1cdac0032 Mon Sep 17 00:00:00 2001
 From: Jan Safranek <jsafrane@redhat.com>
 Date: Thu, 9 Jun 2011 14:56:59 +0200
 Subject: [PATCH] Load correct shared object name in python.

@@ -1,4 +1,3 @@
-From 1904600d69fb059c768170d12d636137f3b19de0 Mon Sep 17 00:00:00 2001
 From: Anders Broman <anders.broman@ericsson.com>
 Date: Thu, 11 Jul 2013 21:13:27 +0000
 Subject: [PATCH] The beginning of an openflow dissector.

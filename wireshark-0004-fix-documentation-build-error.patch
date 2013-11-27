@@ -1,4 +1,3 @@
-From 8e34a9a261f26ceabc39ea373d9025a24805b832 Mon Sep 17 00:00:00 2001
 From: Peter Hatina <phatina@redhat.com>
 Date: Mon, 8 Apr 2013 13:03:24 +0200
 Subject: [PATCH] fix documentation build error

@@ -1,4 +1,3 @@
-From dfd843cda67cfd9b785b44f5096a185c04c08be8 Mon Sep 17 00:00:00 2001
 From: Peter Hatina <phatina@redhat.com>
 Date: Wed, 4 Sep 2013 10:03:57 +0200
 Subject: [PATCH] fix string overrun in plugins/profinet

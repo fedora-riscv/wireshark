@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.3
-Release:	4%{?dist}
+Release:	5%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -47,9 +47,13 @@ Patch10:	wireshark-0010-Add-pkgconfig-entry.patch
 Patch11:	wireshark-0011-Install-autoconf-related-file.patch
 # Fedora-specific
 Patch12:	wireshark-0012-move-default-temporary-directory-to-var-tmp.patch
+# Backported from upstream.
+Patch13:	wireshark-0013-Copy-over-r49999-from-trunk.patch
+# Backported from upstream.
+Patch14:	wireshark-0014-Fix-https-bugs.wireshark.org-bugzilla-show_bug.cgi-i.patch
 # Backported to 1.10.x from the patch from this ticket:
-# https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9397
-Patch13:	wireshark-0013-Initial-version-of-RT-C-P-dissector-hinting.patch
+# https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9484
+Patch15:	wireshark-0015-Add-expert-info-about-timeouts.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -156,7 +160,9 @@ and plugins.
 %patch10 -p1 -b .add_pkgconfig
 %patch11 -p1 -b .install_autoconf
 %patch12 -p1 -b .tmp_dir
-%patch13 -p1 -b .rtpproxy_hinting
+%patch13 -p1 -b .allow_64kpackets_for_usb
+%patch14 -p1 -b .dont_die_during_sip_dissection
+%patch15 -p1 -b .add_expert_info_about_rtpproxy
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -351,6 +357,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Wed Nov 27 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.3-5
+- Updated RTPproxy dissector (again)
+- Allow packets more than 64k (for USB capture). See patch no. 13
+- Don't die during loading of some SIP capture files. See patch no. 14
+- Backport support for RTPproxy dissector timeouts detection. See patch no. 15
+
 * Wed Nov 13 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.3-4
 - Updated RTPproxy dissector
 

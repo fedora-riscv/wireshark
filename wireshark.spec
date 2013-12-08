@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.3
-Release:	5%{?dist}
+Release:	6%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -31,7 +31,9 @@ Patch1:		wireshark-0001-enable-Lua-support.patch
 Patch2:		wireshark-0002-Customize-permission-denied-error.patch
 # Fedora-specific
 Patch3:		wireshark-0003-Load-correct-shared-object-name-in-python.patch
+# No longer necessary - will be removed in the next release (1.12.x)
 Patch4:		wireshark-0004-fix-documentation-build-error.patch
+# Will be proposed upstream
 Patch5:		wireshark-0005-fix-string-overrun-in-plugins-profinet.patch
 # Backported from upstream. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=8326
 Patch6:		wireshark-0006-From-Peter-Lemenkov-via-https-bugs.wireshark.org-bug.patch
@@ -51,9 +53,12 @@ Patch12:	wireshark-0012-move-default-temporary-directory-to-var-tmp.patch
 Patch13:	wireshark-0013-Copy-over-r49999-from-trunk.patch
 # Backported from upstream.
 Patch14:	wireshark-0014-Fix-https-bugs.wireshark.org-bugzilla-show_bug.cgi-i.patch
-# Backported to 1.10.x from the patch from this ticket:
-# https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9484
-Patch15:	wireshark-0015-Add-expert-info-about-timeouts.patch
+# Backported from upstream.
+Patch15:	wireshark-0015-From-Dirk-Jagdmann-Make-sure-err_str-is-initialized.patch
+# Backported from upstream.
+Patch16:	wireshark-0016-Crash-when-selecting-Decode-As-based-on-SCTP-PPID.-B.patch
+# Backported from upstream.
+Patch17:	wireshark-0017-Fix-https-bugs.wireshark.org-bugzilla-show_bug.cgi-i.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -151,7 +156,7 @@ and plugins.
 
 %patch2 -p1 -b .perm_denied_customization
 %patch3 -p1 -b .soname
-%patch4 -p1 -b .pod2man
+#%patch4 -p1 -b .pod2man
 %patch5 -p1 -b .profinet_crash
 %patch6 -p1 -b .rtpproxy
 %patch7 -p1 -b .openflow
@@ -162,7 +167,9 @@ and plugins.
 %patch12 -p1 -b .tmp_dir
 %patch13 -p1 -b .allow_64kpackets_for_usb
 %patch14 -p1 -b .dont_die_during_sip_dissection
-%patch15 -p1 -b .add_expert_info_about_rtpproxy
+%patch15 -p1 -b .fix_main_window
+%patch16 -p1 -b .fix_sctp
+%patch17 -p1 -b .fix_global_pinfo
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -350,13 +357,25 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files devel
 %doc doc/README.*
+%if %{with_lua}
 %config(noreplace) %{_datadir}/wireshark/init.lua
+%endif
 %{_includedir}/wireshark
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*
 %{_datadir}/aclocal/*
 
 %changelog
+* Fri Dec 06 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.3-6
+- Updated RTPproxy dissector (again), squashed patch no. 15 (applied upstream).
+- Use proper soname in the python scripts
+- Don't apply no longer needed fix for pod2man.
+- Fix for main window. See patch no. 15
+- Fix for SCTP dissection. See patch no. 16
+- Fix for rare issue in Base Station Subsystem GPRS Protocol dissection. See
+  patch no. 17
+- Fix building w/o Lua
+
 * Wed Nov 27 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.3-5
 - Updated RTPproxy dissector (again)
 - Allow packets more than 64k (for USB capture). See patch no. 13

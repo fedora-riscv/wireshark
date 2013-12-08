@@ -1,7 +1,8 @@
 From: Evan Huus <eapache@gmail.com>
 Date: Sun, 18 Aug 2013 19:49:08 +0000
-Subject: [PATCH] From Peter Lemenkov via
- https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=8326
+Subject: [PATCH] Dissector for the Sippy RTPproxy controlling protocol
+
+From Peter Lemenkov via https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=8326
 
 Dissector for the Sippy RTPproxy controlling protocol. RTPproxy is a well-known
 (among SIP-engineers) application and it operates using its own simple
@@ -129,6 +130,30 @@ Reinitialize counter between loops to avoid an out of bound access found with fu
 
 svn path=/trunk/; revision=53612
 
+RTPproxy dissector: Add expert info about timeouts.  Bug 9484 (https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9484)
+
+From Peter Lemenkov
+
+svn path=/trunk/; revision=53622
+
+From Peter Lemenkov via https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9487 :
+Use RTP payload descriptions from RTP dissector in RTPproxy codec param value
+
+svn path=/trunk/; revision=53658
+
+From Peter Lemenkov via https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9490 :
+Couple packets in RTPproxy dissector not only with CookieID but also with Call-IDs
+
+svn path=/trunk/; revision=53673
+
+Fix Coverity CID 1134045: Printf format string issue.  (As documented in the printf man page for the ' option, "Note that many versions of gcc(1) cannot parse this option and will issue a warning."  (r47940 reverted a similar change, so this keeps things consistent.)
+
+svn path=/trunk/; revision=53705
+
+Clean up indentation.
+
+svn path=/trunk/; revision=53742
+
 diff --git a/AUTHORS b/AUTHORS
 index 10782b0..e7b3c18 100644
 --- a/AUTHORS
@@ -167,10 +192,10 @@ index 937f522..73217d7 100644
  	packet-rudp.c		\
 diff --git a/epan/dissectors/packet-rtpproxy.c b/epan/dissectors/packet-rtpproxy.c
 new file mode 100644
-index 0000000..831448b
+index 0000000..1a80ee7
 --- /dev/null
 +++ b/epan/dissectors/packet-rtpproxy.c
-@@ -0,0 +1,1350 @@
+@@ -0,0 +1,1387 @@
 +/* packet-rtpproxy.c
 + * RTPproxy command protocol dissector
 + * Copyright 2013, Peter Lemenkov <lemenkov@gmail.com>
@@ -210,6 +235,8 @@ index 0000000..831448b
 +#include <epan/packet.h>
 +#include <epan/prefs.h>
 +#include <epan/conversation.h>
++#include <epan/expert.h>
++#include <epan/rtp_pt.h>
 +
 +#ifdef HAVE_ARPA_INET_H
 +#include <arpa/inet.h>
@@ -272,6 +299,7 @@ index 0000000..831448b
 +	guint32 req_frame;
 +	guint32 resp_frame;
 +	nstime_t req_time;
++	gchar* callid;
 +} rtpproxy_info_t;
 +
 +static dissector_handle_t rtcp_handle;
@@ -421,9 +449,14 @@ index 0000000..831448b
 +
 +static gint ett_rtpproxy_reply = -1;
 +
++/* Default values */
 +static guint rtpproxy_tcp_port = 22222;
 +static guint rtpproxy_udp_port = 22222;
 +static gboolean rtpproxy_establish_conversation = TRUE;
++/* See - http://www.opensips.org/html/docs/modules/1.11.x/rtpproxy.html#id250018 */
++/* See - http://www.kamailio.org/docs/modules/devel/modules/rtpproxy.html#idm448 */
++static guint rtpproxy_timeout = 1000;
++static nstime_t rtpproxy_timeout_ns = {1, 0};
 +
 +void proto_reg_handoff_rtpproxy(void);
 +
@@ -492,7 +525,8 @@ index 0000000..831448b
 +				while(codecs[i]){
 +					/* We assume strings < 2^32-1 bytes long. :-) */
 +					codec_len = (guint)strlen(codecs[i]);
-+					proto_tree_add_item(another_tree, hf_rtpproxy_command_parameter_codec, tvb, begin+offset, codec_len, ENC_ASCII | ENC_NA);
++					ti = proto_tree_add_item(another_tree, hf_rtpproxy_command_parameter_codec, tvb, begin+offset, codec_len, ENC_ASCII | ENC_NA);
++					proto_item_append_text(ti, " (%s)", val_to_str_ext((guint)strtoul(tvb_format_text(tvb,begin+offset,codec_len),NULL,10), &rtp_payload_type_vals_ext, "Unknown"));
 +					offset += codec_len;
 +					if(codecs[i+1])
 +						offset++; /* skip comma */
@@ -542,7 +576,8 @@ index 0000000..831448b
 +			case 't':
 +				new_offset = (gint)strspn(rawstr+offset, "0123456789");
 +				another_tree = proto_item_add_subtree(ti, ett_rtpproxy_command_parameters_transcode);
-+				proto_tree_add_item(another_tree, hf_rtpproxy_command_parameter_transcode, tvb, begin+offset, new_offset, ENC_ASCII | ENC_NA);
++				ti = proto_tree_add_item(another_tree, hf_rtpproxy_command_parameter_transcode, tvb, begin+offset, new_offset, ENC_ASCII | ENC_NA);
++				proto_item_append_text(ti, " (%s)", val_to_str_ext((guint)strtoul(tvb_format_text(tvb,begin+offset, new_offset),NULL,10), &rtp_payload_type_vals_ext, "Unknown"));
 +				offset += new_offset;
 +				break;
 +			case 'v':
@@ -556,7 +591,7 @@ index 0000000..831448b
 +	}
 +}
 +
-+void
++rtpproxy_info_t *
 +rtpproxy_add_tid(gboolean is_request, tvbuff_t *tvb, packet_info *pinfo, proto_tree *rtpproxy_tree, rtpproxy_conv_info_t *rtpproxy_conv, gchar* cookie)
 +{
 +	rtpproxy_info_t *rtpproxy_info;
@@ -568,6 +603,7 @@ index 0000000..831448b
 +			rtpproxy_info->req_frame = PINFO_FD_NUM(pinfo);
 +			rtpproxy_info->resp_frame = 0;
 +			rtpproxy_info->req_time = pinfo->fd->abs_ts;
++			rtpproxy_info->callid = NULL;
 +			se_tree_insert_string(rtpproxy_conv->trans, cookie, rtpproxy_info, 0);
 +		} else {
 +			rtpproxy_info = (rtpproxy_info_t *)se_tree_lookup_string(rtpproxy_conv->trans, cookie, 0);
@@ -588,9 +624,13 @@ index 0000000..831448b
 +				nstime_delta(&ns, &pinfo->fd->abs_ts, &rtpproxy_info->req_time);
 +				pi = proto_tree_add_time(rtpproxy_tree, hf_rtpproxy_response_time, tvb, 0, 0, &ns);
 +				PROTO_ITEM_SET_GENERATED(pi);
++				if (nstime_cmp(&rtpproxy_timeout_ns, &ns) < 0)
++					expert_add_info_format(pinfo, rtpproxy_tree, PI_RESPONSE_CODE, PI_WARN, "Response timeout %.3f seconds", nstime_to_sec(&ns));
 +			}
 +		}
 +	}
++	/* Could be NULL so we should check it before dereferencing */
++	return rtpproxy_info;
 +}
 +
 +void
@@ -644,6 +684,7 @@ index 0000000..831448b
 +	address addr;
 +	guint16 port;
 +	guint32 ipaddr[4];
++	rtpproxy_info_t *rtpproxy_info = NULL;
 +
 +	/* If it does not start with a printable character it's not RTPProxy */
 +	if(!isprint(tvb_get_guint8(tvb, 0)))
@@ -669,6 +710,7 @@ index 0000000..831448b
 +	/* Calculate size to prevent recalculation in the future */
 +	realsize = tvb_reported_length(tvb);
 +
++
 +	/* Check for LF (required for TCP connection, optional for UDP) */
 +	if (tvb_get_guint8(tvb, realsize - 1) == '\n'){
 +		col_set_str(pinfo->cinfo, COL_PROTOCOL, "RTPproxy");
@@ -678,6 +720,7 @@ index 0000000..831448b
 +	}
 +	else
 +		col_set_str(pinfo->cinfo, COL_PROTOCOL, "RTPproxy (no LF)");
++
 +
 +	/* Try to create conversation */
 +	conversation = find_or_create_conversation(pinfo);
@@ -717,7 +760,7 @@ index 0000000..831448b
 +		case 'r':
 +		case 'c':
 +		case 'q':
-+			rtpproxy_add_tid(TRUE, tvb, pinfo, rtpproxy_tree, rtpproxy_conv, cookie);
++			rtpproxy_info = rtpproxy_add_tid(TRUE, tvb, pinfo, rtpproxy_tree, rtpproxy_conv, cookie);
 +			col_add_fstr(pinfo->cinfo, COL_INFO, "Request: %s", rawstr);
 +			ti = proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_request, tvb, offset, -1, ENC_NA);
 +			rtpproxy_tree = proto_item_add_subtree(ti, ett_rtpproxy_request);
@@ -764,6 +807,8 @@ index 0000000..831448b
 +			/* Extract Call-ID */
 +			new_offset = tvb_find_guint8(tvb, offset, -1, ' ');
 +			proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_callid, tvb, offset, new_offset - offset, ENC_ASCII | ENC_NA);
++			if(rtpproxy_info && !rtpproxy_info->callid)
++				rtpproxy_info->callid = tvb_get_ephemeral_string(tvb, offset, new_offset - offset);
 +			/* Skip whitespace */
 +			offset = tvb_skip_wsp(tvb, new_offset+1, -1);
 +
@@ -856,7 +901,7 @@ index 0000000..831448b
 +		case '7':
 +		case '8':
 +		case '9':
-+			rtpproxy_add_tid(FALSE, tvb, pinfo, rtpproxy_tree, rtpproxy_conv, cookie);
++			rtpproxy_info = rtpproxy_add_tid(FALSE, tvb, pinfo, rtpproxy_tree, rtpproxy_conv, cookie);
 +			if (tmp == 'e')
 +				col_add_fstr(pinfo->cinfo, COL_INFO, "Error reply: %s", rawstr);
 +			else
@@ -864,6 +909,11 @@ index 0000000..831448b
 +
 +			ti = proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_reply, tvb, offset, -1, ENC_NA);
 +			rtpproxy_tree = proto_item_add_subtree(ti, ett_rtpproxy_reply);
++
++			if(rtpproxy_info && rtpproxy_info->callid){
++				ti = proto_tree_add_string(rtpproxy_tree, hf_rtpproxy_callid, tvb, offset, 0, rtpproxy_info->callid);
++				PROTO_ITEM_SET_GENERATED(ti);
++			}
 +
 +			if (tmp == 'e'){
 +				tmp = tvb_find_line_end(tvb, offset, -1, &new_offset, FALSE);
@@ -1456,6 +1506,7 @@ index 0000000..831448b
 +	proto_register_subtree_array(ett, array_length(ett));
 +
 +	rtpproxy_module = prefs_register_protocol(proto_rtpproxy, proto_reg_handoff_rtpproxy);
++
 +	prefs_register_uint_preference(rtpproxy_module, "tcp.port",
 +								 "RTPproxy TCP Port", /* Title */
 +								 "RTPproxy TCP Port", /* Descr */
@@ -1467,11 +1518,18 @@ index 0000000..831448b
 +								 "RTPproxy UDP Port", /* Descr */
 +								 10,
 +								 &rtpproxy_udp_port);
++
 +	prefs_register_bool_preference(rtpproxy_module, "establish_conversation",
 +                                 "Establish Media Conversation",
 +                                 "Specifies that RTP/RTCP/T.38/MSRP/etc streams are decoded based "
 +                                 "upon port numbers found in RTPproxy answers",
 +                                 &rtpproxy_establish_conversation);
++
++	prefs_register_uint_preference(rtpproxy_module, "reply.timeout",
++								 "RTPproxy reply timeout", /* Title */
++								 "Maximum timeout value in waiting for reply from RTPProxy (in milliseconds).", /* Descr */
++								 10,
++								 &rtpproxy_timeout);
 +}
 +
 +void
@@ -1507,6 +1565,10 @@ index 0000000..831448b
 +	rtcp_handle   = find_dissector("rtcp");
 +	rtp_events_handle    = find_dissector("rtpevent");
 +	rtp_handle    = find_dissector("rtp");
++
++	/* Calculate nstime_t struct for the timeout from the rtpproxy_timeout value in milliseconds */
++	rtpproxy_timeout_ns.secs = (rtpproxy_timeout - rtpproxy_timeout % 1000) / 1000;
++	rtpproxy_timeout_ns.nsecs = (rtpproxy_timeout % 1000) * 1000;
 +}
 +
 +/*

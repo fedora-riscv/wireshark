@@ -192,7 +192,7 @@ index 937f522..73217d7 100644
  	packet-rudp.c		\
 diff --git a/epan/dissectors/packet-rtpproxy.c b/epan/dissectors/packet-rtpproxy.c
 new file mode 100644
-index 0000000..1a80ee7
+index 0000000..0afee3a
 --- /dev/null
 +++ b/epan/dissectors/packet-rtpproxy.c
 @@ -0,0 +1,1387 @@
@@ -808,7 +808,7 @@ index 0000000..1a80ee7
 +			new_offset = tvb_find_guint8(tvb, offset, -1, ' ');
 +			proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_callid, tvb, offset, new_offset - offset, ENC_ASCII | ENC_NA);
 +			if(rtpproxy_info && !rtpproxy_info->callid)
-+				rtpproxy_info->callid = tvb_get_ephemeral_string(tvb, offset, new_offset - offset);
++				rtpproxy_info->callid = tvb_get_seasonal_string(tvb, offset, new_offset - offset);
 +			/* Skip whitespace */
 +			offset = tvb_skip_wsp(tvb, new_offset+1, -1);
 +

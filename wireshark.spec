@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.3
-Release:	6%{?dist}
+Release:	7%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -366,6 +366,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Dec 09 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.3-7
+- Fix error in the backported RTPproxy patches
+
 * Fri Dec 06 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.3-6
 - Updated RTPproxy dissector (again), squashed patch no. 15 (applied upstream).
 - Use proper soname in the python scripts

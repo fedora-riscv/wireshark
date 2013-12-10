@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.3
-Release:	8%{?dist}
+Release:	9%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -30,7 +30,7 @@ Source1:	90-wireshark-usbmon.rules
 Patch1:		wireshark-0001-enable-Lua-support.patch
 # Fedora-specific
 Patch2:		wireshark-0002-Customize-permission-denied-error.patch
-# Fedora-specific
+# No longer necessary - will be removed in the next release (1.12.x)
 Patch3:		wireshark-0003-Load-correct-shared-object-name-in-python.patch
 # No longer necessary - will be removed in the next release (1.12.x)
 Patch4:		wireshark-0004-fix-documentation-build-error.patch
@@ -68,11 +68,11 @@ BuildRequires:	zlib-devel, bzip2-devel
 BuildRequires:	openssl-devel
 BuildRequires:	glib2-devel
 BuildRequires:	elfutils-devel, krb5-devel
-BuildRequires:	python, pcre-devel, libselinux
+BuildRequires:	pcre-devel, libselinux
 BuildRequires:	gnutls-devel
 BuildRequires:	desktop-file-utils
 BuildRequires:	xdg-utils
-BuildRequires:	flex, bison, python, python-devel
+BuildRequires:	flex, bison
 BuildRequires:	libcap-devel
 %if 0%{?fedora} > 18
 BuildRequires:	perl-podlators
@@ -156,7 +156,7 @@ and plugins.
 %endif
 
 %patch2 -p1 -b .perm_denied_customization
-%patch3 -p1 -b .soname
+#%patch3 -p1 -b .soname
 #%patch4 -p1 -b .pod2man
 %patch5 -p1 -b .profinet_crash
 %patch6 -p1 -b .rtpproxy
@@ -219,7 +219,6 @@ autoreconf -ivf
 %endif
    --with-ssl \
    --disable-warnings-as-errors \
-   --with-python \
    --with-plugins=%{_libdir}/%{name}/plugins/%{version} \
    --with-dumpcap-group="wireshark" \
    --enable-setcap-install \
@@ -274,9 +273,6 @@ rm -f %{buildroot}%{_libdir}/%{name}/plugins/%{version}/*.la
 
 # Remove .la files in libdir
 rm -f %{buildroot}%{_libdir}/*.la
-
-# add wspy_dissectors directory for plugins
-mkdir -p %{buildroot}%{_libdir}/%{name}/python/%{version}/wspy_dissectors
 
 %pre
 getent group wireshark >/dev/null || groupadd -r wireshark
@@ -373,6 +369,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Dec 10 2013 Peter Hatina <phatina@redhat.com> - 1.10-3-9
+- remove python support
+
 * Tue Dec 10 2013 Peter Hatina <phatina@redhat.com> - 1.10-3-8
 - fix read permissions of /dev/usbmon* for non-root users
 

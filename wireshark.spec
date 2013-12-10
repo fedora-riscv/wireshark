@@ -21,10 +21,11 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.3
-Release:	7%{?dist}
+Release:	8%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
+Source1:	90-wireshark-usbmon.rules
 # Fedora-specific
 Patch1:		wireshark-0001-enable-Lua-support.patch
 # Fedora-specific
@@ -253,6 +254,7 @@ mkdir -p "${IDIR}/epan/dfilter"
 mkdir -p "${IDIR}/epan/dissectors"
 mkdir -p "${IDIR}/wiretap"
 mkdir -p "${IDIR}/wsutil"
+mkdir -p %{buildroot}/%{_sysconfdir}/udev/rules.d
 install -m 644 color.h config.h register.h	"${IDIR}/"
 install -m 644 cfile.h file.h			"${IDIR}/"
 install -m 644 frame_data_sequence.h		"${IDIR}/"
@@ -265,6 +267,7 @@ install -m 644 epan/dissectors/*.h		"${IDIR}/epan/dissectors"
 install -m 644 wiretap/*.h			"${IDIR}/wiretap"
 install -m 644 wsutil/*.h			"${IDIR}/wsutil"
 install -m 644 ws_symbol_export.h               "${IDIR}/"
+install -m 644 %{SOURCE1}                       %{buildroot}/%{_sysconfdir}/udev/rules.d/
 
 # Remove .la files
 rm -f %{buildroot}%{_libdir}/%{name}/plugins/%{version}/*.la
@@ -277,8 +280,11 @@ mkdir -p %{buildroot}%{_libdir}/%{name}/python/%{version}/wspy_dissectors
 
 %pre
 getent group wireshark >/dev/null || groupadd -r wireshark
+getent group usbmon >/dev/null || groupadd -r usbmon
 
-%post -p /sbin/ldconfig
+%post
+/sbin/ldconfig
+/usr/bin/udevadm trigger
 
 %postun -p /sbin/ldconfig
 
@@ -315,6 +321,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/reordercap
 %attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=ep) %{_sbindir}/dumpcap
 %{_sbindir}/rawshark
+%{_sysconfdir}/udev/rules.d/90-wireshark-usbmon.rules
 %{python_sitearch}/*.py*
 %{_libdir}/lib*.so.*
 %{_libdir}/wireshark
@@ -366,6 +373,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Dec 10 2013 Peter Hatina <phatina@redhat.com> - 1.10-3-8
+- fix read permissions of /dev/usbmon* for non-root users
+
 * Mon Dec 09 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.3-7
 - Fix error in the backported RTPproxy patches
 

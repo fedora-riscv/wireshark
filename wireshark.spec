@@ -20,8 +20,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.10.3
-Release:	9%{?dist}
+Version:	1.10.4
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -50,16 +50,18 @@ Patch10:	wireshark-0010-Add-pkgconfig-entry.patch
 Patch11:	wireshark-0011-Install-autoconf-related-file.patch
 # Fedora-specific
 Patch12:	wireshark-0012-move-default-temporary-directory-to-var-tmp.patch
-# Backported from upstream.
+# No longer necessary - will be removed in the next release (1.12.x)
 Patch13:	wireshark-0013-Copy-over-r49999-from-trunk.patch
-# Backported from upstream.
+# No longer necessary - will be removed in the next release (1.12.x)
 Patch14:	wireshark-0014-Fix-https-bugs.wireshark.org-bugzilla-show_bug.cgi-i.patch
-# Backported from upstream.
+# No longer necessary - will be removed in the next release (1.12.x)
 Patch15:	wireshark-0015-From-Dirk-Jagdmann-Make-sure-err_str-is-initialized.patch
-# Backported from upstream.
+# No longer necessary - will be removed in the next release (1.12.x)
 Patch16:	wireshark-0016-Crash-when-selecting-Decode-As-based-on-SCTP-PPID.-B.patch
-# Backported from upstream.
+# No longer necessary - will be removed in the next release (1.12.x)
 Patch17:	wireshark-0017-Fix-https-bugs.wireshark.org-bugzilla-show_bug.cgi-i.patch
+# Backported from upstream.
+Patch18:	wireshark-0018-Copy-over-from-Trunk.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -166,11 +168,12 @@ and plugins.
 %patch10 -p1 -b .add_pkgconfig
 %patch11 -p1 -b .install_autoconf
 %patch12 -p1 -b .tmp_dir
-%patch13 -p1 -b .allow_64kpackets_for_usb
-%patch14 -p1 -b .dont_die_during_sip_dissection
-%patch15 -p1 -b .fix_main_window
-%patch16 -p1 -b .fix_sctp
-%patch17 -p1 -b .fix_global_pinfo
+#%patch13 -p1 -b .allow_64kpackets_for_usb
+#%patch14 -p1 -b .dont_die_during_sip_dissection
+#%patch15 -p1 -b .fix_main_window
+#%patch16 -p1 -b .fix_sctp
+#%patch17 -p1 -b .fix_global_pinfo
+%patch18 -p1 -b .fix_overflow
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -369,6 +372,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Wed Dec 18 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.4-1
+- Ver. 1.10.4
+- Don't apply upsteamed patches no. 13, 14, 15, 16, 17
+- Fix variable overflow (patch no. 18)
+- Updated RTPproxy dissector (backported patches from trung)
+
 * Tue Dec 10 2013 Peter Hatina <phatina@redhat.com> - 1.10-3-9
 - remove python support
 

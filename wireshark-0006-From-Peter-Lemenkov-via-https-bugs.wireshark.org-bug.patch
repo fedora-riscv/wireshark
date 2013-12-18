@@ -154,6 +154,47 @@ Clean up indentation.
 
 svn path=/trunk/; revision=53742
 
+From Peter Lemenkov via https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9556
+
+Cosmetic change in a LF field representation in the RTPproxy dissector
+
+Don't display any value for LF field
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+svn path=/trunk/; revision=54045
+
+From Peter Lemenkov via https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9558
+
+Mark generated fields as generated in RTPproxy dissector
+
+This patch is cosmetic. It just marks generated fields as generated (to avoid confusion)
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+svn path=/trunk/; revision=54123
+
+From Peter Lemenkov:
+
+ "This patch removes misleading dereferencing operator from the
+  array's name. E.g. consider the following declaration:
+
+  guint32 ipaddr[4];
+
+  ipaddr points to the address of an array of guint32's, while &ipaddr
+  points to the first' guint32 object. E.g. &ipaddr == &ipaddr[0]. The
+  value is the same, but has different type which is necessary
+  sometimes. However inet_pton treats latest argument as void*, and
+  this information is left anyway. So no need to bother with types and
+  let's just pass pointer to the array."
+
+  https://bugs.wireshark.org/bugzilla/attachment.cgi?id=12304
+
+From me: Remove dereferencing operator from 'ipaddr' in two calls to
+         wmem_memdup().
+
+svn path=/trunk/; revision=54156
+
 diff --git a/AUTHORS b/AUTHORS
 index 10782b0..e7b3c18 100644
 --- a/AUTHORS
@@ -192,10 +233,10 @@ index 937f522..73217d7 100644
  	packet-rudp.c		\
 diff --git a/epan/dissectors/packet-rtpproxy.c b/epan/dissectors/packet-rtpproxy.c
 new file mode 100644
-index 0000000..0afee3a
+index 0000000..2c8fba3
 --- /dev/null
 +++ b/epan/dissectors/packet-rtpproxy.c
-@@ -0,0 +1,1387 @@
+@@ -0,0 +1,1386 @@
 +/* packet-rtpproxy.c
 + * RTPproxy command protocol dissector
 + * Copyright 2013, Peter Lemenkov <lemenkov@gmail.com>
@@ -425,11 +466,6 @@ index 0000000..0afee3a
 +	{ 0, NULL }
 +};
 +
-+static const value_string flowcontroltypenames[] = {
-+	{ '\n', "Yes"},
-+	{ 0, NULL }
-+};
-+
 +static gint ett_rtpproxy = -1;
 +
 +static gint ett_rtpproxy_request = -1;
@@ -483,11 +519,14 @@ index 0000000..0afee3a
 +		another_tree = proto_item_add_subtree(ti, ett_rtpproxy_tag);
 +		ti = proto_tree_add_item(another_tree, hf_rtpproxy_mediaid, tvb, new_offset+1, 0, ENC_ASCII | ENC_NA);
 +		proto_item_append_text(ti, "<skipped>");
++		PROTO_ITEM_SET_GENERATED(ti);
 +	}
 +	else{
 +		ti = proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_tag, tvb, begin, new_offset - begin, ENC_ASCII | ENC_NA);
-+		if ((guint)new_offset == begin)
++		if ((guint)new_offset == begin){
 +			proto_item_append_text(ti, "<skipped>"); /* A very first Offer/Update command */
++			PROTO_ITEM_SET_GENERATED(ti);
++		}
 +		another_tree = proto_item_add_subtree(ti, ett_rtpproxy_tag);
 +		proto_tree_add_item(another_tree, hf_rtpproxy_mediaid, tvb, new_offset+1, end - (new_offset+1), ENC_ASCII | ENC_NA);
 +	}
@@ -660,6 +699,7 @@ index 0000000..0afee3a
 +		/* Only port is supplied */
 +		ti = proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_notify_ipv4, tvb, begin, 0, ENC_ASCII | ENC_NA);
 +		proto_item_append_text(ti, "<skipped>");
++		PROTO_ITEM_SET_GENERATED(ti);
 +		proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_notify_port, tvb, begin, end - begin, ENC_ASCII | ENC_NA);
 +	}
 +}
@@ -953,17 +993,17 @@ index 0000000..0afee3a
 +			/* Extract IP */
 +			tmp = tvb_find_line_end(tvb, offset, -1, &new_offset, FALSE);
 +			if (tvb_find_guint8(tvb, offset, -1, ':') == -1){
-+				inet_pton(AF_INET, (char*)tvb_get_ephemeral_string(tvb, offset, tmp), &ipaddr);
++				inet_pton(AF_INET, (char*)tvb_get_ephemeral_string(tvb, offset, tmp), ipaddr);
 +				addr.type = AT_IPv4;
 +				addr.len  = 4;
-+				addr.data = ep_memdup(&ipaddr, 4);
++				addr.data = ep_memdup(ipaddr, 4);
 +				proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_ipv4, tvb, offset, tmp, ENC_ASCII | ENC_NA);
 +			}
 +			else{
-+				inet_pton(AF_INET6, (char*)tvb_get_ephemeral_string(tvb, offset, tmp), &ipaddr);
++				inet_pton(AF_INET6, (char*)tvb_get_ephemeral_string(tvb, offset, tmp), ipaddr);
 +				addr.type = AT_IPv6;
 +				addr.len  = 16;
-+				addr.data = ep_memdup(&ipaddr, 16);
++				addr.data = ep_memdup(ipaddr, 16);
 +				proto_tree_add_item(rtpproxy_tree, hf_rtpproxy_ipv6, tvb, offset, tmp, ENC_ASCII | ENC_NA);
 +			}
 +
@@ -1426,9 +1466,9 @@ index 0000000..0afee3a
 +			{
 +				"LF",
 +				"rtpproxy.lf",
-+				FT_UINT8,
-+				BASE_DEC,
-+				VALS(flowcontroltypenames),
++				FT_NONE,
++				BASE_NONE,
++				NULL,
 +				0x0,
 +				NULL,
 +				HFILL

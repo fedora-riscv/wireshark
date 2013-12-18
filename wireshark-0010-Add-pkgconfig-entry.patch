@@ -18,7 +18,7 @@ index eb735a5..2844c90 100644
  # Wireshark configuration files are put in $(pkgdatadir).
  #
 diff --git a/configure.ac b/configure.ac
-index 6c05883..5cae378 100644
+index 1356d9a..8691bbf 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -2543,6 +2543,7 @@ AC_CONFIG_HEADERS(config.h)

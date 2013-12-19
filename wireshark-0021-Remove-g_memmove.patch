@@ -1,0 +1,56 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 18 Dec 2013 13:39:07 +0400
+Subject: [PATCH] Remove g_memmove
+
+Glib no longer offers this macro so we have to fallback to C90 memmove.
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/epan/dissectors/packet-ssl-utils.c b/epan/dissectors/packet-ssl-utils.c
+index 1ab3c8d..0f1ad44 100644
+--- a/epan/dissectors/packet-ssl-utils.c
++++ b/epan/dissectors/packet-ssl-utils.c
+@@ -1633,7 +1633,7 @@ ssl_private_decrypt(guint len, guchar* encr_data, SSL_PRIVATE_KEY* pk)
+     ssl_debug_printf("pcry_private_decrypt: stripping %d bytes, decr_len %" G_GSIZE_MODIFIER "u\n",
+         rc, decr_len);
+     ssl_print_data("decrypted_unstrip_pre_master", decr_data_ptr, decr_len);
+-    g_memmove(decr_data_ptr, &decr_data_ptr[rc], decr_len - rc);
++    memmove(decr_data_ptr, &decr_data_ptr[rc], decr_len - rc);
+     decr_len -= rc;
+ 
+ out:
+@@ -1670,7 +1670,7 @@ out:
+     ssl_debug_printf("pcry_private_decrypt: stripping %d bytes, decr_len %d\n",
+         rc, decr_len);
+     ssl_print_data("decrypted_unstrip_pre_master", decr_data_ptr, decr_len);
+-    g_memmove(decr_data_ptr, &decr_data_ptr[rc], decr_len - rc);
++    memmove(decr_data_ptr, &decr_data_ptr[rc], decr_len - rc);
+     decr_len -= rc;
+ #endif /* SSL_FAST */
+     gcry_mpi_release(text);
+diff --git a/packaging/macosx/native-gtk/glibconfig.h b/packaging/macosx/native-gtk/glibconfig.h
+index e0a9589..2730202 100644
+--- a/packaging/macosx/native-gtk/glibconfig.h
++++ b/packaging/macosx/native-gtk/glibconfig.h
+@@ -78,8 +78,6 @@ typedef unsigned long gsize;
+ # define g_ATEXIT(proc)	(atexit (proc))
+ #endif
+ 
+-#define g_memmove(dest,src,len) G_STMT_START { memmove ((dest), (src), (len)); } G_STMT_END
+-
+ #define GLIB_MAJOR_VERSION 2
+ #define GLIB_MINOR_VERSION 12
+ #define GLIB_MICRO_VERSION 9
+diff --git a/ui/export_object_smb.c b/ui/export_object_smb.c
+index dec3de9..59ccaa2 100644
+--- a/ui/export_object_smb.c
++++ b/ui/export_object_smb.c
+@@ -254,7 +254,7 @@ gpointer    dest_memory_addr;
+ 	/* ...then, put the chunk of the file in the right place */
+ 	if (!file->is_out_of_memory) {
+ 		dest_memory_addr = entry->payload_data + chunk_offset;
+-		g_memmove(dest_memory_addr, eo_info->payload_data, eo_info->payload_len);
++		memmove(dest_memory_addr, eo_info->payload_data, eo_info->payload_len);
+ 	}
+ }
+ 

@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.4
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -62,6 +62,13 @@ Patch16:	wireshark-0016-Crash-when-selecting-Decode-As-based-on-SCTP-PPID.-B.pat
 Patch17:	wireshark-0017-Fix-https-bugs.wireshark.org-bugzilla-show_bug.cgi-i.patch
 # Backported from upstream.
 Patch18:	wireshark-0018-Copy-over-from-Trunk.patch
+# Backported from upstream.
+Patch19:	wireshark-0019-Bugfix-port-number-endianness.-Bug-9530-https-bugs.w.patch
+# Backported from upstream.
+Patch20:	wireshark-0020-Something-went-wrong-with-the-backport-of-r53608-r53.patch
+# Sent upstream:
+# https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9576
+Patch21:	wireshark-0021-Remove-g_memmove.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -174,6 +181,9 @@ and plugins.
 #%patch16 -p1 -b .fix_sctp
 #%patch17 -p1 -b .fix_global_pinfo
 %patch18 -p1 -b .fix_overflow
+%patch19 -p1 -b .fix_endianness
+%patch20 -p1 -b .fix_previous_backport
+%patch21 -p1 -b .remove_g_memmove
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -372,6 +382,11 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Dec 19 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.4-2
+- Fix endianness in the Bitcoin protocol dissector (patch no. 19)
+- Last-minute fix for wrongly backported change (patch no. 20)
+- Fix FTBFS in Rawhide (see patch no. 21 - recent Glib doesn't provide g_memmove macro anymore)
+
 * Wed Dec 18 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.4-1
 - Ver. 1.10.4
 - Don't apply upsteamed patches no. 13, 14, 15, 16, 17

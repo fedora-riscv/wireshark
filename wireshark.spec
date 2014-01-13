@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.5
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -66,9 +66,14 @@ Patch18:	wireshark-0018-Copy-over-from-Trunk.patch
 Patch19:	wireshark-0019-Bugfix-port-number-endianness.-Bug-9530-https-bugs.w.patch
 # No longer necessary - will be removed in the next release (1.12.x)
 Patch20:	wireshark-0020-Something-went-wrong-with-the-backport-of-r53608-r53.patch
-# Sent upstream:
+# Applied upstream:
 # https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9576
 Patch21:	wireshark-0021-Remove-g_memmove.patch
+# W.i.p. patch. See also:
+# https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9561
+Patch22:	wireshark-0022-Fix-IP-types.patch
+# Backported from upstream
+Patch23:	wireshark-0023-Copy-over-r54544-from-trunk.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -184,6 +189,8 @@ and plugins.
 #%patch19 -p1 -b .fix_endianness
 #%patch20 -p1 -b .fix_previous_backport
 %patch21 -p1 -b .remove_g_memmove
+%patch22 -p1 -b .rtpproxy_ip_types
+%patch23 -p1 -b .rare_bug_with_sniffer_traces
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -382,6 +389,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Jan 13 2014 Peter Lemenkov <lemenkov@gmail.com> - 1.10.5-2
+- Updated RTPproxy dissector (again)
+- Fix rare issue with the Sniffer traces (patch no. 23)
+
 * Mon Dec 23 2013 Peter Lemenkov <lemenkov@gmail.com> - 1.10.5-1
 - Ver. 1.10.5
 - Don't apply upstreamed patches no. 18, 19, 20.

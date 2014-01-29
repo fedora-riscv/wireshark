@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.5
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -74,6 +74,8 @@ Patch21:	wireshark-0021-Remove-g_memmove.patch
 Patch22:	wireshark-0022-Fix-IP-types.patch
 # Backported from upstream
 Patch23:	wireshark-0023-Copy-over-r54544-from-trunk.patch
+# Fedora-specific
+Patch24:	wireshark-0024-Fix-paths-in-a-wireshark.desktop-file.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -191,6 +193,7 @@ and plugins.
 %patch21 -p1 -b .remove_g_memmove
 %patch22 -p1 -b .rtpproxy_ip_types
 %patch23 -p1 -b .rare_bug_with_sniffer_traces
+%patch24 -p1 -b .fix_paths
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -389,6 +392,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Wed Jan 29 2014 Peter Lemenkov <lemenkov@gmail.com> - 1.10.5-3
+- Fixed paths in the desktop-file (see rhbz #1059188)
+
 * Mon Jan 13 2014 Peter Lemenkov <lemenkov@gmail.com> - 1.10.5-2
 - Updated RTPproxy dissector (again)
 - Fix rare issue with the Sniffer traces (patch no. 23)

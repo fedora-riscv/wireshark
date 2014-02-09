@@ -216,9 +216,9 @@ autoreconf -ivf
    --with-gnu-ld \
    --with-pic \
 %if %{with_gtk2}
-   --with-gtk2 \
+   --with-gtk3=no \
 %else
-    --with-gtk3 \
+   --with-gtk3=yes \
 %endif
 %if %{with_adns}
    --with-adns \
@@ -392,6 +392,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Sun Feb  9 2014 Ville Skyttä <ville.skytta@iki.fi>
+- Fix --with-gtk* build option usage.
+
 * Wed Jan 29 2014 Peter Lemenkov <lemenkov@gmail.com> - 1.10.5-3
 - Fixed paths in the desktop-file (see rhbz #1059188)
 

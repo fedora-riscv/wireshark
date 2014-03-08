@@ -4,7 +4,7 @@ Subject: [PATCH] Install autoconf-related file
 
 
 diff --git a/Makefile.am b/Makefile.am
-index 2844c90..3053bda 100644
+index 07efc02..2ce4527 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -53,6 +53,9 @@ EXTRA_PROGRAMS = wireshark tshark capinfos editcap mergecap dftest \

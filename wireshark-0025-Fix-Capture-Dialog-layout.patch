@@ -1,5 +1,11 @@
+From: Peter Hatina <phatina@redhat.com>
+Date: Mon, 3 Mar 2014 12:01:36 +0100
+Subject: [PATCH] Reorganize Capture Dialog layout
+
+Change-Id: Iafe20f3a8509c83e821ce4abc9bd91bd1bb002dd
+
 diff --git a/ui/gtk/capture_dlg.c b/ui/gtk/capture_dlg.c
-index 0c57825..ccbc805 100644
+index a4ef2dc..700f23a 100644
 --- a/ui/gtk/capture_dlg.c
 +++ b/ui/gtk/capture_dlg.c
 @@ -4637,7 +4637,7 @@ capture_prep_cb(GtkWidget *w _U_, gpointer d _U_)
@@ -11,7 +17,7 @@ index 0c57825..ccbc805 100644
    gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swindow), GTK_SHADOW_IN);
  
    view = gtk_tree_view_new ();
-@@ -5045,30 +5045,6 @@ fprintf(stderr, "Adding the default filter \"%s\"???\n", global_capture_opts.def
+@@ -5044,30 +5044,6 @@ capture_prep_cb(GtkWidget *w _U_, gpointer d _U_)
  
    row++;
  
@@ -42,7 +48,7 @@ index 0c57825..ccbc805 100644
    /* Capture limits frame */
    limit_fr = frame_new("Stop Capture Automatically After...");
    gtk_box_pack_start(GTK_BOX (left_vb), limit_fr, TRUE, TRUE, 0);
-@@ -5108,15 +5084,13 @@ fprintf(stderr, "Adding the default filter \"%s\"???\n", global_capture_opts.def
+@@ -5107,15 +5083,13 @@ capture_prep_cb(GtkWidget *w _U_, gpointer d _U_)
    ws_gtk_grid_attach_extended(GTK_GRID (limit_grid), stop_packets_lb, 2, row, 1, 1,
                                (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, 0);
  
@@ -59,7 +65,7 @@ index 0c57825..ccbc805 100644
                                (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, 0);
  
    stop_filesize_adj = (GtkAdjustment *) gtk_adjustment_new(0.0,
-@@ -5124,11 +5098,11 @@ fprintf(stderr, "Adding the default filter \"%s\"???\n", global_capture_opts.def
+@@ -5123,11 +5097,11 @@ capture_prep_cb(GtkWidget *w _U_, gpointer d _U_)
    stop_filesize_sb = gtk_spin_button_new (stop_filesize_adj, 0, 0);
    gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (stop_filesize_sb), TRUE);
    gtk_widget_set_size_request(stop_filesize_sb, 80, -1);
@@ -73,7 +79,7 @@ index 0c57825..ccbc805 100644
                                (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, 0);
  
    value = size_unit_combo_box_set_value(global_capture_opts.autostop_filesize);
-@@ -5136,13 +5110,35 @@ fprintf(stderr, "Adding the default filter \"%s\"???\n", global_capture_opts.def
+@@ -5135,13 +5109,35 @@ capture_prep_cb(GtkWidget *w _U_, gpointer d _U_)
  
    row++;
  
@@ -110,7 +116,7 @@ index 0c57825..ccbc805 100644
                                (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, 0);
  
    stop_duration_adj = (GtkAdjustment *) gtk_adjustment_new(0.0,
-@@ -5150,11 +5146,11 @@ fprintf(stderr, "Adding the default filter \"%s\"???\n", global_capture_opts.def
+@@ -5149,11 +5145,11 @@ capture_prep_cb(GtkWidget *w _U_, gpointer d _U_)
    stop_duration_sb = gtk_spin_button_new (stop_duration_adj, 0, 0);
    gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (stop_duration_sb), TRUE);
    gtk_widget_set_size_request(stop_duration_sb, 80, -1);
@@ -124,7 +130,7 @@ index 0c57825..ccbc805 100644
                                (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, 0);
  
    value = time_unit_combo_box_convert_value(global_capture_opts.autostop_duration);
-@@ -5165,7 +5161,7 @@ fprintf(stderr, "Adding the default filter \"%s\"???\n", global_capture_opts.def
+@@ -5164,7 +5160,7 @@ capture_prep_cb(GtkWidget *w _U_, gpointer d _U_)
    display_fr = frame_new("Display Options");
    gtk_box_pack_start(GTK_BOX (right_vb), display_fr, TRUE, TRUE, 0);
  
@@ -133,7 +139,7 @@ index 0c57825..ccbc805 100644
    gtk_container_set_border_width(GTK_CONTAINER(display_vb), DLG_OUTER_MARGIN);
    gtk_container_add(GTK_CONTAINER(display_fr), display_vb);
  
-@@ -5178,7 +5174,7 @@ fprintf(stderr, "Adding the default filter \"%s\"???\n", global_capture_opts.def
+@@ -5177,7 +5173,7 @@ capture_prep_cb(GtkWidget *w _U_, gpointer d _U_)
    gtk_widget_set_tooltip_text(sync_cb,
      "Using this option will show the captured packets immediately on the main screen. "
      "Please note: this will slow down capturing, so increased packet drops might appear.");
@@ -142,7 +148,7 @@ index 0c57825..ccbc805 100644
  
    /* "Auto-scroll live update" row */
    auto_scroll_cb = gtk_check_button_new_with_mnemonic("_Automatically scroll during live capture");
-@@ -5186,19 +5182,19 @@ fprintf(stderr, "Adding the default filter \"%s\"???\n", global_capture_opts.def
+@@ -5185,19 +5181,19 @@ capture_prep_cb(GtkWidget *w _U_, gpointer d _U_)
    gtk_widget_set_tooltip_text(auto_scroll_cb,
      "This will scroll the \"Packet List\" automatically to the latest captured packet, "
      "when the \"Update List of packets in real time\" option is used.");
@@ -165,7 +171,7 @@ index 0c57825..ccbc805 100644
    gtk_container_set_border_width(GTK_CONTAINER(resolv_vb), DLG_OUTER_MARGIN);
    gtk_container_add(GTK_CONTAINER(resolv_fr), resolv_vb);
  
-@@ -5207,14 +5203,14 @@ fprintf(stderr, "Adding the default filter \"%s\"???\n", global_capture_opts.def
+@@ -5206,14 +5202,14 @@ capture_prep_cb(GtkWidget *w _U_, gpointer d _U_)
    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_resolv_cb),
                  gbl_resolv_flags.mac_name);
    gtk_widget_set_tooltip_text(m_resolv_cb, "Perform MAC layer name resolution while capturing.");
@@ -182,7 +188,7 @@ index 0c57825..ccbc805 100644
  
    t_resolv_cb = gtk_check_button_new_with_mnemonic(
                  "Resolve _transport-layer name");
-@@ -5222,7 +5218,7 @@ fprintf(stderr, "Adding the default filter \"%s\"???\n", global_capture_opts.def
+@@ -5221,7 +5217,7 @@ capture_prep_cb(GtkWidget *w _U_, gpointer d _U_)
                  gbl_resolv_flags.transport_name);
    gtk_widget_set_tooltip_text(t_resolv_cb,
      "Perform transport layer name resolution while capturing.");
@@ -191,7 +197,7 @@ index 0c57825..ccbc805 100644
  
    e_resolv_cb = gtk_check_button_new_with_mnemonic(
                  "Use _external network name resolver");
-@@ -5230,7 +5226,7 @@ fprintf(stderr, "Adding the default filter \"%s\"???\n", global_capture_opts.def
+@@ -5229,7 +5225,7 @@ capture_prep_cb(GtkWidget *w _U_, gpointer d _U_)
                  gbl_resolv_flags.use_external_net_name_resolver);
    gtk_widget_set_tooltip_text(e_resolv_cb,
                  "Use the (system's) configured name resolver (e.g., DNS) to resolve network names.");

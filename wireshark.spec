@@ -20,8 +20,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.10.5
-Release:	4%{?dist}
+Version:	1.10.6
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -72,10 +72,11 @@ Patch21:	wireshark-0021-Remove-g_memmove.patch
 # W.i.p. patch. See also:
 # https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9561
 Patch22:	wireshark-0022-Fix-IP-types.patch
-# Backported from upstream
+# No longer necessary - will be removed in the next release (1.12.x)
 Patch23:	wireshark-0023-Copy-over-r54544-from-trunk.patch
 # Fedora-specific
 Patch24:	wireshark-0024-Fix-paths-in-a-wireshark.desktop-file.patch
+# Fedora-specific
 Patch25:        wireshark-0025-Fix-Capture-Dialog-layout.patch
 
 Url:		http://www.wireshark.org/
@@ -193,7 +194,7 @@ and plugins.
 #%patch20 -p1 -b .fix_previous_backport
 %patch21 -p1 -b .remove_g_memmove
 %patch22 -p1 -b .rtpproxy_ip_types
-%patch23 -p1 -b .rare_bug_with_sniffer_traces
+#%patch23 -p1 -b .rare_bug_with_sniffer_traces
 %patch24 -p1 -b .fix_paths
 %patch25 -p1 -b .fix_capture_dlg_layout
 
@@ -394,6 +395,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Sat Mar 08 2014 Peter Lemenkov <lemenkov@gmail.com> - 1.10.6-1
+- Ver. 1.10.6
+
 * Fri Mar  7 2014 Peter Hatina <phatina@redhat.com> - 1.10.5-4
 - Fix Capture Dialog layout on low resolution displays
 - Resolves: #1071313

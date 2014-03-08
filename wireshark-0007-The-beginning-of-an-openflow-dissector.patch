@@ -52,7 +52,7 @@ Fix "malformed packet" and tidy up a bit.
 svn path=/trunk/; revision=51740
 
 diff --git a/epan/CMakeLists.txt b/epan/CMakeLists.txt
-index 610cea7..83e975d 100644
+index 9c547b3..22fd862 100644
 --- a/epan/CMakeLists.txt
 +++ b/epan/CMakeLists.txt
 @@ -972,6 +972,7 @@ set(DISSECTOR_SRC

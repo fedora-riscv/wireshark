@@ -4,7 +4,7 @@ Subject: [PATCH] Add pkgconfig entry
 
 
 diff --git a/Makefile.am b/Makefile.am
-index eb735a5..2844c90 100644
+index f3e313c..07efc02 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -50,6 +50,9 @@ bin_PROGRAMS = \
@@ -18,10 +18,10 @@ index eb735a5..2844c90 100644
  # Wireshark configuration files are put in $(pkgdatadir).
  #
 diff --git a/configure.ac b/configure.ac
-index 1356d9a..8691bbf 100644
+index 488d8d0..0c1ed4d 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -2543,6 +2543,7 @@ AC_CONFIG_HEADERS(config.h)
+@@ -2549,6 +2549,7 @@ AC_CONFIG_HEADERS(config.h)
  AC_OUTPUT(
    Makefile
    doxygen.cfg

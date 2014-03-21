@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.6
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -306,7 +306,7 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 
 %post
 /sbin/ldconfig
-/usr/bin/udevadm trigger
+/usr/bin/udevadm trigger --subsystem-match=usbmon
 
 %postun -p /sbin/ldconfig
 
@@ -395,6 +395,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Fri Mar 21 2014 Peter Hatina <phatina@redhat.com> - 1.10.6-2
+- Reload udev rule for usbmon subsystem only
+
 * Sat Mar 08 2014 Peter Lemenkov <lemenkov@gmail.com> - 1.10.6-1
 - Ver. 1.10.6
 

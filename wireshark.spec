@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.7
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -78,6 +78,8 @@ Patch23:	wireshark-0023-Copy-over-r54544-from-trunk.patch
 Patch24:	wireshark-0024-Fix-paths-in-a-wireshark.desktop-file.patch
 # Fedora-specific
 Patch25:        wireshark-0025-Fix-Capture-Dialog-layout.patch
+# Applied upstream (unstable branch)
+Patch26:        wireshark-0026-amqp-1.0.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -197,6 +199,7 @@ and plugins.
 #%patch23 -p1 -b .rare_bug_with_sniffer_traces
 %patch24 -p1 -b .fix_paths
 %patch25 -p1 -b .fix_capture_dlg_layout
+%patch26 -p1 -b .amqp-1.0
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -395,6 +398,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Fri May 30 2014 Peter Hatina <phatina@redhat.com> - 1.0.7-2
+- add AMQP 1.0 support
+
 * Wed Apr 23 2014 Peter Hatina <phatina@redhat.com> - 1.10.7-1
 - Ver. 1.10.7
 

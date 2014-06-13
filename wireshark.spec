@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.7
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -80,6 +80,7 @@ Patch24:	wireshark-0024-Fix-paths-in-a-wireshark.desktop-file.patch
 Patch25:        wireshark-0025-Fix-Capture-Dialog-layout.patch
 # Applied upstream (unstable branch)
 Patch26:        wireshark-0026-amqp-1.0.patch
+Patch27:        wireshark-0027-frame-fix.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -200,6 +201,7 @@ and plugins.
 %patch24 -p1 -b .fix_paths
 %patch25 -p1 -b .fix_capture_dlg_layout
 %patch26 -p1 -b .amqp-1.0
+%patch27 -p1 -b .frame
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -398,7 +400,11 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
-* Fri May 30 2014 Peter Hatina <phatina@redhat.com> - 1.0.7-2
+* Fri Jun 13 2014 Peter Hatina <phatina@redhat.com> - 1.10.7-3
+- fix frame metadissector
+- Resolves: rhbz#1109036
+
+* Fri May 30 2014 Peter Hatina <phatina@redhat.com> - 1.10.7-2
 - add AMQP 1.0 support
 
 * Wed Apr 23 2014 Peter Hatina <phatina@redhat.com> - 1.10.7-1

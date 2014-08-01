@@ -20,8 +20,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.10.7
-Release:	3%{?dist}
+Version:	1.10.9
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -80,6 +80,7 @@ Patch24:	wireshark-0024-Fix-paths-in-a-wireshark.desktop-file.patch
 Patch25:        wireshark-0025-Fix-Capture-Dialog-layout.patch
 # Applied upstream (unstable branch)
 Patch26:        wireshark-0026-amqp-1.0.patch
+# No longer necessary - will be removed in the next release (1.12.x)
 Patch27:        wireshark-0027-frame-fix.patch
 
 Url:		http://www.wireshark.org/
@@ -201,7 +202,7 @@ and plugins.
 %patch24 -p1 -b .fix_paths
 %patch25 -p1 -b .fix_capture_dlg_layout
 %patch26 -p1 -b .amqp-1.0
-%patch27 -p1 -b .frame
+#%patch27 -p1 -b .frame
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -400,6 +401,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Fri Aug  1 2014 Peter Hatina <phatina@redhat.com> - 1.10.9-1
+- Ver. 1.10.9
+
 * Fri Jun 13 2014 Peter Hatina <phatina@redhat.com> - 1.10.7-3
 - fix frame metadissector
 - Resolves: rhbz#1109036

@@ -4,10 +4,10 @@ Subject: [PATCH] Fix paths in a wireshark.desktop file
 
 
 diff --git a/wireshark.desktop b/wireshark.desktop
-index d275887..a72a655 100644
+index 828eca7..eef3503 100644
 --- a/wireshark.desktop
 +++ b/wireshark.desktop
-@@ -70,8 +70,8 @@ Comment[fi]=Verkkoliikenne analysaattori
+@@ -69,8 +69,8 @@ Comment[fi]=Verkkoliikenne analysaattori
  Comment[fr]=Analyseur de trafic réseau
  Comment[sv]=Nätverkstrafikanalysator
  Icon=wireshark

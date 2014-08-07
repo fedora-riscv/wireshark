@@ -4,10 +4,10 @@ Subject: [PATCH] Install autoconf-related file
 
 
 diff --git a/Makefile.am b/Makefile.am
-index 07efc02..2ce4527 100644
+index 40a6e4d..82f7fdf 100644
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -53,6 +53,9 @@ EXTRA_PROGRAMS = wireshark tshark capinfos editcap mergecap dftest \
+@@ -56,6 +56,9 @@ EXTRA_PROGRAMS = wireshark wireshark-qt tshark tfshark capinfos captype editcap
  pkgconfigdir = $(libdir)/pkgconfig
  pkgconfig_DATA = wireshark.pc
  

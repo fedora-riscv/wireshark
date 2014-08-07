@@ -20,7 +20,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.10.9
+Version:	1.12.0
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -30,56 +30,20 @@ Source1:	90-wireshark-usbmon.rules
 Patch1:		wireshark-0001-enable-Lua-support.patch
 # Fedora-specific
 Patch2:		wireshark-0002-Customize-permission-denied-error.patch
-# No longer necessary - will be removed in the next release (1.12.x)
-Patch3:		wireshark-0003-Load-correct-shared-object-name-in-python.patch
-# No longer necessary - will be removed in the next release (1.12.x)
-Patch4:		wireshark-0004-fix-documentation-build-error.patch
 # Will be proposed upstream
-Patch5:		wireshark-0005-fix-string-overrun-in-plugins-profinet.patch
-# Backported from upstream. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=8326
-Patch6:		wireshark-0006-From-Peter-Lemenkov-via-https-bugs.wireshark.org-bug.patch
-# Backported from upstream. See also https://bugzilla.redhat.com/1007139
-Patch7:		wireshark-0007-The-beginning-of-an-openflow-dissector.patch
+Patch3:		wireshark-0003-fix-string-overrun-in-plugins-profinet.patch
 # Will be proposed upstream
-Patch8:		wireshark-0008-adds-autoconf-macro-file.patch
+Patch4:		wireshark-0004-adds-autoconf-macro-file.patch
 # Fedora-specific
-Patch9:		wireshark-0009-Restore-Fedora-specific-groups.patch
+Patch5:		wireshark-0005-Restore-Fedora-specific-groups.patch
 # Will be proposed upstream
-Patch10:	wireshark-0010-Add-pkgconfig-entry.patch
+Patch6:		wireshark-0006-Add-pkgconfig-entry.patch
 # Will be proposed upstream
-Patch11:	wireshark-0011-Install-autoconf-related-file.patch
+Patch7:		wireshark-0007-Install-autoconf-related-file.patch
 # Fedora-specific
-Patch12:	wireshark-0012-move-default-temporary-directory-to-var-tmp.patch
-# No longer necessary - will be removed in the next release (1.12.x)
-Patch13:	wireshark-0013-Copy-over-r49999-from-trunk.patch
-# No longer necessary - will be removed in the next release (1.12.x)
-Patch14:	wireshark-0014-Fix-https-bugs.wireshark.org-bugzilla-show_bug.cgi-i.patch
-# No longer necessary - will be removed in the next release (1.12.x)
-Patch15:	wireshark-0015-From-Dirk-Jagdmann-Make-sure-err_str-is-initialized.patch
-# No longer necessary - will be removed in the next release (1.12.x)
-Patch16:	wireshark-0016-Crash-when-selecting-Decode-As-based-on-SCTP-PPID.-B.patch
-# No longer necessary - will be removed in the next release (1.12.x)
-Patch17:	wireshark-0017-Fix-https-bugs.wireshark.org-bugzilla-show_bug.cgi-i.patch
-# No longer necessary - will be removed in the next release (1.12.x)
-Patch18:	wireshark-0018-Copy-over-from-Trunk.patch
-# No longer necessary - will be removed in the next release (1.12.x)
-Patch19:	wireshark-0019-Bugfix-port-number-endianness.-Bug-9530-https-bugs.w.patch
-# No longer necessary - will be removed in the next release (1.12.x)
-Patch20:	wireshark-0020-Something-went-wrong-with-the-backport-of-r53608-r53.patch
-# Applied upstream:
-# https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9576
-Patch21:	wireshark-0021-Remove-g_memmove.patch
-# W.i.p. patch. See also:
-# https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9561
-Patch22:	wireshark-0022-Fix-IP-types.patch
-# No longer necessary - will be removed in the next release (1.12.x)
-Patch23:	wireshark-0023-Copy-over-r54544-from-trunk.patch
+Patch8:		wireshark-0008-move-default-temporary-directory-to-var-tmp.patch
 # Fedora-specific
-Patch24:	wireshark-0024-Fix-paths-in-a-wireshark.desktop-file.patch
-# Fedora-specific
-Patch25:        wireshark-0025-Fix-Capture-Dialog-layout.patch
-# Applied upstream (unstable branch)
-Patch26:        wireshark-0026-amqp-1.0.patch
+Patch9:		wireshark-0009-Fix-paths-in-a-wireshark.desktop-file.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -176,30 +140,30 @@ and plugins.
 %endif
 
 %patch2 -p1 -b .perm_denied_customization
-#%patch3 -p1 -b .soname
-#%patch4 -p1 -b .pod2man
-%patch5 -p1 -b .profinet_crash
-%patch6 -p1 -b .rtpproxy
-%patch7 -p1 -b .openflow
-%patch8 -p1 -b .add_autoconf
-%patch9 -p1 -b .restore_group
-%patch10 -p1 -b .add_pkgconfig
-%patch11 -p1 -b .install_autoconf
-%patch12 -p1 -b .tmp_dir
-#%patch13 -p1 -b .allow_64kpackets_for_usb
-#%patch14 -p1 -b .dont_die_during_sip_dissection
-#%patch15 -p1 -b .fix_main_window
-#%patch16 -p1 -b .fix_sctp
-#%patch17 -p1 -b .fix_global_pinfo
-#%patch18 -p1 -b .fix_overflow
-#%patch19 -p1 -b .fix_endianness
-#%patch20 -p1 -b .fix_previous_backport
-%patch21 -p1 -b .remove_g_memmove
-%patch22 -p1 -b .rtpproxy_ip_types
-#%patch23 -p1 -b .rare_bug_with_sniffer_traces
-%patch24 -p1 -b .fix_paths
-%patch25 -p1 -b .fix_capture_dlg_layout
-%patch26 -p1 -b .amqp-1.0
+%patch3 -p1 -b .profinet_crash
+%patch4 -p1 -b .add_autoconf
+%patch5 -p1 -b .restore_group
+
+# Somebody forgot to add this file into tarball (fixed in wireshark-1.12.1)
+echo "prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=\${prefix}
+libdir=\${prefix}/@CMAKE_INSTALL_LIBDIR@
+sharedlibdir=\${libdir}
+includedir=\${prefix}/include/wireshark
+plugindir=@PLUGIN_INSTALL_DIR@
+
+Name: wireshark
+Description: wireshark network packet dissection library
+Version: @PROJECT_VERSION@
+
+Requires:
+Libs: -L\${libdir} -L\${sharedlibdir} -lwireshark
+Cflags: -I\${includedir}" > wireshark.pc.in
+
+%patch6 -p1 -b .add_pkgconfig
+%patch7 -p1 -b .install_autoconf
+%patch8 -p1 -b .tmp_dir
+%patch9 -p1 -b .fix_paths
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -222,6 +186,7 @@ autoreconf -ivf
    --with-gnu-ld \
    --with-pic \
 %if %{with_gtk2}
+   --with-gtk2 \
    --with-gtk3=no \
 %else
    --with-gtk3=yes \
@@ -249,8 +214,6 @@ autoreconf -ivf
    --with-ssl \
    --disable-warnings-as-errors \
    --with-plugins=%{_libdir}/%{name}/plugins/%{version} \
-   --with-dumpcap-group="wireshark" \
-   --enable-setcap-install \
    --enable-airpcap
 
 #remove rpath
@@ -285,8 +248,6 @@ mkdir -p "${IDIR}/wsutil"
 mkdir -p %{buildroot}/%{_sysconfdir}/udev/rules.d
 install -m 644 color.h config.h register.h	"${IDIR}/"
 install -m 644 cfile.h file.h			"${IDIR}/"
-install -m 644 frame_data_sequence.h		"${IDIR}/"
-install -m 644 packet-range.h print.h		"${IDIR}/"
 install -m 644 epan/*.h				"${IDIR}/epan/"
 install -m 644 epan/crypt/*.h			"${IDIR}/epan/crypt"
 install -m 644 epan/ftypes/*.h			"${IDIR}/epan/ftypes"
@@ -342,6 +303,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_sbindir}/text2pcap
 %{_sbindir}/dftest
 %{_sbindir}/capinfos
+%{_sbindir}/captype
 %{_sbindir}/randpkt
 %{_sbindir}/reordercap
 %attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=ep) %{_sbindir}/dumpcap
@@ -383,6 +345,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/icons/hicolor/64x64/mimetypes/application-wireshark-doc.png
 %{_datadir}/icons/hicolor/128x128/mimetypes/application-wireshark-doc.png
 %{_datadir}/icons/hicolor/256x256/mimetypes/application-wireshark-doc.png
+%{_datadir}/icons/hicolor/scalable/apps/wireshark.svg
 %{_datadir}/mime/packages/wireshark.xml
 %{_sbindir}/wireshark
 %{_mandir}/man1/wireshark.*
@@ -398,6 +361,17 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Aug 05 2014 Peter Lemenkov <lemenkov@gmail.com> - 1.12.0-1
+- Ver. 1.12.0
+- Dropped a lot of outdated patches.
+- Added /usr/sbin/captype application.
+- Added temporary workaround for wireshark.pc.in missing in the official
+  tarball.
+- Removed outdated --with-dumpcap-group="wireshark" cli switch. It doesn't work
+  during rpmbuild, and we still set group explicitly in the 'files' section.
+- Removed --enable-setcap-install. Likewise.
+- Some ANSI C header files were moved to epan/
+
 * Fri Aug  1 2014 Peter Hatina <phatina@redhat.com> - 1.10.9-1
 - Ver. 1.10.9
 

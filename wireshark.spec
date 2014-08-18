@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.12.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -276,24 +276,28 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 
 %post gnome
 update-desktop-database &> /dev/null ||:
-update-mime-database %{_datadir}/mime &> /dev/null || :
 touch --no-create %{_datadir}/icons/gnome &>/dev/null || :
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+touch --no-create %{_datadir}/mime/packages &> /dev/null || :
+update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 %postun gnome
 update-desktop-database &> /dev/null ||:
-update-mime-database %{_datadir}/mime &> /dev/null || :
 if [ $1 -eq 0 ] ; then
 	touch --no-create %{_datadir}/icons/gnome &>/dev/null
 	gtk-update-icon-cache %{_datadir}/icons/gnome &>/dev/null || :
 
 	touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 	gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+
+        touch --no-create %{_datadir}/mime/packages &> /dev/null || :
+        update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 fi
 
 %posttrans
 gtk-update-icon-cache %{_datadir}/icons/gnome &>/dev/null || :
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 %files
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README*
@@ -361,6 +365,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Aug 18 2014 Rex Dieter <rdieter@fedoraproject.org> 1.12.0-3
+- update mime scriptlets
+
 * Mon Aug 18 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.12.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 

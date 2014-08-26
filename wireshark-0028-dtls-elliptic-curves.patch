@@ -1,0 +1,106 @@
+diff --git a/epan/dissectors/packet-dtls.c b/epan/dissectors/packet-dtls.c
+index 3fd7c8c..afdcca2 100644
+--- a/epan/dissectors/packet-dtls.c
++++ b/epan/dissectors/packet-dtls.c
+@@ -119,6 +119,9 @@ static gint hf_dtls_handshake_extensions_len    = -1;
+ static gint hf_dtls_handshake_extension_type    = -1;
+ static gint hf_dtls_handshake_extension_len     = -1;
+ static gint hf_dtls_handshake_extension_data    = -1;
++static gint hf_ssl_handshake_extension_elliptic_curves_len  = -1;
++static gint hf_ssl_handshake_extension_elliptic_curves      = -1;
++static gint hf_ssl_handshake_extension_elliptic_curve       = -1;
+ static gint hf_dtls_handshake_session_ticket_lifetime_hint = -1;
+ static gint hf_dtls_handshake_session_ticket_len = -1;
+ static gint hf_dtls_handshake_session_ticket    = -1;
+@@ -165,6 +168,7 @@ static gint ett_dtls_heartbeat         = -1;
+ static gint ett_dtls_cipher_suites     = -1;
+ static gint ett_dtls_comp_methods      = -1;
+ static gint ett_dtls_extension         = -1;
++static gint ett_dtls_extension_curves  = -1;
+ static gint ett_dtls_new_ses_ticket    = -1;
+ static gint ett_dtls_certs             = -1;
+ static gint ett_dtls_cert_types        = -1;
+@@ -1654,6 +1658,43 @@ dissect_dtls_hnd_hello_common(tvbuff_t *tvb, proto_tree *tree,
+ }
+ 
+ static gint
++dissect_dtls_hnd_hello_ext_elliptic_curves(tvbuff_t *tvb,
++                                           proto_tree *tree, guint32 offset)
++{
++    gint16      curves_length;
++    proto_tree *curves_tree;
++    proto_item *ti;
++
++    curves_length = tvb_get_ntohs(tvb, offset);
++    proto_tree_add_item(tree, hf_ssl_handshake_extension_elliptic_curves_len,
++        tvb, offset, 2, ENC_BIG_ENDIAN);
++
++    offset += 2;
++    tvb_ensure_bytes_exist(tvb, offset, curves_length);
++    ti = proto_tree_add_none_format(tree,
++                                    hf_ssl_handshake_extension_elliptic_curves,
++                                    tvb, offset, curves_length,
++                                    "Elliptic curves (%d curve%s)",
++                                    curves_length / 2,
++                                    plurality(curves_length/2, "", "s"));
++
++    /* make this a subtree */
++    curves_tree = proto_item_add_subtree(ti, ett_dtls_extension_curves);
++
++    /* loop over all curves */
++    while (curves_length > 0)
++    {
++        proto_tree_add_item(curves_tree,
++                            hf_ssl_handshake_extension_elliptic_curve,
++                            tvb, offset, 2, ENC_BIG_ENDIAN);
++        offset += 2;
++        curves_length -= 2;
++    }
++
++    return offset;
++}
++
++static gint
+ dissect_dtls_hnd_hello_ext(tvbuff_t *tvb,
+                            proto_tree *tree, guint32 offset, guint32 left)
+ {
+@@ -1700,6 +1741,9 @@ dissect_dtls_hnd_hello_ext(tvbuff_t *tvb,
+                               tvb, offset, 1, ENC_BIG_ENDIAN);
+           offset += ext_len;
+           break;
++      case SSL_HND_HELLO_EXT_ELLIPTIC_CURVES:
++          offset = dissect_dtls_hnd_hello_ext_elliptic_curves(tvb, ext_tree, offset);
++          break;
+       default:
+           proto_tree_add_bytes_format(ext_tree, hf_dtls_handshake_extension_data,
+                                       tvb, offset, ext_len, NULL,
+@@ -2534,6 +2578,21 @@ proto_register_dtls(void)
+         FT_BYTES, BASE_NONE, NULL, 0x0,
+         "Hello Extension data", HFILL }
+     },
++    { &hf_ssl_handshake_extension_elliptic_curves_len,
++      { "Elliptic Curves Length", "dtls.handshake.extensions_elliptic_curves_length",
++        FT_UINT16, BASE_DEC, NULL, 0x0,
++        "Length of elliptic curves field", HFILL }
++    },
++    { &hf_ssl_handshake_extension_elliptic_curves,
++      { "Elliptic Curves List", "dtls.handshake.extensions_elliptic_curves",
++        FT_NONE, BASE_NONE, NULL, 0x0,
++        "List of elliptic curves supported", HFILL }
++    },
++    { &hf_ssl_handshake_extension_elliptic_curve,
++      { "Elliptic curve", "dtls.handshake.extensions_elliptic_curve",
++        FT_UINT16, BASE_HEX, VALS(ssl_extension_curves), 0x0,
++        NULL, HFILL }
++    },
+     { &hf_dtls_handshake_session_ticket_lifetime_hint,
+       { "Session Ticket Lifetime Hint", "dtls.handshake.session_ticket_lifetime_hint",
+         FT_UINT32, BASE_DEC, NULL, 0x0,
+@@ -2707,6 +2766,7 @@ proto_register_dtls(void)
+     &ett_dtls_cipher_suites,
+     &ett_dtls_comp_methods,
+     &ett_dtls_extension,
++    &ett_dtls_extension_curves,
+     &ett_dtls_new_ses_ticket,
+     &ett_dtls_certs,
+     &ett_dtls_cert_types,

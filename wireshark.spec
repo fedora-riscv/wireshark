@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.10.9
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -83,6 +83,7 @@ Patch26:        wireshark-0026-amqp-1.0.patch
 # No longer necessary - will be removed in the next release (1.12.x)
 Patch27:        wireshark-0027-frame-fix.patch
 Patch28:        wireshark-0028-dtls-elliptic-curves.patch
+Patch29:        wireshark-0029-kerberos-camellia.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -205,6 +206,7 @@ and plugins.
 %patch26 -p1 -b .amqp-1.0
 #%patch27 -p1 -b .frame
 %patch28 -p1 -b .dtls-elliptic-curves
+%patch29 -p1 -b .krb-camellia
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -403,6 +405,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Sep  2 2014 Peter Hatina <phatina@redhat.com> - 1.10.9-3
+- fix decode Camellia encryption for Kerberos 5
+- Resolves: rhbz#1131135
+
 * Tue Sep  2 2014 Peter Hatina <phatina@redhat.com> - 1.10.9-2
 - fix decode elliptic curves in DTLS
 - Resolves: rhbz#1131200

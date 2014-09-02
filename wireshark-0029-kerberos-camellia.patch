@@ -1,0 +1,22 @@
+diff --git a/epan/dissectors/packet-kerberos.c b/epan/dissectors/packet-kerberos.c
+index 90000c2..b0dc967 100644
+--- a/epan/dissectors/packet-kerberos.c
++++ b/epan/dissectors/packet-kerberos.c
+@@ -1007,6 +1007,8 @@ g_warning("woohoo decrypted keytype:%d in frame:%u\n", keytype, pinfo->fd->num);
+ #define KRB5_ENCTYPE_DES_CBC_MD5_NT               20
+ #define KERB_ENCTYPE_RC4_HMAC                     23
+ #define KERB_ENCTYPE_RC4_HMAC_EXP                 24
++#define KERB_ENCTYPE_CAMELLIA128_CTS_CMAC         25
++#define KERB_ENCTYPE_CAMELLIA256_CTS_CMAC         26
+ #define KRB5_ENCTYPE_UNKNOWN                   0x1ff
+ #define KRB5_ENCTYPE_LOCAL_DES3_HMAC_SHA1     0x7007
+ #define KRB5_ENCTYPE_RC4_PLAIN_EXP        0xffffff73
+@@ -1364,6 +1366,8 @@ static const value_string krb5_encryption_types[] = {
+     { KRB5_ENCTYPE_DES_CBC_MD5_NT  , "des-cbc-md5-nt" },
+     { KERB_ENCTYPE_RC4_HMAC       , "rc4-hmac" },
+     { KERB_ENCTYPE_RC4_HMAC_EXP   , "rc4-hmac-exp" },
++    { KERB_ENCTYPE_CAMELLIA128_CTS_CMAC, "camellia128-cts-cmac" },
++    { KERB_ENCTYPE_CAMELLIA256_CTS_CMAC, "camellia256-cts-cmac" },
+     { KRB5_ENCTYPE_UNKNOWN        , "unknown" },
+     { KRB5_ENCTYPE_LOCAL_DES3_HMAC_SHA1    , "local-des3-hmac-sha1" },
+     { KRB5_ENCTYPE_RC4_PLAIN_EXP  , "rc4-plain-exp" },

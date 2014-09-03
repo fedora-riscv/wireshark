@@ -1,0 +1,72 @@
+diff --git a/epan/ftypes/ftype-integer.c b/epan/ftypes/ftype-integer.c
+index 123238d..2e47d93 100644
+--- a/epan/ftypes/ftype-integer.c
++++ b/epan/ftypes/ftype-integer.c
+@@ -228,7 +228,7 @@ integer_repr_len(fvalue_t *fv _U_, ftrepr_t rtype _U_)
+ }
+ 
+ static void
+-integer_to_repr(fvalue_t *fv, ftrepr_t rtype _U_, char *buf)
++integer_to_repr(fvalue_t *fv, ftrepr_t rtype, char *buf)
+ {
+ 	guint32 val;
+ 
+@@ -238,7 +238,12 @@ integer_to_repr(fvalue_t *fv, ftrepr_t rtype _U_, char *buf)
+ 	} else
+ 		val = fv->value.sinteger;
+ 
+-	guint32_to_str_buf(val, buf, 11);
++        if (rtype == FTREPR_DISPLAY_HEX) {
++            // This format perfectly fits into 11 bytes.
++            g_sprintf(buf, "0x%08x", val);
++        } else {
++            guint32_to_str_buf(val, buf, 11);
++        }
+ }
+ 
+ static int
+@@ -248,9 +253,14 @@ uinteger_repr_len(fvalue_t *fv _U_, ftrepr_t rtype _U_)
+ }
+ 
+ static void
+-uinteger_to_repr(fvalue_t *fv, ftrepr_t rtype _U_, char *buf)
++uinteger_to_repr(fvalue_t *fv, ftrepr_t rtype, char *buf)
+ {
+-	guint32_to_str_buf(fv->value.uinteger, buf, 11);
++	if (rtype == FTREPR_DISPLAY_HEX) {
++                // This format perfectly fits into 11 bytes.
++		g_sprintf(buf, "0x%08x", fv->value.uinteger);
++	} else {
++		guint32_to_str_buf(fv->value.uinteger, buf, 11);
++	}
+ }
+ 
+ static gboolean
+diff --git a/epan/ftypes/ftypes.h b/epan/ftypes/ftypes.h
+index bdf969b..c15a4df 100644
+--- a/epan/ftypes/ftypes.h
++++ b/epan/ftypes/ftypes.h
+@@ -92,6 +92,7 @@ typedef struct _ftype_t ftype_t;
+ /* String representation types. */
+ enum ftrepr {
+ 	FTREPR_DISPLAY,
++        FTREPR_DISPLAY_HEX,
+ 	FTREPR_DFILTER
+ };
+ 
+diff --git a/print.c b/print.c
+index 9bd843f..2d34de5 100644
+--- a/print.c
++++ b/print.c
+@@ -1733,7 +1733,10 @@ gchar* get_node_field_value(field_info* fi, epan_dissect_t* edt)
+              * FT_NONE can be checked when using -T fields */
+             return g_strdup("1");
+         default:
+-            dfilter_string = fvalue_to_string_repr(&fi->value, FTREPR_DISPLAY, NULL);
++            dfilter_string = fvalue_to_string_repr(
++                &fi->value,
++                fi->hfinfo->display == BASE_HEX ? FTREPR_DISPLAY_HEX : FTREPR_DISPLAY,
++                NULL);
+             if (dfilter_string != NULL) {
+                 return dfilter_string;
+             } else {

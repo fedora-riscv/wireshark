@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.12.0
-Release:	4%{?dist}
+Release:	5%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -246,6 +246,7 @@ mkdir -p "${IDIR}/epan/crypt"
 mkdir -p "${IDIR}/epan/ftypes"
 mkdir -p "${IDIR}/epan/dfilter"
 mkdir -p "${IDIR}/epan/dissectors"
+mkdir -p "${IDIR}/epan/wmem"
 mkdir -p "${IDIR}/wiretap"
 mkdir -p "${IDIR}/wsutil"
 mkdir -p %{buildroot}/%{_sysconfdir}/udev/rules.d
@@ -256,6 +257,7 @@ install -m 644 epan/crypt/*.h			"${IDIR}/epan/crypt"
 install -m 644 epan/ftypes/*.h			"${IDIR}/epan/ftypes"
 install -m 644 epan/dfilter/*.h			"${IDIR}/epan/dfilter"
 install -m 644 epan/dissectors/*.h		"${IDIR}/epan/dissectors"
+install -m 644 epan/wmem/*.h			"${IDIR}/epan/wmem"
 install -m 644 wiretap/*.h			"${IDIR}/wiretap"
 install -m 644 wsutil/*.h			"${IDIR}/wsutil"
 install -m 644 ws_symbol_export.h               "${IDIR}/"
@@ -368,7 +370,10 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
-* Wed Sep  3 2014 Peter Hatina <phatina@redhat.com> - 1.12.0-3
+* Tue Sep 09 2014 Peter Lemenkov <lemenkov@gmail.com> - 1.12.0-5
+- Install epan/wmem/*.h files. See rhbz #1129419
+
+* Wed Sep  3 2014 Peter Hatina <phatina@redhat.com> - 1.12.0-4
 - fix fields print format
 
 * Mon Aug 18 2014 Rex Dieter <rdieter@fedoraproject.org> 1.12.0-3

@@ -20,8 +20,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.12.0
-Release:	5%{?dist}
+Version:	1.12.1
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -370,6 +370,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Sep 22 2014 Peter Hatina <phatina@redhat.com> - 1.12.1-1
+- Ver. 1.12.1
+
 * Tue Sep 09 2014 Peter Lemenkov <lemenkov@gmail.com> - 1.12.0-5
 - Install epan/wmem/*.h files. See rhbz #1129419
 

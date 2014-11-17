@@ -19,7 +19,7 @@ index fbb170b..cf7fc9c 100644
  #include "packet-tcp.h"
  
  /*  Generic data  */
-@@ -56,7 +57,7 @@ static int amqp_port = 5672;
+@@ -59,7 +60,7 @@ static int amqp_port = 5672;
  }
  
  /*
@@ -28,7 +28,7 @@ index fbb170b..cf7fc9c 100644
   * contains the version being run - it's only really reliably detected at
   * protocol init. If this dissector starts in the middle of a conversation
   * it will try to figure it out, but conversation start is the best.
-@@ -66,10 +67,13 @@ static int amqp_port = 5672;
+@@ -69,10 +70,13 @@ static int amqp_port = 5672;
  #define AMQP_V0_9           2
  /* #define AMQP_V0_91          3 */
  #define AMQP_V0_10          4
@@ -42,7 +42,7 @@ index fbb170b..cf7fc9c 100644
  /* 0-9 defines */
  
  #define AMQP_0_9_FRAME_TYPE_METHOD                                      1
-@@ -192,6 +196,65 @@ typedef struct {
+@@ -195,6 +199,65 @@ typedef struct {
  
  #define AMQP_0_9_METHOD_TUNNEL_REQUEST                                 10
  
@@ -108,7 +108,7 @@ index fbb170b..cf7fc9c 100644
  /* AMQP 0-10 values */
  
  #define AMQP_0_10_FRAME_CONTROL  0
-@@ -330,6 +393,40 @@ static void
+@@ -333,6 +396,40 @@ static void
  check_amqp_version(tvbuff_t *tvb, amqp_conv *conn);
  
  static guint
@@ -149,7 +149,7 @@ index fbb170b..cf7fc9c 100644
  get_amqp_0_10_message_len(packet_info *pinfo, tvbuff_t *tvb, int offset);
  
  static guint
-@@ -470,6 +567,25 @@ dissect_amqp_0_10_frame(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree);
+@@ -473,6 +570,25 @@ dissect_amqp_0_10_frame(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree);
  static void
  dissect_amqp_0_9_frame(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree);
  
@@ -175,7 +175,7 @@ index fbb170b..cf7fc9c 100644
  static int
  dissect_amqp_0_9_method_connection_start(tvbuff_t *tvb, packet_info *pinfo,
      int offset, proto_tree *args_tree);
-@@ -851,6 +967,144 @@ struct amqp_typeinfo {
+@@ -854,6 +970,144 @@ struct amqp_typeinfo {
      type_formatter  formatter;
      guint           known_size;
  };
@@ -320,7 +320,7 @@ index fbb170b..cf7fc9c 100644
  static gboolean
  get_amqp_0_10_type_formatter(guint8 code,
                               const char **name,
-@@ -899,6 +1153,533 @@ format_amqp_0_10_sequence_set(tvbuff_t *tvb, guint offset, guint length,
+@@ -902,6 +1156,533 @@ format_amqp_0_10_sequence_set(tvbuff_t *tvb, guint offset, guint length,
  /*  Various handles  */
  
  static int proto_amqp = -1;
@@ -854,7 +854,7 @@ index fbb170b..cf7fc9c 100644
  
  /* 0-10 handles */
  
-@@ -1360,10 +2141,12 @@ static int hf_amqp_header_tunnel_durable = -1;
+@@ -1363,10 +2144,12 @@ static int hf_amqp_header_tunnel_durable = -1;
  static int hf_amqp_header_tunnel_broadcast = -1;
  static int hf_amqp_payload = -1;
  static int hf_amqp_init_protocol = -1;
@@ -867,7 +867,7 @@ index fbb170b..cf7fc9c 100644
  
  static gint ett_amqp = -1;
  static gint ett_header = -1;
-@@ -1373,9 +2156,87 @@ static gint ett_field_table = -1;
+@@ -1376,9 +2159,87 @@ static gint ett_field_table = -1;
  static gint ett_amqp_init = -1;
  static gint ett_amqp_0_10_map = -1;
  static gint ett_amqp_0_10_array = -1;
@@ -955,7 +955,7 @@ index fbb170b..cf7fc9c 100644
  static const value_string amqp_0_10_frame_position [] = {
      {0x00,  "----"},
      {0x01,  "---e"},
-@@ -1844,6 +2705,70 @@ static struct amqp_typeinfo amqp_0_10_var_types[] = {
+@@ -1847,6 +2708,70 @@ static struct amqp_typeinfo amqp_0_10_var_types[] = {
      { 0xff, "end", 0, 0 }
  };
  
@@ -1026,7 +1026,7 @@ index fbb170b..cf7fc9c 100644
  
  /*  Main dissection routine  */
  
-@@ -1882,6 +2807,11 @@ dissect_amqp(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree)
+@@ -1885,6 +2810,11 @@ dissect_amqp(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree)
          dissector = dissect_amqp_0_10_frame;
          fixed_length = 8;
          break;
@@ -1038,7 +1038,7 @@ index fbb170b..cf7fc9c 100644
      default:
          col_append_str(pinfo->cinfo, COL_INFO, "AMQP (unknown version)");
          col_set_fence(pinfo->cinfo, COL_INFO);
-@@ -1906,15 +2836,22 @@ check_amqp_version(tvbuff_t *tvb, amqp_conv *conn)
+@@ -1909,15 +2839,22 @@ check_amqp_version(tvbuff_t *tvb, amqp_conv *conn)
          return;
  
      if (tvb_memeql(tvb, 0, "AMQP", 4) == 0) {
@@ -1069,7 +1069,7 @@ index fbb170b..cf7fc9c 100644
                  conn->version = AMQP_V0_10;
          }
          return;
-@@ -1925,18 +2862,30 @@ check_amqp_version(tvbuff_t *tvb, amqp_conv *conn)
+@@ -1928,18 +2865,30 @@ check_amqp_version(tvbuff_t *tvb, amqp_conv *conn)
       * deduce it from the content. First indicator is the frame length. 0-9
       * has a 32-bit length in octets 3-7. If the frame length is the same
       * as the PDU length and there's a frame end where it should be, this
@@ -1102,7 +1102,7 @@ index fbb170b..cf7fc9c 100644
  get_amqp_0_10_message_len(packet_info *pinfo _U_, tvbuff_t *tvb, int offset)
  {
      /*  Heuristic - protocol initialisation frame starts with 'AMQP'  */
-@@ -2017,7 +2966,7 @@ dissect_amqp_0_9_field_table(tvbuff_t *tvb, packet_info *pinfo, int offset, guin
+@@ -2020,7 +2969,7 @@ dissect_amqp_0_9_field_table(tvbuff_t *tvb, packet_info *pinfo, int offset, guin
              amqp_typename = "integer";
              if (length < 4)
                  goto too_short;
@@ -1111,7 +1111,7 @@ index fbb170b..cf7fc9c 100644
              offset += 4;
              length -= 4;
              break;
-@@ -2232,7 +3181,7 @@ dissect_amqp_0_10_array(tvbuff_t *tvb,
+@@ -2245,7 +3194,7 @@ dissect_amqp_0_10_array(tvbuff_t *tvb,
      element_count = tvb_get_ntohl(tvb, offset);
      AMQP_INCREMENT(offset, 4, bound);
      length -= 4;
@@ -1120,7 +1120,7 @@ index fbb170b..cf7fc9c 100644
      if (element_count > 1)
          array_tree = proto_item_add_subtree(item, ett_amqp_0_10_array);
      while ((element_count > 0) && (length > 0)) {
-@@ -5596,16 +6545,16 @@ dissect_amqp_0_10_frame(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree)
+@@ -5609,16 +6558,16 @@ dissect_amqp_0_10_frame(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree)
      if (tvb_memeql(tvb, 0, "AMQP", 4) == 0) {
          guint8         proto_major;
          guint8         proto_minor;
@@ -1144,7 +1144,7 @@ index fbb170b..cf7fc9c 100644
          col_set_fence(pinfo->cinfo, COL_INFO);
  
          if (tree) {
-@@ -5741,16 +6690,16 @@ dissect_amqp_0_9_frame(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree)
+@@ -5754,16 +6703,16 @@ dissect_amqp_0_9_frame(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree)
      if (tvb_memeql(tvb, 0, "AMQP", 4) == 0) {
          guint8         proto_major;
          guint8         proto_minor;
@@ -1168,7 +1168,7 @@ index fbb170b..cf7fc9c 100644
          col_set_fence(pinfo->cinfo, COL_INFO);
  
          if (tree) {
-@@ -6410,88 +7359,751 @@ dissect_amqp_0_9_frame(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree)
+@@ -6423,88 +7372,751 @@ dissect_amqp_0_9_frame(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree)
  
  /*  Dissection routine for method Connection.Start                        */
  
@@ -1989,7 +1989,7 @@ index fbb170b..cf7fc9c 100644
  
  /*  Dissection routine for method Connection.Secure-Ok                    */
  
-@@ -8546,6 +10158,543 @@ dissect_amqp_0_9_content_header_tunnel(tvbuff_t *tvb, packet_info *pinfo,
+@@ -8559,6 +10171,543 @@ dissect_amqp_0_9_content_header_tunnel(tvbuff_t *tvb, packet_info *pinfo,
      return offset;
  }
  
@@ -2533,7 +2533,7 @@ index fbb170b..cf7fc9c 100644
  /*  AMQP 0-10 Type Decoders  */
  
  static gboolean
-@@ -8563,7 +10712,7 @@ get_amqp_0_10_type_formatter(guint8 code,
+@@ -8576,7 +10725,7 @@ get_amqp_0_10_type_formatter(guint8 code,
          table = amqp_0_10_fixed_types;
      for (i = 0; table[i].typecode != 0xff; ++i) {
          if (table[i].typecode == code) {
@@ -2542,7 +2542,7 @@ index fbb170b..cf7fc9c 100644
              *formatter   = table[i].formatter;
              *length_size = table[i].known_size;
              return TRUE;
-@@ -8595,10 +10744,10 @@ format_amqp_0_10_int(tvbuff_t *tvb,
+@@ -8608,10 +10757,10 @@ format_amqp_0_10_int(tvbuff_t *tvb,
      else if (length == 4)
          val = (gint32)tvb_get_ntohl(tvb, offset);
      else {
@@ -2555,7 +2555,7 @@ index fbb170b..cf7fc9c 100644
      return length;
  }
  
-@@ -8616,10 +10765,10 @@ format_amqp_0_10_uint(tvbuff_t *tvb,
+@@ -8629,10 +10778,10 @@ format_amqp_0_10_uint(tvbuff_t *tvb,
      else if (length == 4)
          val = tvb_get_ntohl(tvb, offset);
      else {
@@ -2568,7 +2568,7 @@ index fbb170b..cf7fc9c 100644
      return length;
  }
  
-@@ -8640,7 +10789,7 @@ format_amqp_0_10_boolean(tvbuff_t *tvb,
+@@ -8653,7 +10802,7 @@ format_amqp_0_10_boolean(tvbuff_t *tvb,
      guint8 val;
  
      val = tvb_get_guint8(tvb, offset);
@@ -2577,7 +2577,7 @@ index fbb170b..cf7fc9c 100644
      return 1;
  }
  
-@@ -8658,7 +10807,7 @@ format_amqp_0_10_vbin(tvbuff_t *tvb,
+@@ -8671,7 +10820,7 @@ format_amqp_0_10_vbin(tvbuff_t *tvb,
      else if (length == 4)
          bin_length = tvb_get_ntohl(tvb, offset);
      else {
@@ -2586,7 +2586,7 @@ index fbb170b..cf7fc9c 100644
          return length;
      }
      AMQP_INCREMENT(offset, length, bound);
-@@ -8681,7 +10830,7 @@ format_amqp_0_10_str(tvbuff_t *tvb,
+@@ -8694,7 +10843,7 @@ format_amqp_0_10_str(tvbuff_t *tvb,
      else if (length == 4)
          string_length = tvb_get_ntohl(tvb, offset);
      else {
@@ -2595,7 +2595,7 @@ index fbb170b..cf7fc9c 100644
          return length;
      }
      AMQP_INCREMENT(offset, length, bound);
-@@ -8730,6 +10879,837 @@ proto_register_amqp(void)
+@@ -8743,6 +10892,837 @@ proto_register_amqp(void)
       * in 0-10, but there are many separate.
       */
      static hf_register_info hf[] = {
@@ -3433,7 +3433,7 @@ index fbb170b..cf7fc9c 100644
          {&hf_amqp_0_10_format, {
              "Format", "amqp.format",
              FT_UINT8, BASE_DEC, NULL, 0xc0,
-@@ -10575,6 +13555,10 @@ proto_register_amqp(void)
+@@ -10588,6 +13568,10 @@ proto_register_amqp(void)
              "Protocol ID Minor", "amqp.init.id_minor",
              FT_UINT8, BASE_DEC, NULL, 0,
              NULL, HFILL}},
@@ -3444,7 +3444,7 @@ index fbb170b..cf7fc9c 100644
          {&hf_amqp_init_version_major, {
              "Version Major", "amqp.init.version_major",
              FT_UINT8, BASE_DEC, NULL, 0,
-@@ -10582,7 +13566,11 @@ proto_register_amqp(void)
+@@ -10595,7 +13579,11 @@ proto_register_amqp(void)
          {&hf_amqp_init_version_minor, {
              "Version Minor", "amqp.init.version_minor",
              FT_UINT8, BASE_DEC, NULL, 0,
@@ -3457,7 +3457,7 @@ index fbb170b..cf7fc9c 100644
      };
  
      /*  Setup of protocol subtree array  */
-@@ -10595,7 +13583,10 @@ proto_register_amqp(void)
+@@ -10608,7 +13596,10 @@ proto_register_amqp(void)
           &ett_field_table,
           &ett_amqp_init,
           &ett_amqp_0_10_map,

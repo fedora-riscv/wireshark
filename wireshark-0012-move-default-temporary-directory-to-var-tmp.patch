@@ -100,13 +100,16 @@ index 570dbe6..7a33f5b 100644
  
  # Header files that are not generated from other files
  LIBWSUTIL_INCLUDES = 	\
-@@ -60,4 +61,5 @@ LIBWSUTIL_INCLUDES = 	\
+@@ -60,7 +61,8 @@ LIBWSUTIL_INCLUDES = 	\
  	mpeg-audio.h	\
  	privileges.h	\
  	str_util.h	\
 -	type_util.h
 +	type_util.h     \
 +	wstmpdir.h
+ 
+ #
+ # Editor modelines  -  https://www.wireshark.org/tools/modelines.html
 diff --git a/wsutil/wstmpdir.c b/wsutil/wstmpdir.c
 new file mode 100644
 index 0000000..d8b733b

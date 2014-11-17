@@ -46,7 +46,7 @@ diff --git a/epan/ftypes/ftype-string.c b/epan/ftypes/ftype-string.c
 index 3893823..7e67292 100644
 --- a/epan/ftypes/ftype-string.c
 +++ b/epan/ftypes/ftype-string.c
-@@ -58,6 +58,7 @@ string_repr_len(fvalue_t *fv, ftrepr_t rtype)
+@@ -57,6 +57,7 @@ string_repr_len(fvalue_t *fv, ftrepr_t rtype)
  {
  	switch (rtype) {
  		case FTREPR_DISPLAY:
@@ -54,7 +54,7 @@ index 3893823..7e67292 100644
  			return (int)strlen(fv->value.string);
  
  		case FTREPR_DFILTER:
-@@ -72,6 +73,7 @@ string_to_repr(fvalue_t *fv, ftrepr_t rtype, char *buf)
+@@ -71,6 +72,7 @@ string_to_repr(fvalue_t *fv, ftrepr_t rtype, char *buf)
  {
  	switch (rtype) {
  		case FTREPR_DISPLAY:
@@ -78,7 +78,7 @@ diff --git a/epan/print.c b/epan/print.c
 index 5a7ed61..6dd2222 100644
 --- a/epan/print.c
 +++ b/epan/print.c
-@@ -1797,7 +1797,10 @@ gchar* get_node_field_value(field_info* fi, epan_dissect_t* edt)
+@@ -1799,7 +1799,10 @@ gchar* get_node_field_value(field_info* fi, epan_dissect_t* edt)
               * FT_NONE can be checked when using -T fields */
              return g_strdup("1");
          default:

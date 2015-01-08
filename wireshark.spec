@@ -20,8 +20,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.12.2
-Release:	2%{?dist}
+Version:	1.12.3
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -46,8 +46,6 @@ Patch8:		wireshark-0008-move-default-temporary-directory-to-var-tmp.patch
 Patch9:		wireshark-0009-Fix-paths-in-a-wireshark.desktop-file.patch
 # Update, when pushed upstream: https://code.wireshark.org/review/#/c/3770/
 Patch10:		wireshark-0010-fields-print-format.patch
-# Update, when pushed upstream: https://code.wireshark.org/review/#/c/5973/
-Patch11:		wireshark-0011-getopt_long.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -169,7 +167,6 @@ Cflags: -I\${includedir}" > wireshark.pc.in
 %patch8 -p1 -b .tmp_dir
 %patch9 -p1 -b .fix_paths
 %patch10 -p1 -b .fields-print-format
-%patch11 -p1 -b .getopt_long
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -373,6 +370,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Jan  8 2015 Peter Hatina <phatina@redhat.com> - 1.12.3-1
+- Ver. 1.12.3
+
 * Mon Dec 22 2014 Peter Hatina <phatina@redhat.com> - 1.12.2-2
 - fix CLI parsing by getopt_long
 

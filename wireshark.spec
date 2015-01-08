@@ -20,7 +20,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.10.11
+Version:	1.10.12
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -408,6 +408,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Jan  8 2015 Peter Hatina <phatina@redhat.com> - 1.10.12-1
+- Ver. 1.10.12
+
 * Mon Nov 17 2014 Peter Hatina <phatina@redhat.com> - 1.10.11-1
 - Ver. 1.10.11
 

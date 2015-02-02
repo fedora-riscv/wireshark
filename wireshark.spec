@@ -1,7 +1,7 @@
 %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
 
 %global with_adns 0
-%global with_lua 1
+%global with_lua 0
 %global with_gtk2 0
 
 %if 0%{?rhel} != 0
@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.12.3
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -372,6 +372,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Mon Feb  2 2015 Peter Hatina <phatina@redhat.com> - 1.12.3-3
+- temporary: disable lua
+
 * Mon Feb  2 2015 Peter Hatina <phatina@redhat.com> - 1.12.3-2
 - rebuild with gtk3
 - fix gdk crash

@@ -58,7 +58,7 @@ diff --git a/print.c b/print.c
 index 9bd843f..2d34de5 100644
 --- a/print.c
 +++ b/print.c
-@@ -1733,7 +1733,10 @@ gchar* get_node_field_value(field_info* fi, epan_dissect_t* edt)
+@@ -1735,7 +1735,10 @@ gchar* get_node_field_value(field_info* fi, epan_dissect_t* edt)
               * FT_NONE can be checked when using -T fields */
              return g_strdup("1");
          default:

@@ -20,8 +20,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.12.3
-Release:	3%{?dist}
+Version:	1.12.4
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -372,6 +372,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Mar  5 2015 Peter Hatina <phatina@redhat.com> - 1.12.4-1
+- Ver. 1.12.4
+
 * Mon Feb  2 2015 Peter Hatina <phatina@redhat.com> - 1.12.3-3
 - temporary: disable lua
 

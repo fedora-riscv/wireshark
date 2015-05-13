@@ -20,7 +20,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.12.4
+Version:	1.12.5
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -44,8 +44,6 @@ Patch7:		wireshark-0007-Install-autoconf-related-file.patch
 Patch8:		wireshark-0008-move-default-temporary-directory-to-var-tmp.patch
 # Fedora-specific
 Patch9:		wireshark-0009-Fix-paths-in-a-wireshark.desktop-file.patch
-# Update, when pushed upstream: https://code.wireshark.org/review/#/c/3770/
-Patch10:		wireshark-0010-fields-print-format.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -166,7 +164,6 @@ Cflags: -I\${includedir}" > wireshark.pc.in
 %patch7 -p1 -b .install_autoconf
 %patch8 -p1 -b .tmp_dir
 %patch9 -p1 -b .fix_paths
-%patch10 -p1 -b .fields-print-format
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -370,6 +367,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Wed May 13 2015 Peter Hatina <phatina@redhat.com> - 1.12.5-1
+- Ver. 1.12.5
+
 * Thu Mar  5 2015 Peter Hatina <phatina@redhat.com> - 1.12.4-1
 - Ver. 1.12.4
 

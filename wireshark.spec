@@ -20,7 +20,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.10.13
+Version:	1.10.14
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -84,8 +84,6 @@ Patch26:        wireshark-0026-amqp-1.0.patch
 Patch27:        wireshark-0027-frame-fix.patch
 Patch28:        wireshark-0028-dtls-elliptic-curves.patch
 Patch29:        wireshark-0029-kerberos-camellia.patch
-# Update, when pushed upstream: https://code.wireshark.org/review/#/c/3770/
-Patch30:        wireshark-0030-fields-print-format.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -209,7 +207,6 @@ and plugins.
 #%patch27 -p1 -b .frame
 %patch28 -p1 -b .dtls-elliptic-curves
 %patch29 -p1 -b .krb-camellia
-%patch30 -p1 -b .fields-print-format
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -408,6 +405,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Wed May 13 2015 Peter Hatina <phatina@redhat.com> - 1.10.14-1
+- Ver. 1.10.14
+
 * Thu Mar  5 2015 Peter Hatina <phatina@redhat.com> - 1.10.13-1
 - Ver. 1.10.13
 

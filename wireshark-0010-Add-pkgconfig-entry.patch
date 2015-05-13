@@ -21,7 +21,7 @@ diff --git a/configure.ac b/configure.ac
 index 488d8d0..0c1ed4d 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -2549,6 +2549,7 @@ AC_CONFIG_HEADERS(config.h)
+@@ -2568,6 +2568,7 @@ AC_CONFIG_HEADERS(config.h)
  AC_OUTPUT(
    Makefile
    doxygen.cfg

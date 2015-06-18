@@ -20,7 +20,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.12.5
+Version:	1.12.6
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -367,6 +367,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Jun 18 2015 Peter Hatina <phatina@redhat.com> - 1.12.6-1
+- Ver. 1.12.6
+
 * Wed May 13 2015 Peter Hatina <phatina@redhat.com> - 1.12.5-1
 - Ver. 1.12.5
 

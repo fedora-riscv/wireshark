@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.12.6
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -44,7 +44,8 @@ Patch7:		wireshark-0007-Install-autoconf-related-file.patch
 Patch8:		wireshark-0008-move-default-temporary-directory-to-var-tmp.patch
 # Fedora-specific
 Patch9:		wireshark-0009-Fix-paths-in-a-wireshark.desktop-file.patch
-Patch10:		wireshark-0010-gdk.patch
+Patch10:	wireshark-0010-gdk.patch
+Patch11:	wireshark-0011-Disable-overlay-scrolling.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -166,6 +167,7 @@ Cflags: -I\${includedir}" > wireshark.pc.in
 %patch8 -p1 -b .tmp_dir
 %patch9 -p1 -b .fix_paths
 %patch10 -p1 -b .gdk
+%patch11 -p1 -b .overlay_scrolling
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -374,6 +376,10 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Fri Jun 26 2015 Peter Hatina <phatina@redhat.com> - 1.12.6-3
+- Disable overlay scrolling in main window
+- Resolves: rhbz#1235830
+
 * Fri Jun 26 2015 Peter Hatina <phatina@redhat.com> - 1.12.6-2
 - Add symlink plugins/current -> plugins/%{version}
 

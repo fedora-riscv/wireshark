@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.12.6
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -215,7 +215,7 @@ autoreconf -ivf
 %endif
    --with-ssl \
    --disable-warnings-as-errors \
-   --with-plugins=%{_libdir}/%{name}/plugins/%{version} \
+   --with-plugins=%{_libdir}/%{name}/plugins/current \
    --enable-airpcap
 
 #remove rpath
@@ -261,6 +261,11 @@ install -m 644 wiretap/*.h			"${IDIR}/wiretap"
 install -m 644 wsutil/*.h			"${IDIR}/wsutil"
 install -m 644 ws_symbol_export.h               "${IDIR}/"
 install -m 644 %{SOURCE1}                       %{buildroot}/%{_sysconfdir}/udev/rules.d/
+
+# Link current plugins directory to %{version}
+pushd %{buildroot}/%{_libdir}/%{name}/plugins
+ln -s current %{version}
+popd
 
 # Remove .la files
 rm -f %{buildroot}%{_libdir}/%{name}/plugins/%{version}/*.la
@@ -369,6 +374,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Fri Jun 26 2015 Peter Hatina <phatina@redhat.com> - 1.12.6-2
+- Add symlink plugins/current -> plugins/%{version}
+
 * Thu Jun 18 2015 Peter Hatina <phatina@redhat.com> - 1.12.6-1
 - Ver. 1.12.6
 

@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.12.6
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -217,7 +217,7 @@ autoreconf -ivf
 %endif
    --with-ssl \
    --disable-warnings-as-errors \
-   --with-plugins=%{_libdir}/%{name}/plugins/current \
+   --with-plugins=%{_libdir}/%{name}/plugins \
    --enable-airpcap
 
 #remove rpath
@@ -227,9 +227,6 @@ sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{?_smp_mflags}
 
 %install
-# The evil plugins hack
-perl -pi -e 's|-L../../epan|-L../../epan/.libs|' plugins/*/*.la
-
 make DESTDIR=%{buildroot} install
 make DESTDIR=%{buildroot} install_desktop_files
 
@@ -264,13 +261,8 @@ install -m 644 wsutil/*.h			"${IDIR}/wsutil"
 install -m 644 ws_symbol_export.h               "${IDIR}/"
 install -m 644 %{SOURCE1}                       %{buildroot}/%{_sysconfdir}/udev/rules.d/
 
-# Link current plugins directory to %{version}
-pushd %{buildroot}/%{_libdir}/%{name}/plugins
-ln -s current %{version}
-popd
-
 # Remove .la files
-rm -f %{buildroot}%{_libdir}/%{name}/plugins/%{version}/*.la
+rm -f %{buildroot}%{_libdir}/%{name}/plugins/*.la
 
 # Remove .la files in libdir
 rm -f %{buildroot}%{_libdir}/*.la
@@ -327,6 +319,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{python_sitearch}/*.py*
 %{_libdir}/lib*.so.*
 %{_libdir}/wireshark
+%{_libdir}/wireshark/plugins
 %{_mandir}/man1/editcap.*
 %{_mandir}/man1/tshark.*
 %{_mandir}/man1/mergecap.*
@@ -376,6 +369,10 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Jun 30 2015 Peter Hatina <phatina@redhat.com> - 1.12.6-4
+- Move plugins to %{_libdir}/wireshark/plugins to avoid
+  transaction conflicts
+
 * Fri Jun 26 2015 Peter Hatina <phatina@redhat.com> - 1.12.6-3
 - Disable overlay scrolling in main window
 - Resolves: rhbz#1235830

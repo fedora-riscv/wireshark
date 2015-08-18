@@ -20,8 +20,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.12.6
-Release:	4%{?dist}
+Version:	1.12.7
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -45,7 +45,6 @@ Patch8:		wireshark-0008-move-default-temporary-directory-to-var-tmp.patch
 # Fedora-specific
 Patch9:		wireshark-0009-Fix-paths-in-a-wireshark.desktop-file.patch
 Patch10:	wireshark-0010-gdk.patch
-Patch11:	wireshark-0011-Disable-overlay-scrolling.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -167,7 +166,6 @@ Cflags: -I\${includedir}" > wireshark.pc.in
 %patch8 -p1 -b .tmp_dir
 %patch9 -p1 -b .fix_paths
 %patch10 -p1 -b .gdk
-%patch11 -p1 -b .overlay_scrolling
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -408,6 +406,10 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Aug 18 2015 Peter Lemenkov <lemenkov@gmail.com> - 1.12.7-1
+- Ver. 1.12.7
+- Dropped patch no. 11 (applied upstream)
+
 * Tue Jun 30 2015 Peter Hatina <phatina@redhat.com> - 1.12.6-4
 - Move plugins to %{_libdir}/wireshark/plugins to avoid
   transaction conflicts

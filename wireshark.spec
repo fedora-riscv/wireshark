@@ -20,8 +20,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.12.6
-Release:	4%{?dist}
+Version:	1.12.7
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -45,7 +45,6 @@ Patch8:		wireshark-0008-move-default-temporary-directory-to-var-tmp.patch
 # Fedora-specific
 Patch9:		wireshark-0009-Fix-paths-in-a-wireshark.desktop-file.patch
 Patch10:	wireshark-0010-gdk.patch
-Patch11:	wireshark-0011-Disable-overlay-scrolling.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -167,7 +166,6 @@ Cflags: -I\${includedir}" > wireshark.pc.in
 %patch8 -p1 -b .tmp_dir
 %patch9 -p1 -b .fix_paths
 %patch10 -p1 -b .gdk
-%patch11 -p1 -b .overlay_scrolling
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -261,6 +259,44 @@ install -m 644 wsutil/*.h			"${IDIR}/wsutil"
 install -m 644 ws_symbol_export.h               "${IDIR}/"
 install -m 644 %{SOURCE1}                       %{buildroot}/%{_sysconfdir}/udev/rules.d/
 
+# Register as an application to be visible in the software center
+#
+# NOTE: It would be *awesome* if this file was maintained by the upstream
+# project, translated and installed into the right place during `make install`.
+#
+# See http://www.freedesktop.org/software/appstream/docs/ for more details.
+#
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
+cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Richard Hughes <richard@hughsie.com> -->
+<!--
+BugReportURL: https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=10479
+SentUpstream: 2014-09-18
+-->
+<application>
+  <id type="desktop">wireshark.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <description>
+    <p>
+      Wireshark is an essential tool to capture and analyze the packets
+      arriving or leaving the network interface.
+      It is almost a GUI equivalent of the classic unix tool tcpdump.
+    </p>
+    <p>
+      Wireshark has a easy to use GUI to capture the packets matching the
+      filter, on the mentioned interface and save them for later analysis.
+    </p>
+  </description>
+  <url type="homepage">http://www.wireshark.org</url>
+  <screenshots>
+    <screenshot type="default">https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/wireshark/a.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/wireshark/b.png</screenshot>
+  </screenshots>
+  <updatecontact>http://www.wireshark.org/lists/</updatecontact>
+</application>
+EOF
+
 # Remove .la files
 rm -f %{buildroot}%{_libdir}/%{name}/plugins/*.la
 
@@ -338,6 +374,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 
 %files gnome
+%{_datadir}/appdata/%{name}.appdata.xml
 %{_datadir}/applications/wireshark.desktop
 %{_datadir}/icons/hicolor/16x16/apps/wireshark.png
 %{_datadir}/icons/hicolor/24x24/apps/wireshark.png
@@ -369,6 +406,10 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Aug 18 2015 Peter Lemenkov <lemenkov@gmail.com> - 1.12.7-1
+- Ver. 1.12.7
+- Dropped patch no. 11 (applied upstream)
+
 * Tue Jun 30 2015 Peter Hatina <phatina@redhat.com> - 1.12.6-4
 - Move plugins to %{_libdir}/wireshark/plugins to avoid
   transaction conflicts
@@ -385,6 +426,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Wed May 13 2015 Peter Hatina <phatina@redhat.com> - 1.12.5-1
 - Ver. 1.12.5
+
+* Thu Mar 26 2015 Richard Hughes <rhughes@redhat.com> - 1.12.4-2
+- Add an AppData file for the software center
 
 * Thu Mar  5 2015 Peter Hatina <phatina@redhat.com> - 1.12.4-1
 - Ver. 1.12.4

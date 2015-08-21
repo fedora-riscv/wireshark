@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.12.7
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -45,6 +45,8 @@ Patch8:		wireshark-0008-move-default-temporary-directory-to-var-tmp.patch
 # Fedora-specific
 Patch9:		wireshark-0009-Fix-paths-in-a-wireshark.desktop-file.patch
 Patch10:	wireshark-0010-gdk.patch
+# Backported from upstream - https://code.wireshark.org/review/#/c/10015/
+Patch11:	wireshark-0011-Allow-redefining-all-ports-for-RADIUS.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -59,8 +61,10 @@ BuildRequires:	desktop-file-utils
 BuildRequires:	xdg-utils
 BuildRequires:	flex, bison
 BuildRequires:	libcap-devel
+BuildRequires:	libnl3-devel
 %if 0%{?fedora} > 18
-BuildRequires:	perl-podlators
+BuildRequires:	perl(Pod::Html)
+BuildRequires:	perl(Pod::Man)
 %endif
 BuildRequires:	libgcrypt-devel
 %if %{with_GeoIP}
@@ -166,6 +170,7 @@ Cflags: -I\${includedir}" > wireshark.pc.in
 %patch8 -p1 -b .tmp_dir
 %patch9 -p1 -b .fix_paths
 %patch10 -p1 -b .gdk
+%patch11 -p1 -b .radius_ports
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -216,7 +221,7 @@ autoreconf -ivf
    --with-ssl \
    --disable-warnings-as-errors \
    --with-plugins=%{_libdir}/%{name}/plugins \
-   --enable-airpcap
+   --with-libnl
 
 #remove rpath
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
@@ -406,6 +411,12 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Fri Aug 21 2015 Peter Lemenkov <lemenkov@gmail.com> - 1.12.7-2
+- Enable libnl3 (see rhbz#1207386, rhbz#1247566)
+- Remove airpcap switch (doesn't have any effect on Linux)
+- Backport patch no. 11
+- Fixed building with F24+
+
 * Tue Aug 18 2015 Peter Lemenkov <lemenkov@gmail.com> - 1.12.7-1
 - Ver. 1.12.7
 - Dropped patch no. 11 (applied upstream)

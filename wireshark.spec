@@ -20,8 +20,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.12.7
-Release:	2%{?dist}
+Version:	1.12.8
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -44,9 +44,8 @@ Patch7:		wireshark-0007-Install-autoconf-related-file.patch
 Patch8:		wireshark-0008-move-default-temporary-directory-to-var-tmp.patch
 # Fedora-specific
 Patch9:		wireshark-0009-Fix-paths-in-a-wireshark.desktop-file.patch
-Patch10:	wireshark-0010-gdk.patch
 # Backported from upstream - https://code.wireshark.org/review/#/c/10015/
-Patch11:	wireshark-0011-Allow-redefining-all-ports-for-RADIUS.patch
+Patch10:	wireshark-0010-Allow-redefining-all-ports-for-RADIUS.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -169,8 +168,7 @@ Cflags: -I\${includedir}" > wireshark.pc.in
 %patch7 -p1 -b .install_autoconf
 %patch8 -p1 -b .tmp_dir
 %patch9 -p1 -b .fix_paths
-%patch10 -p1 -b .gdk
-%patch11 -p1 -b .radius_ports
+%patch10 -p1 -b .radius_ports
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -411,6 +409,10 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Oct 15 2015 Peter Hatina <phatina@redhat.com> - 1.12.8-1
+- Ver. 1.12.8
+- Dropped patch no. 10 (applied upstream)
+
 * Fri Aug 21 2015 Peter Lemenkov <lemenkov@gmail.com> - 1.12.7-2
 - Enable libnl3 (see rhbz#1207386, rhbz#1247566)
 - Remove airpcap switch (doesn't have any effect on Linux)

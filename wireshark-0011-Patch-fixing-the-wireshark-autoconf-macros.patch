@@ -1,0 +1,41 @@
+From: Patrick Monnerat <patrick.monnerat@dh.com>
+Date: Fri, 23 Oct 2015 11:23:11 -0400
+Subject: [PATCH] Patch fixing the wireshark autoconf macros.
+
+When configuring a project using a wireshark detection macro on a 64-bit
+system, the detection fails because a configuration test program
+crashes.
+
+epan/epan.h include is missing in configuration test program. This is
+needed to define epan_get_version() as char *. Failure to doing so uses
+a 32-bit integer as a string address --> segfault.
+
+diff --git a/wireshark.m4 b/wireshark.m4
+index d8015d8..6d7b177 100644
+--- a/wireshark.m4
++++ b/wireshark.m4
+@@ -33,6 +33,7 @@ AC_DEFUN([AM_PATH_WIRESHARK],[
+ #include <gmodule.h>
+ #include <epan/packet.h>
+ #include <epan/prefs.h>
++#include <epan/epan.h>
+ 
+ int 
+ main()
+@@ -40,7 +41,7 @@ main()
+ {
+ 	int ws_major_version, ws_minor_version, ws_micro_version;
+ 	int major, minor, micro;
+-	char **tmp_version;
++	char *tmp_version;
+ 
+ 	tmp_version = (char *) strdup("$min_wireshark_version");
+ 	major = 0;
+@@ -76,6 +77,7 @@ main()
+ #include <gmodule.h>
+ #include <epan/packet.h>
+ #include <epan/prefs.h>
++#include <epan/epan.h>
+ ], [puts(epan_get_version());])], [WIRESHARK_VERSION=`./conftest$ac_exeext`],
+ wireshark_found=no)
+ 		

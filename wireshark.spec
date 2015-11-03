@@ -21,7 +21,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	1.12.8
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
@@ -46,6 +46,8 @@ Patch8:		wireshark-0008-move-default-temporary-directory-to-var-tmp.patch
 Patch9:		wireshark-0009-Fix-paths-in-a-wireshark.desktop-file.patch
 # Backported from upstream - https://code.wireshark.org/review/#/c/10015/
 Patch10:	wireshark-0010-Allow-redefining-all-ports-for-RADIUS.patch
+# Fedora-specific, see https://bugzilla.redhat.com/1274831
+Patch11:	wireshark-0011-Patch-fixing-the-wireshark-autoconf-macros.patch
 
 Url:		http://www.wireshark.org/
 BuildRequires:	libpcap-devel >= 0.9
@@ -169,6 +171,7 @@ Cflags: -I\${includedir}" > wireshark.pc.in
 %patch8 -p1 -b .tmp_dir
 %patch9 -p1 -b .fix_paths
 %patch10 -p1 -b .radius_ports
+%patch11 -p1 -b .64bit
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -409,6 +412,10 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Nov  3 2015 Peter Lemenkov <lemenkov@gmail.com> - 1.12.8-2
+- Fixed Wireshark detection in external projects uwing wireshark.m4 script.
+  See https://bugzilla.redhat.com/1274831 for further details.
+
 * Thu Oct 15 2015 Peter Hatina <phatina@redhat.com> - 1.12.8-1
 - Ver. 1.12.8
 - Dropped patch no. 10 (applied upstream)

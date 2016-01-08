@@ -4,7 +4,7 @@ Subject: [PATCH] Add pkgconfig entry
 
 
 diff --git a/Makefile.am b/Makefile.am
-index c60d873..40a6e4d 100644
+index d813784..a2f6017 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -53,6 +53,9 @@ EXTRA_PROGRAMS = wireshark wireshark-qt tshark tfshark capinfos captype editcap
@@ -18,10 +18,10 @@ index c60d873..40a6e4d 100644
  # Wireshark configuration files are put in $(pkgdatadir).
  #
 diff --git a/configure.ac b/configure.ac
-index 20eb3b3..8c9b79c 100644
+index baa47eb..6ea3c7b 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -2779,6 +2779,7 @@ AC_CONFIG_HEADERS(config.h)
+@@ -2890,6 +2890,7 @@ AC_CONFIG_HEADERS(config.h)
  AC_OUTPUT(
    Makefile
    doxygen.cfg

@@ -32,7 +32,7 @@ index 6de7daa..a644615 100644
  
  	for (i = 0; i < PH_CONF_DIRS; i++) {
 diff --git a/wsutil/Makefile.common b/wsutil/Makefile.common
-index 75c31bd..81648a7 100644
+index 0f8075b..8eddff4 100644
 --- a/wsutil/Makefile.common
 +++ b/wsutil/Makefile.common
 @@ -62,7 +62,8 @@ LIBWSUTIL_SRC = 	\

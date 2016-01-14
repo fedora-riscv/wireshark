@@ -303,7 +303,7 @@ SentUpstream: 2014-09-18
     <screenshot type="default">https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/wireshark/a.png</screenshot>
     <screenshot>https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/wireshark/b.png</screenshot>
   </screenshots>
-  <updatecontact>http://www.wireshark.org/lists/</updatecontact>
+  <updatecontact>https://www.wireshark.org/lists/</updatecontact>
 </application>
 EOF
 
@@ -459,6 +459,11 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 - Ver. 2.0.1
 - Introduced wireshark metapackage for wireshark-cli and wireshark-gtk
 - wireshark-qt and wireshark-gtk contain the GUI applications
+- See https://www.wireshark.org/docs/relnotes/wireshark-2.0.1.html
+
+* Fri Jan  8 2016 Peter Lemenkov <lemenkov@gmail.com> - 1.12.9-1
+- Ver. 1.12.9
+- See https://www.wireshark.org/docs/relnotes/wireshark-1.12.9.html
 
 * Tue Nov  3 2015 Peter Lemenkov <lemenkov@gmail.com> - 1.12.8-2
 - Fixed Wireshark detection in external projects using wireshark.m4 script.
@@ -694,7 +699,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Mon Jun 17 2013 Peter Hatina <phatina@redhat.com> 1.10.0-1
 - upgrade to 1.10.0
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.10.0.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.10.0.html
 
 * Mon Apr 08 2013 Peter Hatina <phatina@redhat.com> 1.8.6-5
 - fix documentation build error
@@ -710,7 +715,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Tue Mar 12 2013 Peter Hatina <phatina@redhat.com> 1.8.6-1
 - upgrade to 1.8.6
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.8.6.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.8.6.html
 
 * Sun Feb 10 2013 Parag Nemade <paragn AT fedoraproject DOT org> - 1.8.5-3
 - Remove vendor tag from desktop file as per https://fedorahosted.org/fesco/ticket/1077
@@ -721,11 +726,11 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Thu Jan 31 2013 Peter Hatina <phatina@redhat.com> - 1.8.5-1
 - upgrade to 1.8.5
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.8.5.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.8.5.html
 
 * Mon Dec 03 2012 Peter Hatina <phatina@redhat.com> - 1.8.4-1
 - upgrade to 1.8.4
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.8.4.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.8.4.html
 
 * Tue Oct 16 2012 Peter Hatina <phatina@redhat.com> - 1.8.3-2
 - backport dissector table fix
@@ -733,7 +738,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Thu Oct 11 2012 Peter Hatina <phatina@redhat.com> - 1.8.3-1
 - upgrade to 1.8.3
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.8.3.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.8.3.html
 
 * Tue Sep  4 2012 Jan Safranek <jsafrane@redhat.com> - 1.8.2-3
 - added back compatibility with RHEL6
@@ -745,33 +750,33 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Thu Aug 16 2012 Jan Safranek <jsafrane@redhat.com> - 1.8.2-1
 - upgrade to 1.8.2
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.8.2.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.8.2.html
 
 * Fri Jul 27 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
 * Tue Jul 24 2012 Jan Safranek <jsafrane@redhat.com> - 1.8.1-1
 - upgrade to 1.8.1
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.8.1.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.8.1.html
 
 * Mon Jun 25 2012 Jan Safranek <jsafrane@redhat.com> - 1.8.0
 - upgrade to 1.8.0
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.8.0.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.8.0.html
 
 * Wed May 23 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.8-1
 - upgrade to 1.6.8
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.8.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.6.8.html
 
 * Mon May 21 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.7-2
 - Removed dependency on GeoIP on RHEL.
 
 * Tue Apr 10 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.7-1
 - upgrade to 1.6.7
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.7.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.6.7.html
 
 * Wed Mar 28 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.6-1
 - upgrade to 1.6.6
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.6.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.6.6.html
 
 * Fri Mar  9 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.5-2
 - fixed wireshark crashing when using combo box in import dialog (#773290)
@@ -779,11 +784,11 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Wed Jan 11 2012 Jan Safranek <jsafrane@redhat.com> - 1.6.5-1
 - upgrade to 1.6.5
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.5.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.6.5.html
 
 * Fri Dec  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.4-1
 - upgrade to 1.6.4
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.4.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.6.4.html
 - build with c-ares and libpcap (#759305)
 - fixed display of error message boxes on startup in gnome3 (#752559)
 
@@ -793,7 +798,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Wed Nov  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.3-1
 - upgrade to 1.6.3
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.3.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.6.3.html
 
 * Wed Oct 26 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.6.2-5
 - Rebuilt for glibc bug#747377
@@ -812,12 +817,12 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Fri Sep  9 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.2-1
 - upgrade to 1.6.2
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.2.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.6.2.html
 
 
 * Thu Jul 21 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.1-1
 - upgrade to 1.6.1
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.1.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.6.1.html
 
 * Thu Jun 16 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.0-4
 - fixed previous incomplete fix
@@ -835,11 +840,11 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Wed Jun  8 2011 Jan Safranek <jsafrane@redhat.com> - 1.6.0-1
 - upgrade to 1.6.0
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.6.0.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.6.0.html
 
 * Thu Jun  2 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.7-1
 - upgrade to 1.4.7
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.7.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.4.7.html
 
 * Thu May 19 2011 Steve Dickson <steved@redhat.com> - 1.4.6-3
 - Improved the NFS4.1 patcket dissectors 
@@ -849,18 +854,18 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Tue Apr 19 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.6-1
 - upgrade to 1.4.6
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.6.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.4.6.html
 
 * Mon Apr 18 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.5-1
 - upgrade to 1.4.5
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.5.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.4.5.html
 
 * Sun Apr 03 2011 Cosimo Cecchi <cosimoc@redhat.com> - 1.4.4-2
 - Use hi-res icons
 
 * Thu Mar  3 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.4-1
 - upgrade to 1.4.4
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.4.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.4.4.html
 
 * Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.3-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
@@ -871,7 +876,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Thu Jan 13 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.3-1
 - upgrade to 1.4.3
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.3.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.4.3.html
 
 * Wed Jan  5 2011 Jan Safranek <jsafrane@redhat.com> - 1.4.2-5
 - fixed buffer overflow in ENTTEC dissector (#666897)
@@ -888,15 +893,15 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Mon Nov 22 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.2-1
 - upgrade to 1.4.2
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.2.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.4.2.html
 
 * Mon Nov  1 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.1-2
 - temporarily disable zlib until
   https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=4955 is resolved (#643461)
-  
+
 * Fri Oct 22 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.1-1
 - upgrade to 1.4.1
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.1.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.4.1.html
 - Own the %%{_libdir}/wireshark dir (#644508)
 - associate *.pcap files with wireshark (#641163)
 
@@ -908,11 +913,11 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Tue Aug 31 2010 Jan Safranek <jsafrane@redhat.com> - 1.4.0-1
 - upgrade to 1.4.0
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.4.0.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.4.0.html
 
 * Fri Jul 30 2010 Jan Safranek <jsafrane@redhat.com> - 1.2.10-1
 - upgrade to 1.2.10
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.2.10.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.2.10.html
 
 * Fri Jul 30 2010 Jan Safranek <jsafrane@redhat.com> - 1.2.9-4
 - Rebuilt again for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
@@ -925,7 +930,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Fri Jun 11 2010 Radek Vokal <rvokal@redhat.com> - 1.2.9-1
 - upgrade to 1.2.9
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.2.9.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.2.9.html
 
 * Mon May 17 2010 Radek Vokal <rvokal@redhat.com> - 1.2.8-4
 - removing traling bracket from python_sitearch (#592391)
@@ -938,14 +943,14 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Thu May  6 2010 Radek Vokal <rvokal@redhat.com> - 1.2.8-1
 - upgrade to 1.2.8
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.2.8.html
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.2.8.html
 
 * Tue Apr  6 2010 Radek Vokal <rvokal@redhat.com> - 1.2.7-2
 - rebuild with GeoIP support (needs to be turned on in IP protocol preferences)
 
 * Fri Apr  2 2010 Radek Vokal <rvokal@redhat.com> - 1.2.7-1
 - upgrade to 1.2.7
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.2.7.html 
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.2.7.html
 
 * Wed Mar 24 2010 Radek Vokal <rvokal@redhat.com> - 1.2.6-3
 - bring back -pie
@@ -956,7 +961,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Fri Jan 29 2010 Radek Vokal <rvokal@redhat.com> - 1.2.6-1
 - upgrade to 1.2.6
-- see http://www.wireshark.org/docs/relnotes/wireshark-1.2.6.html 
+- see https://www.wireshark.org/docs/relnotes/wireshark-1.2.6.html
 
 * Wed Jan 20 2010 Radek Vokal <rvokal@redhat.com> - 1.2.5-5
 - minor spec file tweaks for better svn checkout support (#553500)
@@ -972,27 +977,27 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Fri Dec 18 2009 Radek Vokal <rvokal@redhat.com> - 1.2.5-1
 - upgrade to 1.2.5
-- fixes security vulnaribilities, see http://www.wireshark.org/security/wnpa-sec-2009-09.html 
+- fixes security vulnaribilities, see https://www.wireshark.org/security/wnpa-sec-2009-09.html
 
 * Thu Dec 17 2009 Radek Vokal <rvokal@redhat.com> - 1.2.4-3
 - split -devel package (#547899, #203642, #218451)
 - removing root warning dialog (#543709)
 
 * Mon Dec 14 2009 Radek Vokal <rvokal@redhat.com> - 1.2.4-2
-- enable lua support - http://wiki.wireshark.org/Lua
+- enable lua support - https://wiki.wireshark.org/Lua
 - attempt to fix filter crash on 64bits
 
 * Wed Nov 18 2009 Radek Vokal <rvokal@redhat.com> - 1.2.4-1
 - upgrade to 1.2.4
-- http://www.wireshark.org/docs/relnotes/wireshark-1.2.4.html
+- https://www.wireshark.org/docs/relnotes/wireshark-1.2.4.html
 
 * Fri Oct 30 2009 Radek Vokal <rvokal@redhat.com> - 1.2.3-1
 - upgrade to 1.2.3
-- http://www.wireshark.org/docs/relnotes/wireshark-1.2.3.html
+- https://www.wireshark.org/docs/relnotes/wireshark-1.2.3.html
 
 * Mon Sep 21 2009 Radek Vokal <rvokal@redhat.com> - 1.2.2-1
 - upgrade to 1.2.2
-- http://www.wireshark.org/docs/relnotes/wireshark-1.2.2.html
+- https://www.wireshark.org/docs/relnotes/wireshark-1.2.2.html
 
 * Mon Sep 14 2009 Bill Nottingham <notting@redhat.com> - 1.2.1-5
 - do not use portaudio in RHEL
@@ -1008,11 +1013,11 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Wed Jul 22 2009 Radek Vokal <rvokal@redhat.com> - 1.2.1
 - upgrade to 1.2.1
-- http://www.wireshark.org/docs/relnotes/wireshark-1.2.1.html
+- https://www.wireshark.org/docs/relnotes/wireshark-1.2.1.html
 
 * Tue Jun 16 2009 Radek Vokal <rvokal@redhat.com> - 1.2.0
 - upgrade to 1.2.0
-- http://www.wireshark.org/docs/relnotes/wireshark-1.2.0.html
+- https://www.wireshark.org/docs/relnotes/wireshark-1.2.0.html
 
 * Fri May 22 2009 Radek Vokal <rvokal@redhat.com> - 1.1.4-0.pre1
 - update to latest development build
@@ -1047,9 +1052,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 * Wed Sep 10 2008 Radek Vokál <rvokal@redhat.com> 1.0.3-1
 - upgrade to 1.0.3
-- Security-related bugs in the NCP dissector, zlib compression code, and Tektronix .rf5 file parser have been fixed. 
-- WPA group key decryption is now supported. 
-- A bug that could cause packets to be wrongly dissected as "Redback Lawful Intercept" has been fixed. 
+- Security-related bugs in the NCP dissector, zlib compression code, and Tektronix .rf5 file parser have been fixed.
+- WPA group key decryption is now supported.
+- A bug that could cause packets to be wrongly dissected as "Redback Lawful Intercept" has been fixed.
 
 * Mon Aug 25 2008 Radek Vokál <rvokal@redhat.com> 1.0.2-3
 - fix requires for wireshark-gnome
@@ -1064,7 +1069,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 - upgrade to 1.0.1
 
 * Sun Jun 29 2008 Dennis Gilmore <dennis@ausil.us> 1.0.0-3
-- add sparc arches to -fPIE 
+- add sparc arches to -fPIE
 - rebuild for new gnutls
 
 * Tue Apr  1 2008 Radek Vokál <rvokal@redhat.com> 1.0.0-2
@@ -1123,7 +1128,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 - update to 0.99.5 prerelease
 
 * Thu Dec  7 2006 Jeremy Katz <katzj@redhat.com> - 0.99.4-5
-- rebuild for python 2.5 
+- rebuild for python 2.5
 
 * Tue Nov 28 2006 Radek Vokal <rvokal@redhat.com> 0.99.4-4
 - rebuilt for new libpcap and net-snmp
@@ -1132,7 +1137,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 - add htmlview to Buildrequires to be picked up by configure scripts (#216918)
 
 * Tue Nov  7 2006 Radek Vokal <rvokal@redhat.com> 0.99.4-2.fc7
-- Requires: net-snmp for the list of MIB modules 
+- Requires: net-snmp for the list of MIB modules
 
 * Wed Nov  1 2006 Radek Vokál <rvokal@redhat.com> 0.99.4-1
 - upgrade to 0.99.4 final
@@ -1148,7 +1153,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 - Wireshark 0.99.3 fixes the following vulnerabilities:
 - the SCSI dissector could crash. Versions affected: CVE-2006-4330
 - the IPsec ESP preference parser was susceptible to off-by-one errors. CVE-2006-4331
-- a malformed packet could make the Q.2931 dissector use up available memory. CVE-2006-4333 
+- a malformed packet could make the Q.2931 dissector use up available memory. CVE-2006-4333
 
 * Tue Jul 18 2006 Radek Vokál <rvokal@redhat.com> 0.99.2-1
 - upgrade to 0.99.2

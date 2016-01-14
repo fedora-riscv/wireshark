@@ -7,7 +7,7 @@ diff --git a/epan/wslua/template-init.lua b/epan/wslua/template-init.lua
 index 3fe2aca..2b48f9b 100644
 --- a/epan/wslua/template-init.lua
 +++ b/epan/wslua/template-init.lua
-@@ -43,7 +43,7 @@ if running_superuser then
+@@ -41,7 +41,7 @@ if running_superuser then
      local disabled_lib = {}
      setmetatable(disabled_lib,{ __index = function() error("this package ".. hint) end } );
  

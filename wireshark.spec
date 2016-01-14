@@ -2,30 +2,19 @@
 
 %global with_adns 0
 %global with_lua 0
-%global with_gtk2 0
-
-%if 0%{?rhel} != 0
-#RHEL:
-    %global with_portaudio 0
-    %global with_GeoIP 0
-    %if 0%{?rhel} <= 6
-        # RHEL6: use GTK2
-       %global with_gtk2 1
-    %endif
-%else
-    %global with_portaudio 1
-    %global with_GeoIP 1
-%endif
-
+%global with_portaudio 1
+%global with_GeoIP 1
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.12.8
-Release:	2%{?dist}
+Version:	2.0.1
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
+Url:		http://www.wireshark.org/
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
 Source1:	90-wireshark-usbmon.rules
+Requires:	%{name}-cli = %{version}-%{release}
 # Fedora-specific
 Patch1:		wireshark-0001-enable-Lua-support.patch
 # Fedora-specific
@@ -44,12 +33,15 @@ Patch7:		wireshark-0007-Install-autoconf-related-file.patch
 Patch8:		wireshark-0008-move-default-temporary-directory-to-var-tmp.patch
 # Fedora-specific
 Patch9:		wireshark-0009-Fix-paths-in-a-wireshark.desktop-file.patch
-# Backported from upstream - https://code.wireshark.org/review/#/c/10015/
-Patch10:	wireshark-0010-Allow-redefining-all-ports-for-RADIUS.patch
 # Fedora-specific, see https://bugzilla.redhat.com/1274831
-Patch11:	wireshark-0011-Patch-fixing-the-wireshark-autoconf-macros.patch
+Patch10:	wireshark-0010-Patch-fixing-the-wireshark-autoconf-macros.patch
+# Qt-specific
+Patch11:	wireshark-0011-Fix-FTBFS-Qt-Color-utils-arm.patch
 
-Url:		http://www.wireshark.org/
+%package	cli
+Summary:	Network traffic analyzer
+Group:		Applications/Internet
+Requires:	%{name} = %{version}-%{release}
 BuildRequires:	libpcap-devel >= 0.9
 BuildRequires:	libsmi-devel
 BuildRequires:	zlib-devel, bzip2-devel
@@ -76,20 +68,10 @@ BuildRequires:	adns-devel
 %else
 BuildRequires:	c-ares-devel
 %endif
-%if %{with_portaudio}
-BuildRequires:	portaudio-devel
-%endif
 %if %{with_lua}
 BuildRequires:	lua-devel
 %endif
-%if %{with_gtk2}
-BuildRequires:	gtk2-devel
-%else
-BuildRequires:	gtk3-devel
-%endif
 
-# Temporary hack - wireshark-1.8.0 is not compilable with upstream
-# Makefile.in / configure, they need to be regenerated
 BuildRequires: libtool, automake, autoconf
 
 Requires(pre):	shadow-utils
@@ -97,23 +79,48 @@ Requires(pre):	shadow-utils
 Requires:	adns
 %endif
 
-%package	gnome
-Summary:	Gnome desktop integration for wireshark
+%package	qt
+Summary:	Wireshark's Qt-based GUI
 Group:		Applications/Internet
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-cli = %{version}-%{release}
 Requires:	xdg-utils
 Requires:	hicolor-icon-theme
-%if %{with_gtk2}
-Requires:	gtk2
-%else
-Requires:	gtk3
-%endif
+Requires:	qt >= 4.7.0
+BuildRequires:	qt-devel >= 4.7.0
 %if %{with_portaudio}
 Requires:	portaudio
+BuildRequires:	portaudio-devel
 %endif
 %if %{with_GeoIP}
 Requires:	GeoIP
 %endif
+Requires(post):	/usr/sbin/update-alternatives
+Requires(postun):	/usr/sbin/update-alternatives
+BuildRequires:	gcc-c++
+
+%package	gtk
+Summary:	Wireshark's GTK+-based GUI
+Group:		Applications/Internet
+Requires:	%{name}-cli = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
+# This package used to be called wireshark-gnome.
+Provides:	wireshark-gnome = %{version}-%{release}
+Obsoletes:	wireshark-gnome < 2.0.0
+Requires:	gtk3 >= 3.0.0
+BuildRequires:	gtk3-devel > 3.0.0
+%if %{with_portaudio}
+Requires:	portaudio
+BuildRequires:	portaudio-devel
+%endif
+%if %{with_GeoIP}
+Requires:	GeoIP
+%endif
+Requires:	xdg-utils
+Requires:	hicolor-icon-theme
+BuildRequires:	desktop-file-utils
+Requires(post):	desktop-file-utils
+Requires(post):	/usr/sbin/update-alternatives
+Requires(postun):	/usr/sbin/update-alternatives
 
 %package devel
 Summary:	Development headers and libraries for wireshark
@@ -122,15 +129,27 @@ Requires:	%{name} = %{version}-%{release} glibc-devel glib2-devel
 
 
 %description
-Wireshark is a network traffic analyzer for Unix-ish operating systems.
+Metapackage with installs %{name}-cli and %{name}-qt.
 
-This package lays base for libpcap, a packet capture and filtering
-library, contains command-line utilities, contains plugins and
-documentation for wireshark. A graphical user interface is packaged
-separately to GTK+ package.
+%description cli
+Wireshark allows you to examine protocol data stored in files or as it is
+captured from wired or wireless (WiFi or Bluetooth) networks, USB devices,
+and many other sources.  It supports dozens of protocol capture file formats
+and understands more than a thousand protocols.
 
-%description gnome
-Contains wireshark for Gnome 2 and desktop integration file
+It has many powerful features including a rich display filter language
+and the ability to reassemble multiple protocol packets in order to, for
+example, view a complete TCP stream, save the contents of a file which was
+transferred over HTTP or CIFS, or play back an RTP audio stream.
+
+This package contains command-line utilities, plugins, and documentation for
+Wireshark. A Qt graphical user interface is packaged separately.
+
+%description qt
+This package contains the Qt Wireshark GUI and desktop integration files.
+
+%description gtk
+This package contains the GTK+ Wireshark GUI and desktop integration files.
 
 %description devel
 The wireshark-devel package contains the header files, developer
@@ -149,29 +168,12 @@ and plugins.
 %patch3 -p1 -b .profinet_crash
 %patch4 -p1 -b .add_autoconf
 %patch5 -p1 -b .restore_group
-
-# Somebody forgot to add this file into tarball (fixed in wireshark-1.12.1)
-echo "prefix=@CMAKE_INSTALL_PREFIX@
-exec_prefix=\${prefix}
-libdir=\${prefix}/@CMAKE_INSTALL_LIBDIR@
-sharedlibdir=\${libdir}
-includedir=\${prefix}/include/wireshark
-plugindir=@PLUGIN_INSTALL_DIR@
-
-Name: wireshark
-Description: wireshark network packet dissection library
-Version: @PROJECT_VERSION@
-
-Requires:
-Libs: -L\${libdir} -L\${sharedlibdir} -lwireshark
-Cflags: -I\${includedir}" > wireshark.pc.in
-
 %patch6 -p1 -b .add_pkgconfig
 %patch7 -p1 -b .install_autoconf
 %patch8 -p1 -b .tmp_dir
 %patch9 -p1 -b .fix_paths
-%patch10 -p1 -b .radius_ports
-%patch11 -p1 -b .64bit
+%patch10 -p1 -b .64bit
+%patch11 -p1 -b .ftbfs_arm
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -193,12 +195,8 @@ autoreconf -ivf
    --with-libsmi \
    --with-gnu-ld \
    --with-pic \
-%if %{with_gtk2}
-   --with-gtk2 \
-   --with-gtk3=no \
-%else
-   --with-gtk3=yes \
-%endif
+   --with-gtk3 \
+   --with-qt \
 %if %{with_adns}
    --with-adns \
 %else
@@ -222,7 +220,8 @@ autoreconf -ivf
    --with-ssl \
    --disable-warnings-as-errors \
    --with-plugins=%{_libdir}/%{name}/plugins \
-   --with-libnl
+   --with-libnl \
+   --disable-androiddump
 
 #remove rpath
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
@@ -232,13 +231,13 @@ make %{?_smp_mflags}
 
 %install
 make DESTDIR=%{buildroot} install
-make DESTDIR=%{buildroot} install_desktop_files
 
 # Install python stuff.
 mkdir -p %{buildroot}%{python_sitearch}
 install -m 644 tools/wireshark_be.py tools/wireshark_gen.py  %{buildroot}%{python_sitearch}
 
 desktop-file-validate %{buildroot}%{_datadir}/applications/wireshark.desktop
+desktop-file-validate %{buildroot}%{_datadir}/applications/wireshark-gtk.desktop
 
 #install devel files (inspired by debian/wireshark-dev.header-files)
 install -d -m 0755  %{buildroot}%{_includedir}/wireshark
@@ -264,6 +263,11 @@ install -m 644 wiretap/*.h			"${IDIR}/wiretap"
 install -m 644 wsutil/*.h			"${IDIR}/wsutil"
 install -m 644 ws_symbol_export.h               "${IDIR}/"
 install -m 644 %{SOURCE1}                       %{buildroot}/%{_sysconfdir}/udev/rules.d/
+
+# Change the program name for 'alternatives'
+mv %{buildroot}%{_sbindir}/wireshark %{buildroot}%{_sbindir}/wireshark-qt
+
+touch %{buildroot}%{_sbindir}/%{name}
 
 # Register as an application to be visible in the software center
 #
@@ -309,25 +313,53 @@ rm -f %{buildroot}%{_libdir}/%{name}/plugins/*.la
 # Remove .la files in libdir
 rm -f %{buildroot}%{_libdir}/*.la
 
-%pre
+# Remove idl2wrs
+rm -f %{buildroot}%{_sbindir}/idl2wrs
+
+%pre cli
 getent group wireshark >/dev/null || groupadd -r wireshark
 getent group usbmon >/dev/null || groupadd -r usbmon
 
-%post
+# If we have a pre-alternatives wireshark binary out there, get rid of it.
+# (With 'alternatives' %{_sbindir}/wireshark should be a symlink.)
+%pre gtk
+if [ -f %{_sbindir}/wireshark ]; then
+	rm -f %{_sbindir}/wireshark
+fi
+
+# If we have a pre-alternatives wireshark binary out there, get rid of it.
+# (With 'alternatives' %{_sbindir}/wireshark should be a symlink.)
+%pre qt
+if [ -f %{_sbindir}/wireshark ]; then
+	rm -f %{_sbindir}/wireshark
+fi
+
+%post cli
 /sbin/ldconfig
 /usr/bin/udevadm trigger --subsystem-match=usbmon
 
-%postun -p /sbin/ldconfig
-
-%post gnome
-update-desktop-database &> /dev/null ||:
+%post gtk
+update-desktop-database %{_datadir}/applications &> /dev/null || :
+update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 touch --no-create %{_datadir}/icons/gnome &>/dev/null || :
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 touch --no-create %{_datadir}/mime/packages &> /dev/null || :
-update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
+gtk-update-icon-cache -t %{_datadir}/icons/hicolor &>/dev/null || :
+/usr/sbin/update-alternatives --install %{_sbindir}/wireshark \
+	%{name} %{_sbindir}/wireshark-gtk 10
 
-%postun gnome
+%post qt
 update-desktop-database &> /dev/null ||:
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+touch --no-create %{_datadir}/mime/packages &> /dev/null || :
+update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
+/usr/sbin/update-alternatives --install %{_sbindir}/wireshark \
+	%{name} %{_sbindir}/wireshark-qt 50
+
+%postun cli -p /sbin/ldconfig
+
+%postun gtk
+update-desktop-database &> /dev/null || :
 if [ $1 -eq 0 ] ; then
 	touch --no-create %{_datadir}/icons/gnome &>/dev/null
 	gtk-update-icon-cache %{_datadir}/icons/gnome &>/dev/null || :
@@ -337,14 +369,24 @@ if [ $1 -eq 0 ] ; then
 
         touch --no-create %{_datadir}/mime/packages &> /dev/null || :
         update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
+
+	/usr/sbin/update-alternatives --remove %{name} %{_sbindir}/wireshark-gtk
 fi
 
-%posttrans
+%postun qt
+update-desktop-database &> /dev/null || :
+if [ $1 -eq 0 ] ; then
+        /usr/sbin/update-alternatives --remove %{name} %{_sbindir}/wireshark-qt
+fi
+
+%posttrans cli
 gtk-update-icon-cache %{_datadir}/icons/gnome &>/dev/null || :
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 %files
+
+%files cli
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README*
 %{_sbindir}/editcap
 %{_sbindir}/tshark
@@ -360,8 +402,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_sysconfdir}/udev/rules.d/90-wireshark-usbmon.rules
 %{python_sitearch}/*.py*
 %{_libdir}/lib*.so.*
-%{_libdir}/wireshark
-%{_libdir}/wireshark/plugins
+%dir %{_libdir}/wireshark
+%dir %{_libdir}/wireshark/plugins
+%{_libdir}/wireshark/plugins/*.so
 %{_mandir}/man1/editcap.*
 %{_mandir}/man1/tshark.*
 %{_mandir}/man1/mergecap.*
@@ -373,33 +416,33 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_mandir}/man1/dftest.*
 %{_mandir}/man1/randpkt.*
 %{_mandir}/man1/reordercap.*
-%{_datadir}/wireshark
+%dir %{_datadir}/wireshark
+%{_datadir}/wireshark/*
 %if %{with_lua}
 %exclude %{_datadir}/wireshark/init.lua
 %endif
 
-
-%files gnome
+%files gtk
 %{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/wireshark.desktop
-%{_datadir}/icons/hicolor/16x16/apps/wireshark.png
-%{_datadir}/icons/hicolor/24x24/apps/wireshark.png
-%{_datadir}/icons/hicolor/32x32/apps/wireshark.png
-%{_datadir}/icons/hicolor/48x48/apps/wireshark.png
-%{_datadir}/icons/hicolor/64x64/apps/wireshark.png
-%{_datadir}/icons/hicolor/128x128/apps/wireshark.png
-%{_datadir}/icons/hicolor/256x256/apps/wireshark.png
-%{_datadir}/icons/hicolor/16x16/mimetypes/application-wireshark-doc.png
-%{_datadir}/icons/hicolor/24x24/mimetypes/application-wireshark-doc.png
-%{_datadir}/icons/hicolor/32x32/mimetypes/application-wireshark-doc.png
-%{_datadir}/icons/hicolor/48x48/mimetypes/application-wireshark-doc.png
-%{_datadir}/icons/hicolor/64x64/mimetypes/application-wireshark-doc.png
-%{_datadir}/icons/hicolor/128x128/mimetypes/application-wireshark-doc.png
-%{_datadir}/icons/hicolor/256x256/mimetypes/application-wireshark-doc.png
+%{_datadir}/applications/wireshark-gtk.desktop
+%{_datadir}/icons/hicolor/*/apps/*
+%{_datadir}/icons/hicolor/*/mimetypes/*
 %{_datadir}/icons/hicolor/scalable/apps/wireshark.svg
 %{_datadir}/mime/packages/wireshark.xml
-%{_sbindir}/wireshark
+%{_sbindir}/wireshark-gtk
 %{_mandir}/man1/wireshark.*
+%ghost %{_sbindir}/wireshark
+
+%files qt
+%{_datadir}/appdata/%{name}.appdata.xml
+%{_datadir}/applications/wireshark.desktop
+%{_datadir}/icons/hicolor/*/apps/*
+%{_datadir}/icons/hicolor/*/mimetypes/*
+%{_datadir}/icons/hicolor/scalable/apps/wireshark.svg
+%{_datadir}/mime/packages/wireshark.xml
+%{_sbindir}/wireshark-qt
+%{_mandir}/man1/wireshark.*
+%ghost %{_sbindir}/wireshark
 
 %files devel
 %doc doc/README.*
@@ -412,6 +455,11 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Jan 14 2016 Peter Hatina <phatina@redhat.com> - 2.0.1-1
+- Ver. 2.0.1
+- Introduced wireshark metapackage for wireshark-cli and wireshark-gtk
+- wireshark-qt and wireshark-gtk contain the GUI applications
+
 * Tue Nov  3 2015 Peter Lemenkov <lemenkov@gmail.com> - 1.12.8-2
 - Fixed Wireshark detection in external projects using wireshark.m4 script.
   See https://bugzilla.redhat.com/1274831 for further details.

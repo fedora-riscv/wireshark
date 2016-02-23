@@ -55,6 +55,6 @@ index 826b230..fec2d25 100644
 -Cflags: -I${includedir}
 +Description: Network Traffic Analyzer
 +Version: @PACKAGE_VERSION@
-+Requires: Qt
++Requires: Qt glib-2.0 gmodule-2.0
 +Libs: -L@libdir@ -lwireshark -lwiretap
 +Cflags: -DWS_VAR_IMPORT=extern -DHAVE_STDARG_H -DWS_MSVC_NORETURN= -I@includedir@/wireshark -I@includedir@/wireshark/epan

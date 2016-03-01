@@ -20,7 +20,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	1.12.9
+Version:	1.12.10
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -395,6 +395,10 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Mar  1 2016 Peter Hatina <phatina@redhat.com> - 1.12.10-1
+- Ver. 1.12.10
+- See https://www.wireshark.org/docs/relnotes/wireshark-1.12.10.html
+
 * Fri Jan  8 2016 Peter Lemenkov <lemenkov@gmail.com> - 1.12.9-1
 - Ver. 1.12.9
 - See https://www.wireshark.org/docs/relnotes/wireshark-1.12.9.html

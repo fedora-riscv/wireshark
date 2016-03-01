@@ -7,8 +7,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.0.1
-Release:	3%{?dist}
+Version:	2.0.2
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -455,6 +455,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/aclocal/*
 
 %changelog
+* Tue Mar 01 2016 Peter Hatina <phatina@redhat.com> - 2.0.2-1
+- Ver. 2.0.2
+
 * Tue Feb 23 2016 Peter Hatina <phatina@redhat.com> - 2.0.1-3
 - Fix missing Requires in wireshark.pc
 

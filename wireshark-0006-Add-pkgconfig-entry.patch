@@ -22,7 +22,7 @@ diff --git a/configure.ac b/configure.ac
 index dc8c307..dedd1a4 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -3101,6 +3101,7 @@ AC_CONFIG_HEADERS(config.h)
+@@ -3095,6 +3095,7 @@ AC_CONFIG_HEADERS(config.h)
  AC_OUTPUT(
    Makefile
    doxygen.cfg

@@ -15,7 +15,7 @@ diff --git a/ui/qt/main_window_slots.cpp b/ui/qt/main_window_slots.cpp
 index 3c9a616..56dd3ea 100644
 --- a/ui/qt/main_window_slots.cpp
 +++ b/ui/qt/main_window_slots.cpp
-@@ -2226,7 +2226,7 @@ void MainWindow::zoomText()
+@@ -2171,7 +2171,7 @@ void MainWindow::zoomText()
      mono_font_ = QFont(wsApp->monospaceFont());
      qreal zoom_size = wsApp->monospaceFont().pointSize() * 2 * qPow(1.1, recent.gui_zoom_level);
      zoom_size = qRound(zoom_size) / 2.0;

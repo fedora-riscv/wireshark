@@ -1,22 +1,22 @@
-commit b32de2f6e35b4e7d6ea4d0477db91b12861c09d6
+commit 26725d2cdac4bca0f779cf6fbbcd96a00912d1b9
 Author: Peter Hatina <phatina@gmail.com>
 Date:   Tue Jan 12 13:56:59 2016 +0100
 
     Move default temporary directory to /var/tmp
 
 diff --git a/ui/gtk/about_dlg.c b/ui/gtk/about_dlg.c
-index 0ed474a..fb3275b 100644
+index 06c1d9a..bf521f1 100644
 --- a/ui/gtk/about_dlg.c
 +++ b/ui/gtk/about_dlg.c
-@@ -30,6 +30,7 @@
+@@ -29,6 +29,7 @@
+ 
  #include <wsutil/filesystem.h>
  #include <wsutil/copyright_info.h>
- #include <wsutil/ws_version_info.h>
-+#include <wsutil/wstmpdir.h> /* for get_tmp_dir() */
++#include <wsutil/wstmpdir.h> /* for get_tmp_dor() */
+ #include <ws_version_info.h>
  #ifdef HAVE_LIBSMI
  #include <epan/oids.h>
- #endif
-@@ -407,7 +408,7 @@ about_folders_page_new(void)
+@@ -413,7 +414,7 @@ about_folders_page_new(void)
        "capture files");
  
    /* temp */
@@ -26,11 +26,11 @@ index 0ed474a..fb3275b 100644
  
    /* pers conf */
 diff --git a/ui/gtk/proto_help.c b/ui/gtk/proto_help.c
-index 79cafd4..47eec6c 100644
+index 8632feb..dc9a2a0 100644
 --- a/ui/gtk/proto_help.c
 +++ b/ui/gtk/proto_help.c
 @@ -37,6 +37,8 @@
- #include "../file.h"
+ #include "../../file.h"
  
  
 +#include <wsutil/wstmpdir.h> /* for get_tmp_dir() */
@@ -48,7 +48,7 @@ index 79cafd4..47eec6c 100644
  
  	for (i = 0; i < PH_CONF_DIRS; i++) {
 diff --git a/ui/qt/about_dialog.cpp b/ui/qt/about_dialog.cpp
-index c0899a0..4fada89 100644
+index 733fc55..a1068cd 100644
 --- a/ui/qt/about_dialog.cpp
 +++ b/ui/qt/about_dialog.cpp
 @@ -49,6 +49,7 @@
@@ -58,8 +58,8 @@ index c0899a0..4fada89 100644
 +#include "wsutil/wstmpdir.h" /* for get_tmp_dir() */
  #include "wsutil/plugins.h"
  #include "wsutil/copyright_info.h"
- #include "wsutil/ws_version_info.h"
-@@ -184,7 +185,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
+ #include "ws_version_info.h"
+@@ -210,7 +211,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
      message += about_folders_row("\"File\" dialogs", get_last_open_dir(), "capture files");
  
      /* temp */
@@ -69,7 +69,7 @@ index c0899a0..4fada89 100644
      /* pers conf */
      message += about_folders_row("Personal configuration",
 diff --git a/ui/qt/iax2_analysis_dialog.cpp b/ui/qt/iax2_analysis_dialog.cpp
-index e1ef186..b672b31 100644
+index eb76952..bb815f6 100644
 --- a/ui/qt/iax2_analysis_dialog.cpp
 +++ b/ui/qt/iax2_analysis_dialog.cpp
 @@ -41,6 +41,8 @@
@@ -95,7 +95,7 @@ index e1ef186..b672b31 100644
      rev_tempfile_->open();
  
 diff --git a/ui/qt/rtp_analysis_dialog.cpp b/ui/qt/rtp_analysis_dialog.cpp
-index 87322df..fbe9ffa 100644
+index e12da20..87be751 100644
 --- a/ui/qt/rtp_analysis_dialog.cpp
 +++ b/ui/qt/rtp_analysis_dialog.cpp
 @@ -38,6 +38,8 @@
@@ -107,7 +107,7 @@ index 87322df..fbe9ffa 100644
  #include <QFileDialog>
  #include <QMessageBox>
  #include <QPushButton>
-@@ -321,10 +323,10 @@ RtpAnalysisDialog::RtpAnalysisDialog(QWidget &parent, CaptureFile &cf, struct _r
+@@ -323,10 +325,10 @@ RtpAnalysisDialog::RtpAnalysisDialog(QWidget &parent, CaptureFile &cf, struct _r
  
      // We keep our temp files open for the lifetime of the dialog. The GTK+
      // UI opens and closes at various points.
@@ -121,10 +121,10 @@ index 87322df..fbe9ffa 100644
      rev_tempfile_->open();
  
 diff --git a/ui/qt/rtp_audio_stream.cpp b/ui/qt/rtp_audio_stream.cpp
-index 1346a4d..4d34a3b 100644
+index 7bd072e..db9bd85 100644
 --- a/ui/qt/rtp_audio_stream.cpp
 +++ b/ui/qt/rtp_audio_stream.cpp
-@@ -33,6 +33,7 @@
+@@ -37,6 +37,7 @@
  #include <ui/rtp_stream.h>
  
  #include <wsutil/nstime.h>
@@ -132,9 +132,9 @@ index 1346a4d..4d34a3b 100644
  
  #include <QAudioFormat>
  #include <QAudioOutput>
-@@ -71,7 +72,7 @@ RtpAudioStream::RtpAudioStream(QObject *parent, _rtp_stream_info *rtp_stream) :
+@@ -75,7 +76,7 @@ RtpAudioStream::RtpAudioStream(QObject *parent, _rtp_stream_info *rtp_stream) :
                                                  visual_sample_rate_, SPEEX_RESAMPLER_QUALITY_MIN, NULL);
-     ws_codec_resampler_skip_zeros(visual_resampler_);
+     speex_resampler_skip_zeros(visual_resampler_);
  
 -    QString tempname = QString("%1/wireshark_rtp_stream").arg(QDir::tempPath());
 +    QString tempname = QString("%1/wireshark_rtp_stream").arg(get_tmp_dir());
@@ -142,34 +142,34 @@ index 1346a4d..4d34a3b 100644
      tempfile_->open();
  
 diff --git a/wsutil/Makefile.common b/wsutil/Makefile.common
-index e24f015..49f0a95 100644
+index 4913be5..8a78194 100644
 --- a/wsutil/Makefile.common
 +++ b/wsutil/Makefile.common
-@@ -71,7 +71,8 @@ LIBWSUTIL_SRC = 	\
- 	ws_mempbrk.c	\
- 	u3.c		\
+@@ -71,7 +71,8 @@ LIBWSUTIL_COMMON_SRC = \
+ 	time_util.c	\
+ 	type_util.c	\
  	unicode-utils.c	\
--	ws_version_info.c
-+	ws_version_info.c \
+-	ws_mempbrk.c
++	ws_mempbrk.c	\
 +	wstmpdir.c
  
  # Header files that don't declare replacement functions for functions
  # present in the APIs/ABIs of some, but not all, targets.
 @@ -128,7 +129,8 @@ libwsutil_nonrepl_INCLUDES = \
- 	ws_diag_control.h \
+ 	utf8_entities.h	\
+ 	ws_cpuid.h	\
  	ws_mempbrk.h	\
- 	ws_mempbrk_int.h	\
--	ws_version_info.h
-+	ws_version_info.h \
+-	ws_mempbrk_int.h
++	ws_mempbrk_int.h\
 +	wstmpdir.h
  
  # Header files that are not generated from other files
- LIBWSUTIL_INCLUDES = 	\
+ LIBWSUTIL_COMMON_INCLUDES = \
 diff --git a/wsutil/tempfile.c b/wsutil/tempfile.c
-index 93bd66f..757b6c8 100644
+index 7391fbf..9add952 100644
 --- a/wsutil/tempfile.c
 +++ b/wsutil/tempfile.c
-@@ -44,6 +44,7 @@
+@@ -36,6 +36,7 @@
  
  #include "tempfile.h"
  #include <wsutil/file_util.h>
@@ -177,7 +177,7 @@ index 93bd66f..757b6c8 100644
  
  #ifndef __set_errno
  #define __set_errno(x) errno=(x)
-@@ -146,7 +147,7 @@ mkdtemp (char *path_template)
+@@ -142,7 +143,7 @@ mkdtemp (char *path_template)
   */
  char *get_tempfile_path(const char *filename)
  {
@@ -186,7 +186,7 @@ index 93bd66f..757b6c8 100644
  }
  
  #define MAX_TEMPFILES   3
-@@ -203,7 +204,7 @@ create_tempfile(char **namebuf, const char *pfx)
+@@ -198,7 +199,7 @@ create_tempfile(char **namebuf, const char *pfx, const char *sfx)
      tf[idx].path = (char *)g_malloc(tf[idx].len);
    }
  
@@ -195,7 +195,7 @@ index 93bd66f..757b6c8 100644
  
  #ifdef _WIN32
    _tzset();
-@@ -237,7 +238,7 @@ create_tempfile(char **namebuf, const char *pfx)
+@@ -232,7 +233,7 @@ create_tempfile(char **namebuf, const char *pfx, const char *sfx)
  
  /**
   * Create a directory with the given prefix (e.g. "wireshark"). The path
@@ -204,7 +204,7 @@ index 93bd66f..757b6c8 100644
   *
   * @param namebuf
   * @param pfx A prefix for the temporary directory.
-@@ -265,7 +266,7 @@ create_tempdir(char **namebuf, const char *pfx)
+@@ -260,7 +261,7 @@ create_tempdir(char **namebuf, const char *pfx)
    /*
     * We can't use get_tempfile_path here because we're called from dumpcap.c.
     */
@@ -214,7 +214,7 @@ index 93bd66f..757b6c8 100644
    while (g_snprintf(td_path[idx], td_path_len[idx], "%s%c%s" TMP_FILE_SUFFIX, tmp_dir, G_DIR_SEPARATOR, pfx) > td_path_len[idx]) {
      td_path_len[idx] *= 2;
 diff --git a/wsutil/tempfile.h b/wsutil/tempfile.h
-index f595632..5e22227 100644
+index 1dca2df..bb3160c 100644
 --- a/wsutil/tempfile.h
 +++ b/wsutil/tempfile.h
 @@ -45,7 +45,7 @@ WS_DLL_PUBLIC char *get_tempfile_path(const char *filename);
@@ -226,7 +226,7 @@ index f595632..5e22227 100644
   *
   * @param namebuf [in,out] If not NULL, receives the full path of the temp file.
   *                Must NOT be freed.
-@@ -56,7 +56,7 @@ WS_DLL_PUBLIC int create_tempfile(char **namebuf, const char *pfx);
+@@ -58,7 +58,7 @@ WS_DLL_PUBLIC int create_tempfile(char **namebuf, const char *pfx, const char *s
  
  /**
   * Create a directory with the given prefix (e.g. "wireshark"). The path

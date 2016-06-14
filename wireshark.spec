@@ -7,7 +7,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.0.3
+Version:	2.1.0
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -27,16 +27,12 @@ Patch4:		wireshark-0004-adds-autoconf-macro-file.patch
 Patch5:		wireshark-0005-Restore-Fedora-specific-groups.patch
 # Will be proposed upstream
 Patch6:		wireshark-0006-Add-pkgconfig-entry.patch
-# Will be proposed upstream
-Patch7:		wireshark-0007-Install-autoconf-related-file.patch
 # Fedora-specific
 Patch8:		wireshark-0008-move-default-temporary-directory-to-var-tmp.patch
 # Fedora-specific
 Patch9:		wireshark-0009-Fix-paths-in-a-wireshark.desktop-file.patch
 # Fedora-specific, see https://bugzilla.redhat.com/1274831
 Patch10:	wireshark-0010-Patch-fixing-the-wireshark-autoconf-macros.patch
-# Qt-specific
-Patch11:	wireshark-0011-Fix-FTBFS-Qt-Color-utils-arm.patch
 
 %package	cli
 Summary:	Network traffic analyzer
@@ -169,11 +165,9 @@ and plugins.
 %patch4 -p1 -b .add_autoconf
 %patch5 -p1 -b .restore_group
 %patch6 -p1 -b .add_pkgconfig
-%patch7 -p1 -b .install_autoconf
 %patch8 -p1 -b .tmp_dir
 %patch9 -p1 -b .fix_paths
 %patch10 -p1 -b .64bit
-%patch11 -p1 -b .ftbfs_arm
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
@@ -221,7 +215,8 @@ autoreconf -ivf
    --disable-warnings-as-errors \
    --with-plugins=%{_libdir}/%{name}/plugins \
    --with-libnl \
-   --disable-androiddump
+   --disable-androiddump \
+   --disable-randpktdump
 
 #remove rpath
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
@@ -251,7 +246,7 @@ mkdir -p "${IDIR}/epan/wmem"
 mkdir -p "${IDIR}/wiretap"
 mkdir -p "${IDIR}/wsutil"
 mkdir -p %{buildroot}/%{_sysconfdir}/udev/rules.d
-install -m 644 color.h config.h register.h	"${IDIR}/"
+install -m 644 config.h register.h		"${IDIR}/"
 install -m 644 cfile.h file.h			"${IDIR}/"
 install -m 644 epan/*.h				"${IDIR}/epan/"
 install -m 644 epan/crypt/*.h			"${IDIR}/epan/crypt"
@@ -416,6 +411,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_mandir}/man1/dftest.*
 %{_mandir}/man1/randpkt.*
 %{_mandir}/man1/reordercap.*
+%{_mandir}/man4/extcap.*
 %dir %{_datadir}/wireshark
 %{_datadir}/wireshark/*
 %if %{with_lua}
@@ -452,9 +448,13 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_includedir}/wireshark
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*
-%{_datadir}/aclocal/*
+#%{_datadir}/aclocal/*
 
 %changelog
+* Tue Jun 14 2016 Peter Hatina <phatina@gmail.com> - 2.1.0-1
+- Ver. 2.1.0
+- See https://www.wireshark.org/docs/relnotes/wireshark-2.1.0.html
+
 * Thu Apr 28 2016 Peter Hatina <phatina@redhat.com> - 2.0.3-1
 - Ver. 2.0.3
 

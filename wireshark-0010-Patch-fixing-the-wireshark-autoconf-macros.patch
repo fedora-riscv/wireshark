@@ -10,10 +10,10 @@ epan/epan.h include is missing in configuration test program. This is
 needed to define epan_get_version() as char *. Failure to doing so uses
 a 32-bit integer as a string address --> segfault.
 
-diff --git a/wireshark.m4 b/wireshark.m4
+diff --git a/wireshark-autoconf.m4 b/wireshark-autoconf.m4
 index d8015d8..6d7b177 100644
---- a/wireshark.m4
-+++ b/wireshark.m4
+--- a/wireshark-autoconf.m4
++++ b/wireshark-autoconf.m4
 @@ -33,6 +33,7 @@ AC_DEFUN([AM_PATH_WIRESHARK],[
  #include <gmodule.h>
  #include <epan/packet.h>

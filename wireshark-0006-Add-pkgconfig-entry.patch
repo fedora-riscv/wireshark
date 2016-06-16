@@ -8,7 +8,7 @@ diff --git a/Makefile.am b/Makefile.am
 index 913e064..30f8107 100644
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -55,6 +55,9 @@ EXTRA_PROGRAMS = wireshark-gtk wireshark tshark tfshark capinfos captype editcap
+@@ -57,6 +57,9 @@ EXTRA_PROGRAMS = wireshark-gtk wireshark tshark tfshark capinfos captype editcap
  dist_pkgdata_DATA = COPYING manuf services cfilters colorfilters dfilters \
  	smi_modules ipmap.html pdml2html.xsl
  
@@ -18,43 +18,22 @@ index 913e064..30f8107 100644
  #
  # Install global profiles in the "profiles" subdirectory
  #
-diff --git a/configure.ac b/configure.ac
-index dc8c307..dedd1a4 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -3095,6 +3095,7 @@ AC_CONFIG_HEADERS(config.h)
- AC_OUTPUT(
-   Makefile
-   doxygen.cfg
-+  wireshark.pc
-   asn1/Makefile
-   _CUSTOM_ASN1_AC_OUTPUT_
-   asn1/acp133/Makefile
 diff --git a/wireshark.pc.in b/wireshark.pc.in
-index 826b230..fec2d25 100644
+index 5889178..1e1b62f 100644
 --- a/wireshark.pc.in
 +++ b/wireshark.pc.in
-@@ -1,14 +1,11 @@
--prefix=@CMAKE_INSTALL_PREFIX@
--exec_prefix=${prefix}
--libdir=@ABSOLUTE_CMAKE_INSTALL_LIBDIR@
--sharedlibdir=${libdir}
--includedir=${prefix}/include/wireshark
--plugindir=@PLUGIN_INSTALL_DIR@
-+prefix=@prefix@
-+exec_prefix=@exec_prefix@
-+libdir=@libdir@
-+includedir=@includedir@
+@@ -6,9 +6,9 @@ sharedlibdir=${libdir}
+ plugindir=@plugindir@
  
- Name: wireshark
--Description: wireshark network packet dissection library
--Version: @PROJECT_VERSION@
--
--Requires:
--Libs: -L${libdir} -L${sharedlibdir} -lwireshark
--Cflags: -I${includedir}
+ Name: Wireshark
+-Description: Network Packet Dissection Library
+-Version: @VERSION@
 +Description: Network Traffic Analyzer
 +Version: @PACKAGE_VERSION@
-+Requires: Qt glib-2.0 gmodule-2.0
+ 
+-Requires: glib-2.0, gmodule-2.0, gthread-2.0
+-Libs: -L${libdir} -lwireshark
+-Cflags: -I${includedir}/wireshark
++Requires: Qt, glib-2.0, gmodule-2.0, gthread-2.0
 +Libs: -L@libdir@ -lwireshark -lwiretap
 +Cflags: -DWS_VAR_IMPORT=extern -DHAVE_STDARG_H -DWS_MSVC_NORETURN= -I@includedir@/wireshark -I@includedir@/wireshark/epan

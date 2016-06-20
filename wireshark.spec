@@ -8,7 +8,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.1.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -248,6 +248,7 @@ mkdir -p "${IDIR}/wsutil"
 mkdir -p %{buildroot}/%{_sysconfdir}/udev/rules.d
 install -m 644 config.h register.h		"${IDIR}/"
 install -m 644 cfile.h file.h			"${IDIR}/"
+install -m 644 ws_symbol_export.h		"${IDIR}/"
 install -m 644 epan/*.h				"${IDIR}/epan/"
 install -m 644 epan/crypt/*.h			"${IDIR}/epan/crypt"
 install -m 644 epan/ftypes/*.h			"${IDIR}/epan/ftypes"
@@ -450,6 +451,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/*
 
 %changelog
+* Mon Jun 20 2016 Peter Hatina <phatina@gmail.com> - 2.1.0-2
+- Install ws_diag_control.h into standard include directory
+
 * Thu Jun 16 2016 Peter Hatina <phatina@gmail.com> - 2.1.0-1
 - Ver. 2.1.0
 - See https://www.wireshark.org/docs/relnotes/wireshark-2.1.0.html

@@ -4,20 +4,6 @@ Date:   Wed Jan 6 09:37:49 2016 +0100
 
     Add pkgconfig entry
 
-diff --git a/Makefile.am b/Makefile.am
-index 913e064..30f8107 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -57,6 +57,9 @@ EXTRA_PROGRAMS = wireshark-gtk wireshark tshark tfshark capinfos captype editcap
- dist_pkgdata_DATA = COPYING manuf services cfilters colorfilters dfilters \
- 	smi_modules ipmap.html pdml2html.xsl
- 
-+pkgconfigdir = $(libdir)/pkgconfig
-+pkgconfig_DATA = wireshark.pc
-+
- #
- # Install global profiles in the "profiles" subdirectory
- #
 diff --git a/wireshark.pc.in b/wireshark.pc.in
 index 5889178..1e1b62f 100644
 --- a/wireshark.pc.in

@@ -16,7 +16,7 @@ index 06c1d9a..bf521f1 100644
  #include <ws_version_info.h>
  #ifdef HAVE_LIBSMI
  #include <epan/oids.h>
-@@ -413,7 +414,7 @@ about_folders_page_new(void)
+@@ -421,7 +422,7 @@ about_folders_page_new(void)
        "capture files");
  
    /* temp */
@@ -59,7 +59,7 @@ index 733fc55..a1068cd 100644
  #include "wsutil/plugins.h"
  #include "wsutil/copyright_info.h"
  #include "ws_version_info.h"
-@@ -210,7 +211,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
+@@ -213,7 +214,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
      message += about_folders_row("\"File\" dialogs", get_last_open_dir(), "capture files");
  
      /* temp */
@@ -141,30 +141,30 @@ index 7bd072e..db9bd85 100644
      tempfile_ = new QTemporaryFile(tempname, this);
      tempfile_->open();
  
-diff --git a/wsutil/Makefile.common b/wsutil/Makefile.common
-index 4913be5..8a78194 100644
---- a/wsutil/Makefile.common
-+++ b/wsutil/Makefile.common
-@@ -71,7 +71,8 @@ LIBWSUTIL_COMMON_SRC = \
- 	time_util.c	\
- 	type_util.c	\
- 	unicode-utils.c	\
--	ws_mempbrk.c
-+	ws_mempbrk.c	\
-+	wstmpdir.c
- 
- # Header files that don't declare replacement functions for functions
- # present in the APIs/ABIs of some, but not all, targets.
-@@ -128,7 +129,8 @@ libwsutil_nonrepl_INCLUDES = \
- 	utf8_entities.h	\
- 	ws_cpuid.h	\
- 	ws_mempbrk.h	\
+diff --git a/wsutil/Makefile.am b/wsutil/Makefile.am
+index 95c57d2..acd7837 100644
+--- a/wsutil/Makefile.am
++++ b/wsutil/Makefile.am
+@@ -89,7 +89,8 @@ libwsutil_nonrepl_INCLUDES = \
+ 	utf8_entities.h		\
+ 	ws_cpuid.h		\
+ 	ws_mempbrk.h		\
 -	ws_mempbrk_int.h
-+	ws_mempbrk_int.h\
++	ws_mempbrk_int.h	\
 +	wstmpdir.h
  
- # Header files that are not generated from other files
- LIBWSUTIL_COMMON_INCLUDES = \
+ # Header files for functions in libwsutil's ABI on this platform.
+ libwsutil_abi_INCLUDES = \
+@@ -154,7 +155,8 @@ libwsutil_la_SOURCES = \
+ 	time_util.c		\
+ 	type_util.c		\
+ 	unicode-utils.c		\
+-	ws_mempbrk.c
++	ws_mempbrk.c		\
++	wstmpdir.c
+ 
+ if HAVE_OS_X_FRAMEWORKS
+ libwsutil_la_SOURCES += cfutils.c cfutils.h
 diff --git a/wsutil/tempfile.c b/wsutil/tempfile.c
 index 7391fbf..9add952 100644
 --- a/wsutil/tempfile.c

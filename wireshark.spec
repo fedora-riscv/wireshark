@@ -7,8 +7,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.1.0
-Release:	3%{?dist}
+Version:	2.1.1
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -451,6 +451,10 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/*
 
 %changelog
+* Sun Jul 24 2016 Peter Hatina <phatina@gmail.com> - 2.1.1-1
+- Ver. 2.1.1
+- See https://www.wireshark.org/docs/relnotes/wireshark-2.1.1.html
+
 * Wed Jul 13 2016 Peter Hatina <phatina@gmail.com> - 2.1.0-3
 - Fix typo, install ws_diag_control
 - Related: rhbz#1347869

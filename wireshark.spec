@@ -8,7 +8,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.1.1
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -71,6 +71,7 @@ BuildRequires:	lua-devel
 BuildRequires: libtool, automake, autoconf
 
 Requires(pre):	shadow-utils
+Requires(post): systemd-udev
 %if %{with_adns}
 Requires:	adns
 %endif
@@ -452,6 +453,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 #%{_datadir}/aclocal/*
 
 %changelog
+* Tue Sep 13 2016 Kevin Fenzi <kevin@scrye.com> - 2.1.1-2
+- Add Requires(post) for systemd-udev to avoid rpm scriptlet failures
+
 * Sun Jul 24 2016 Peter Hatina <phatina@gmail.com> - 2.1.1-1
 - Ver. 2.1.1
 - See https://www.wireshark.org/docs/relnotes/wireshark-2.1.1.html

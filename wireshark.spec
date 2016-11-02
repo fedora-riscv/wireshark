@@ -1,6 +1,5 @@
 %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
 
-%global with_adns 0
 %global with_lua 0
 %global with_portaudio 1
 %global with_GeoIP 1
@@ -8,7 +7,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.1.1
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -59,11 +58,7 @@ BuildRequires:	libgcrypt-devel
 %if %{with_GeoIP}
 BuildRequires:	GeoIP-devel
 %endif
-%if %{with_adns}
-BuildRequires:	adns-devel
-%else
 BuildRequires:	c-ares-devel
-%endif
 %if %{with_lua}
 BuildRequires:	lua-devel
 %endif
@@ -72,9 +67,6 @@ BuildRequires: libtool, automake, autoconf
 
 Requires(pre):	shadow-utils
 Requires(post): systemd-udev
-%if %{with_adns}
-Requires:	adns
-%endif
 
 %package	qt
 Summary:	Wireshark's Qt-based GUI
@@ -186,17 +178,11 @@ autoreconf -ivf
 
 %configure \
    --bindir=%{_sbindir} \
-   --enable-ipv6 \
    --with-libsmi \
    --with-gnu-ld \
    --with-pic \
-   --with-gtk3 \
+   --with-gtk=3 \
    --with-qt \
-%if %{with_adns}
-   --with-adns \
-%else
-   --with-adns=no \
-%endif
 %if %{with_lua}
    --with-lua \
 %else
@@ -453,6 +439,11 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 #%{_datadir}/aclocal/*
 
 %changelog
+* Wed Nov  2 2016 Peter Lemenkov <lemenkov@gmail.com> - 2.1.1-3
+- No longer uses adns ( https://github.com/wireshark/wireshark/commit/7a1d3f6 )
+- Remove --with-ipv6 switch ( https://github.com/wireshark/wireshark/commit/fad1565 )
+- Change GTK option switch ( https://github.com/wireshark/wireshark/commit/d77029d )
+
 * Tue Sep 13 2016 Kevin Fenzi <kevin@scrye.com> - 2.1.1-2
 - Add Requires(post) for systemd-udev to avoid rpm scriptlet failures
 

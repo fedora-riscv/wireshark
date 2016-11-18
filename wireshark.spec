@@ -6,13 +6,15 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.1.1
-Release:	3%{?dist}
+Version:	2.2.2
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
+
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
 Source1:	90-wireshark-usbmon.rules
+
 Requires:	%{name}-cli = %{version}-%{release}
 # Fedora-specific
 Patch1:		wireshark-0001-enable-Lua-support.patch
@@ -33,40 +35,61 @@ Patch9:		wireshark-0009-Fix-paths-in-a-wireshark.desktop-file.patch
 # Fedora-specific, see https://bugzilla.redhat.com/1274831
 Patch10:	wireshark-0010-Patch-fixing-the-wireshark-autoconf-macros.patch
 
+BuildRequires:	bzip2-devel
+BuildRequires:	c-ares-devel
+BuildRequires:	elfutils-devel
+BuildRequires:	gcc-c++
+BuildRequires:	glib2-devel
+BuildRequires:	gnutls-devel
+BuildRequires:	gtk3-devel
+BuildRequires:	krb5-devel
+BuildRequires:	libcap-devel
+BuildRequires:	libgcrypt-devel
+BuildRequires:	libnl3-devel
+BuildRequires:	libpcap-devel >= 0.9
+BuildRequires:	libselinux-devel
+BuildRequires:	libsmi-devel
+BuildRequires:	openssl-devel
+BuildRequires:	desktop-file-utils
+BuildRequires:	xdg-utils
+BuildRequires:	bison
+BuildRequires:	flex
+BuildRequires:	pcre-devel
+BuildRequires:	perl(Pod::Html)
+BuildRequires:	perl(Pod::Man)
+BuildRequires:	qt-devel >= 4.7.0
+BuildRequires:	zlib-devel
+%if %{with_GeoIP}
+BuildRequires:	GeoIP-devel
+%endif
+%if %{with_lua}
+BuildRequires:	lua-devel
+%endif
+BuildRequires: libtool, automake, autoconf
+
+%description
+Metapackage with installs %{name}-cli and %{name}-qt.
+
 %package	cli
 Summary:	Network traffic analyzer
 Group:		Applications/Internet
 Requires:	%{name} = %{version}-%{release}
-BuildRequires:	libpcap-devel >= 0.9
-BuildRequires:	libsmi-devel
-BuildRequires:	zlib-devel, bzip2-devel
-BuildRequires:	openssl-devel
-BuildRequires:	glib2-devel
-BuildRequires:	elfutils-devel, krb5-devel
-BuildRequires:	pcre-devel, libselinux
-BuildRequires:	gnutls-devel
-BuildRequires:	desktop-file-utils
-BuildRequires:	xdg-utils
-BuildRequires:	flex, bison
-BuildRequires:	libcap-devel
-BuildRequires:	libnl3-devel
-%if 0%{?fedora} > 18
-BuildRequires:	perl(Pod::Html)
-BuildRequires:	perl(Pod::Man)
-%endif
-BuildRequires:	libgcrypt-devel
-%if %{with_GeoIP}
-BuildRequires:	GeoIP-devel
-%endif
-BuildRequires:	c-ares-devel
-%if %{with_lua}
-BuildRequires:	lua-devel
-%endif
-
-BuildRequires: libtool, automake, autoconf
-
 Requires(pre):	shadow-utils
 Requires(post): systemd-udev
+
+%description cli
+Wireshark allows you to examine protocol data stored in files or as it is
+captured from wired or wireless (WiFi or Bluetooth) networks, USB devices,
+and many other sources.  It supports dozens of protocol capture file formats
+and understands more than a thousand protocols.
+
+It has many powerful features including a rich display filter language
+and the ability to reassemble multiple protocol packets in order to, for
+example, view a complete TCP stream, save the contents of a file which was
+transferred over HTTP or CIFS, or play back an RTP audio stream.
+
+This package contains command-line utilities, plugins, and documentation for
+Wireshark.
 
 %package	qt
 Summary:	Wireshark's Qt-based GUI
@@ -74,8 +97,6 @@ Group:		Applications/Internet
 Requires:	%{name}-cli = %{version}-%{release}
 Requires:	xdg-utils
 Requires:	hicolor-icon-theme
-Requires:	qt >= 4.7.0
-BuildRequires:	qt-devel >= 4.7.0
 %if %{with_portaudio}
 Requires:	portaudio
 BuildRequires:	portaudio-devel
@@ -85,18 +106,19 @@ Requires:	GeoIP
 %endif
 Requires(post):	/usr/sbin/update-alternatives
 Requires(postun):	/usr/sbin/update-alternatives
-BuildRequires:	gcc-c++
+
+%description qt
+This package contains the Qt Wireshark GUI and desktop integration files.
 
 %package	gtk
 Summary:	Wireshark's GTK+-based GUI
 Group:		Applications/Internet
+
 Requires:	%{name}-cli = %{version}-%{release}
 Requires:	%{name} = %{version}-%{release}
 # This package used to be called wireshark-gnome.
 Provides:	wireshark-gnome = %{version}-%{release}
 Obsoletes:	wireshark-gnome < 2.0.0
-Requires:	gtk3 >= 3.0.0
-BuildRequires:	gtk3-devel > 3.0.0
 %if %{with_portaudio}
 Requires:	portaudio
 BuildRequires:	portaudio-devel
@@ -111,34 +133,13 @@ Requires(post):	desktop-file-utils
 Requires(post):	/usr/sbin/update-alternatives
 Requires(postun):	/usr/sbin/update-alternatives
 
+%description gtk
+This package contains the GTK+ Wireshark GUI and desktop integration files.
+
 %package devel
 Summary:	Development headers and libraries for wireshark
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release} glibc-devel glib2-devel
-
-
-%description
-Metapackage with installs %{name}-cli and %{name}-qt.
-
-%description cli
-Wireshark allows you to examine protocol data stored in files or as it is
-captured from wired or wireless (WiFi or Bluetooth) networks, USB devices,
-and many other sources.  It supports dozens of protocol capture file formats
-and understands more than a thousand protocols.
-
-It has many powerful features including a rich display filter language
-and the ability to reassemble multiple protocol packets in order to, for
-example, view a complete TCP stream, save the contents of a file which was
-transferred over HTTP or CIFS, or play back an RTP audio stream.
-
-This package contains command-line utilities, plugins, and documentation for
-Wireshark. A Qt graphical user interface is packaged separately.
-
-%description qt
-This package contains the Qt Wireshark GUI and desktop integration files.
-
-%description gtk
-This package contains the GTK+ Wireshark GUI and desktop integration files.
 
 %description devel
 The wireshark-devel package contains the header files, developer
@@ -164,15 +165,16 @@ and plugins.
 
 %build
 %ifarch s390 s390x sparcv9 sparc64
-export PIECFLAGS="-fPIE"
+export PIECFLAGS="-fPIE -fPIC"
 %else
-export PIECFLAGS="-fpie"
+export PIECFLAGS="-fpie -fPIC"
 %endif
+
 # FC5+ automatic -fstack-protector-all switch
 export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector-strong/-fstack-protector-all}
 export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
 export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
-export LDFLAGS="$LDFLAGS -pie"
+export LDFLAGS="$LDFLAGS -pie -fPIC"
 
 autoreconf -ivf
 
@@ -232,20 +234,20 @@ mkdir -p "${IDIR}/epan/dissectors"
 mkdir -p "${IDIR}/epan/wmem"
 mkdir -p "${IDIR}/wiretap"
 mkdir -p "${IDIR}/wsutil"
-mkdir -p %{buildroot}/%{_sysconfdir}/udev/rules.d
-install -m 644 config.h register.h		"${IDIR}/"
-install -m 644 cfile.h file.h			"${IDIR}/"
-install -m 644 ws_symbol_export.h               "${IDIR}/"
-install -m 644 epan/*.h				"${IDIR}/epan/"
-install -m 644 epan/crypt/*.h			"${IDIR}/epan/crypt"
-install -m 644 epan/ftypes/*.h			"${IDIR}/epan/ftypes"
-install -m 644 epan/dfilter/*.h			"${IDIR}/epan/dfilter"
-install -m 644 epan/dissectors/*.h		"${IDIR}/epan/dissectors"
-install -m 644 epan/wmem/*.h			"${IDIR}/epan/wmem"
-install -m 644 wiretap/*.h			"${IDIR}/wiretap"
-install -m 644 wsutil/*.h			"${IDIR}/wsutil"
-install -m 644 ws_diag_control.h                "${IDIR}/"
-install -m 644 %{SOURCE1}                       %{buildroot}/%{_sysconfdir}/udev/rules.d/
+mkdir -p %{buildroot}%{_udevrulesdir}
+install -m 644 config.h register.h	"${IDIR}/"
+install -m 644 cfile.h file.h		"${IDIR}/"
+install -m 644 ws_symbol_export.h	"${IDIR}/"
+install -m 644 epan/*.h			"${IDIR}/epan/"
+install -m 644 epan/crypt/*.h		"${IDIR}/epan/crypt"
+install -m 644 epan/ftypes/*.h		"${IDIR}/epan/ftypes"
+install -m 644 epan/dfilter/*.h		"${IDIR}/epan/dfilter"
+install -m 644 epan/dissectors/*.h	"${IDIR}/epan/dissectors"
+install -m 644 epan/wmem/*.h		"${IDIR}/epan/wmem"
+install -m 644 wiretap/*.h		"${IDIR}/wiretap"
+install -m 644 wsutil/*.h		"${IDIR}/wsutil"
+install -m 644 ws_diag_control.h	"${IDIR}/"
+install -m 644 %{SOURCE1}		%{buildroot}%{_udevrulesdir}
 
 # Change the program name for 'alternatives'
 mv %{buildroot}%{_sbindir}/wireshark %{buildroot}%{_sbindir}/wireshark-qt
@@ -290,11 +292,8 @@ SentUpstream: 2014-09-18
 </application>
 EOF
 
-# Remove .la files
-rm -f %{buildroot}%{_libdir}/%{name}/plugins/*.la
-
-# Remove .la files in libdir
-rm -f %{buildroot}%{_libdir}/*.la
+# Remove libtool archives and static libs
+find %{buildroot} -type f -name "*.la" -delete
 
 # Remove idl2wrs
 rm -f %{buildroot}%{_sbindir}/idl2wrs
@@ -370,7 +369,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %files
 
 %files cli
-%doc AUTHORS COPYING ChangeLog INSTALL NEWS README*
+%{!?_licensedir:%global license %%doc}
+%license COPYING
+%doc AUTHORS INSTALL NEWS README*
 %{_sbindir}/editcap
 %{_sbindir}/tshark
 %{_sbindir}/mergecap
@@ -382,7 +383,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_sbindir}/reordercap
 %attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=ep) %{_sbindir}/dumpcap
 %{_sbindir}/rawshark
-%{_sysconfdir}/udev/rules.d/90-wireshark-usbmon.rules
+%{_udevrulesdir}/90-wireshark-usbmon.rules
 %{python_sitearch}/*.py*
 %{_libdir}/lib*.so.*
 %dir %{_libdir}/wireshark
@@ -429,16 +430,21 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %ghost %{_sbindir}/wireshark
 
 %files devel
-%doc doc/README.*
+%doc doc/README.* ChangeLog
 %if %{with_lua}
 %config(noreplace) %{_datadir}/wireshark/init.lua
 %endif
 %{_includedir}/wireshark
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*
-#%{_datadir}/aclocal/*
 
 %changelog
+* Fri Nov 18 2016 Peter Robinson <pbrobinson@fedoraproject.org> 2.2.2-1
+- Version 2.2.2
+- See https://www.wireshark.org/docs/relnotes/wireshark-2.2.2.html
+- Use %%license, spec cleanups
+- Put udev rules in right location (rhbz #1365581)
+
 * Wed Nov  2 2016 Peter Lemenkov <lemenkov@gmail.com> - 2.1.1-3
 - No longer uses adns ( https://github.com/wireshark/wireshark/commit/7a1d3f6 )
 - Remove --with-ipv6 switch ( https://github.com/wireshark/wireshark/commit/fad1565 )

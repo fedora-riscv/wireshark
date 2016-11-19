@@ -7,7 +7,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.2.2
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -57,7 +57,10 @@ BuildRequires:	flex
 BuildRequires:	pcre-devel
 BuildRequires:	perl(Pod::Html)
 BuildRequires:	perl(Pod::Man)
-BuildRequires:	qt-devel >= 4.7.0
+BuildRequires:	qt5-linguist
+BuildRequires:	qt5-qtbase-devel
+BuildRequires:	qt5-qtmultimedia-devel
+BuildRequires:	qt5-qtsvg-devel
 BuildRequires:	zlib-devel
 %if %{with_GeoIP}
 BuildRequires:	GeoIP-devel
@@ -184,7 +187,7 @@ autoreconf -ivf
    --with-gnu-ld \
    --with-pic \
    --with-gtk=3 \
-   --with-qt \
+   --with-qt=5 \
 %if %{with_lua}
    --with-lua \
 %else
@@ -439,6 +442,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/*
 
 %changelog
+* Fri Nov 18 2016 Peter Robinson <pbrobinson@fedoraproject.org> 2.2.2-2
+- Build QT GUI with qt5 (rhbz #1347752)
+
 * Fri Nov 18 2016 Peter Robinson <pbrobinson@fedoraproject.org> 2.2.2-1
 - Version 2.2.2
 - See https://www.wireshark.org/docs/relnotes/wireshark-2.2.2.html

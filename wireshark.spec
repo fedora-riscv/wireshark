@@ -7,7 +7,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.2.2
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -182,7 +182,7 @@ export LDFLAGS="$LDFLAGS -pie -fPIC"
 autoreconf -ivf
 
 %configure \
-   --bindir=%{_sbindir} \
+   --bindir=%{_bindir} \
    --with-libsmi \
    --with-gnu-ld \
    --with-pic \
@@ -253,9 +253,9 @@ install -m 644 ws_diag_control.h	"${IDIR}/"
 install -m 644 %{SOURCE1}		%{buildroot}%{_udevrulesdir}
 
 # Change the program name for 'alternatives'
-mv %{buildroot}%{_sbindir}/wireshark %{buildroot}%{_sbindir}/wireshark-qt
+mv %{buildroot}%{_bindir}/wireshark %{buildroot}%{_bindir}/wireshark-qt
 
-touch %{buildroot}%{_sbindir}/%{name}
+touch %{buildroot}%{_bindir}/%{name}
 
 # Register as an application to be visible in the software center
 #
@@ -299,24 +299,24 @@ EOF
 find %{buildroot} -type f -name "*.la" -delete
 
 # Remove idl2wrs
-rm -f %{buildroot}%{_sbindir}/idl2wrs
+rm -f %{buildroot}%{_bindir}/idl2wrs
 
 %pre cli
 getent group wireshark >/dev/null || groupadd -r wireshark
 getent group usbmon >/dev/null || groupadd -r usbmon
 
 # If we have a pre-alternatives wireshark binary out there, get rid of it.
-# (With 'alternatives' %{_sbindir}/wireshark should be a symlink.)
+# (With 'alternatives' %{_bindir}/wireshark should be a symlink.)
 %pre gtk
-if [ -f %{_sbindir}/wireshark ]; then
-	rm -f %{_sbindir}/wireshark
+if [ -f %{_bindir}/wireshark ]; then
+	rm -f %{_bindir}/wireshark
 fi
 
 # If we have a pre-alternatives wireshark binary out there, get rid of it.
-# (With 'alternatives' %{_sbindir}/wireshark should be a symlink.)
+# (With 'alternatives' %{_bindir}/wireshark should be a symlink.)
 %pre qt
-if [ -f %{_sbindir}/wireshark ]; then
-	rm -f %{_sbindir}/wireshark
+if [ -f %{_bindir}/wireshark ]; then
+	rm -f %{_bindir}/wireshark
 fi
 
 %post cli
@@ -330,16 +330,16 @@ touch --no-create %{_datadir}/icons/gnome &>/dev/null || :
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 touch --no-create %{_datadir}/mime/packages &> /dev/null || :
 gtk-update-icon-cache -t %{_datadir}/icons/hicolor &>/dev/null || :
-/usr/sbin/update-alternatives --install %{_sbindir}/wireshark \
-	%{name} %{_sbindir}/wireshark-gtk 10
+/usr/sbin/update-alternatives --install %{_bindir}/wireshark \
+	%{name} %{_bindir}/wireshark-gtk 10
 
 %post qt
 update-desktop-database &> /dev/null ||:
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 touch --no-create %{_datadir}/mime/packages &> /dev/null || :
 update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
-/usr/sbin/update-alternatives --install %{_sbindir}/wireshark \
-	%{name} %{_sbindir}/wireshark-qt 50
+/usr/sbin/update-alternatives --install %{_bindir}/wireshark \
+	%{name} %{_bindir}/wireshark-qt 50
 
 %postun cli -p /sbin/ldconfig
 
@@ -355,13 +355,13 @@ if [ $1 -eq 0 ] ; then
         touch --no-create %{_datadir}/mime/packages &> /dev/null || :
         update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
-	/usr/sbin/update-alternatives --remove %{name} %{_sbindir}/wireshark-gtk
+	/usr/sbin/update-alternatives --remove %{name} %{_bindir}/wireshark-gtk
 fi
 
 %postun qt
 update-desktop-database &> /dev/null || :
 if [ $1 -eq 0 ] ; then
-        /usr/sbin/update-alternatives --remove %{name} %{_sbindir}/wireshark-qt
+        /usr/sbin/update-alternatives --remove %{name} %{_bindir}/wireshark-qt
 fi
 
 %posttrans cli
@@ -375,17 +375,17 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{!?_licensedir:%global license %%doc}
 %license COPYING
 %doc AUTHORS INSTALL NEWS README*
-%{_sbindir}/editcap
-%{_sbindir}/tshark
-%{_sbindir}/mergecap
-%{_sbindir}/text2pcap
-%{_sbindir}/dftest
-%{_sbindir}/capinfos
-%{_sbindir}/captype
-%{_sbindir}/randpkt
-%{_sbindir}/reordercap
-%attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=ep) %{_sbindir}/dumpcap
-%{_sbindir}/rawshark
+%{_bindir}/editcap
+%{_bindir}/tshark
+%{_bindir}/mergecap
+%{_bindir}/text2pcap
+%{_bindir}/dftest
+%{_bindir}/capinfos
+%{_bindir}/captype
+%{_bindir}/randpkt
+%{_bindir}/reordercap
+%attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=ep) %{_bindir}/dumpcap
+%{_bindir}/rawshark
 %{_udevrulesdir}/90-wireshark-usbmon.rules
 %{python_sitearch}/*.py*
 %{_libdir}/lib*.so.*
@@ -417,9 +417,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/icons/hicolor/*/mimetypes/*
 %{_datadir}/icons/hicolor/scalable/apps/wireshark.svg
 %{_datadir}/mime/packages/wireshark.xml
-%{_sbindir}/wireshark-gtk
+%{_bindir}/wireshark-gtk
 %{_mandir}/man1/wireshark.*
-%ghost %{_sbindir}/wireshark
+%ghost %{_bindir}/wireshark
 
 %files qt
 %{_datadir}/appdata/%{name}.appdata.xml
@@ -428,9 +428,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/icons/hicolor/*/mimetypes/*
 %{_datadir}/icons/hicolor/scalable/apps/wireshark.svg
 %{_datadir}/mime/packages/wireshark.xml
-%{_sbindir}/wireshark-qt
+%{_bindir}/wireshark-qt
 %{_mandir}/man1/wireshark.*
-%ghost %{_sbindir}/wireshark
+%ghost %{_bindir}/wireshark
 
 %files devel
 %doc doc/README.* ChangeLog
@@ -442,6 +442,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/*
 
 %changelog
+* Thu Dec 01 2016 Martin Sehnoutka <msehnout@redhat.com> - 2.2.2-3
+- Move all executables into /usr/bin/ directory
+
 * Fri Nov 18 2016 Peter Robinson <pbrobinson@fedoraproject.org> 2.2.2-2
 - Build QT GUI with qt5 (rhbz #1347752)
 

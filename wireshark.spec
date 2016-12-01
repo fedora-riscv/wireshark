@@ -17,7 +17,9 @@ Source1:	90-wireshark-usbmon.rules
 
 Requires:	%{name}-cli = %{version}-%{release}
 # Fedora-specific
+%if %{with_lua}
 Patch1:		wireshark-0001-enable-Lua-support.patch
+%endif
 # Fedora-specific
 Patch2:		wireshark-0002-Customize-permission-denied-error.patch
 # Will be proposed upstream
@@ -69,6 +71,7 @@ BuildRequires:	GeoIP-devel
 BuildRequires:	lua-devel
 %endif
 BuildRequires: libtool, automake, autoconf
+Buildrequires: git
 
 %description
 Metapackage with installs %{name}-cli and %{name}-qt.
@@ -151,20 +154,7 @@ and plugins.
 
 
 %prep
-%setup -q
-
-%if %{with_lua}
-%patch1 -p1 -b .enable_lua
-%endif
-
-%patch2 -p1 -b .perm_denied_customization
-%patch3 -p1 -b .profinet_crash
-%patch4 -p1 -b .add_autoconf
-%patch5 -p1 -b .restore_group
-%patch6 -p1 -b .add_pkgconfig
-%patch8 -p1 -b .tmp_dir
-%patch9 -p1 -b .fix_paths
-%patch10 -p1 -b .64bit
+%autosetup -S git
 
 %build
 %ifarch s390 s390x sparcv9 sparc64

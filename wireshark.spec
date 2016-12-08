@@ -7,7 +7,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.2.2
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -321,7 +321,7 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 touch --no-create %{_datadir}/mime/packages &> /dev/null || :
 gtk-update-icon-cache -t %{_datadir}/icons/hicolor &>/dev/null || :
 /usr/sbin/update-alternatives --install %{_bindir}/wireshark \
-	%{name} %{_bindir}/wireshark-gtk 10
+	%{name}-gui %{_bindir}/wireshark-gtk 10
 
 %post qt
 update-desktop-database &> /dev/null ||:
@@ -329,7 +329,7 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 touch --no-create %{_datadir}/mime/packages &> /dev/null || :
 update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 /usr/sbin/update-alternatives --install %{_bindir}/wireshark \
-	%{name} %{_bindir}/wireshark-qt 50
+	%{name}-gui %{_bindir}/wireshark-qt 50
 
 %postun cli -p /sbin/ldconfig
 
@@ -345,13 +345,13 @@ if [ $1 -eq 0 ] ; then
         touch --no-create %{_datadir}/mime/packages &> /dev/null || :
         update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
-	/usr/sbin/update-alternatives --remove %{name} %{_bindir}/wireshark-gtk
+	/usr/sbin/update-alternatives --remove %{name}-gui %{_bindir}/wireshark-gtk
 fi
 
 %postun qt
 update-desktop-database &> /dev/null || :
 if [ $1 -eq 0 ] ; then
-        /usr/sbin/update-alternatives --remove %{name} %{_bindir}/wireshark-qt
+        /usr/sbin/update-alternatives --remove %{name}-gui %{_bindir}/wireshark-qt
 fi
 
 %posttrans cli
@@ -432,6 +432,10 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/*
 
 %changelog
+* Thu Dec 08 2016 Martin Sehnoutka <msehnout@redhat.com> - 2.2.2-4
+- Change update-alternatives name from wireshark to wireshark-gui; Resolve:
+  #1400654
+
 * Thu Dec 01 2016 Martin Sehnoutka <msehnout@redhat.com> - 2.2.2-3
 - Move all executables into /usr/bin/ directory
 

@@ -6,8 +6,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.2.2
-Release:	2%{?dist}
+Version:	2.2.4
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -442,6 +442,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/*
 
 %changelog
+* Wed Jan 25 2017 rebase-helper <rebase-helper@localhost.local> - 2.2.4-1
+- New upstream release 2.2.4
+
 * Fri Nov 18 2016 Peter Robinson <pbrobinson@fedoraproject.org> 2.2.2-2
 - Build QT GUI with qt5 (rhbz #1347752)
 

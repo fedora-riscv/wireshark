@@ -6,8 +6,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.2.2
-Release:	4%{?dist}
+Version:	2.2.4
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -432,6 +432,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/*
 
 %changelog
+* Wed Jan 25 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.4-2
+- New upstream release 2.2.4
+
 * Thu Dec 08 2016 Martin Sehnoutka <msehnout@redhat.com> - 2.2.2-4
 - Change update-alternatives name from wireshark to wireshark-gui; Resolve:
   #1400654

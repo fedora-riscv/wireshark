@@ -1,5 +1,3 @@
-%global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
-
 %global with_lua 0
 %global with_portaudio 1
 %global with_GeoIP 1
@@ -7,7 +5,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.2.4
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -72,6 +70,7 @@ BuildRequires:	lua-devel
 %endif
 BuildRequires: libtool, automake, autoconf
 Buildrequires: git
+Buildrequires: python2-devel
 
 %description
 Metapackage with installs %{name}-cli and %{name}-qt.
@@ -210,8 +209,8 @@ make %{?_smp_mflags}
 make DESTDIR=%{buildroot} install
 
 # Install python stuff.
-mkdir -p %{buildroot}%{python_sitearch}
-install -m 644 tools/wireshark_be.py tools/wireshark_gen.py  %{buildroot}%{python_sitearch}
+mkdir -p %{buildroot}%{python2_sitearch}
+install -m 644 tools/wireshark_be.py tools/wireshark_gen.py  %{buildroot}%{python2_sitearch}
 
 desktop-file-validate %{buildroot}%{_datadir}/applications/wireshark.desktop
 desktop-file-validate %{buildroot}%{_datadir}/applications/wireshark-gtk.desktop
@@ -377,7 +376,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=ep) %{_bindir}/dumpcap
 %{_bindir}/rawshark
 %{_udevrulesdir}/90-wireshark-usbmon.rules
-%{python_sitearch}/*.py*
+%{python2_sitearch}/*.py*
 %{_libdir}/lib*.so.*
 %dir %{_libdir}/wireshark
 %dir %{_libdir}/wireshark/plugins
@@ -432,6 +431,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/*
 
 %changelog
+* Mon Mar 06 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.4-3
+- Fix python_sitearch macro
+
 * Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.2.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 

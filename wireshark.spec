@@ -4,8 +4,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.2.4
-Release:	3%{?dist}
+Version:	2.2.5
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -431,8 +431,12 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/*
 
 %changelog
+* Tue Mar 07 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.5-1
+- New upstream version 2.2.5
+
 * Mon Mar 06 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.4-3
 - Fix python_sitearch macro
+- Fix path in desktop file
 
 * Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.2.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild

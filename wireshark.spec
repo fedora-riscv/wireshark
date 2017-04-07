@@ -5,7 +5,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.2.5
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -26,8 +26,6 @@ Patch3:		wireshark-0003-fix-string-overrun-in-plugins-profinet.patch
 Patch4:		wireshark-0004-adds-autoconf-macro-file.patch
 # Fedora-specific
 Patch5:		wireshark-0005-Restore-Fedora-specific-groups.patch
-# Will be proposed upstream
-Patch6:		wireshark-0006-Add-pkgconfig-entry.patch
 # Fedora-specific
 Patch8:		wireshark-0008-move-default-temporary-directory-to-var-tmp.patch
 # Fedora-specific
@@ -361,7 +359,6 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %files
 
 %files cli
-%{!?_licensedir:%global license %%doc}
 %license COPYING
 %doc AUTHORS INSTALL NEWS README*
 %{_bindir}/editcap
@@ -428,9 +425,12 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %endif
 %{_includedir}/wireshark
 %{_libdir}/lib*.so
-%{_libdir}/pkgconfig/*
+%{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri Apr 07 2017 Igor Gnatenko <ignatenko@redhat.com> - 2.2.5-2
+- Stop patching pkg-config
+
 * Tue Mar 07 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.5-1
 - New upstream version 2.2.5
 

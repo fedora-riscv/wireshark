@@ -1,11 +1,11 @@
-%global with_lua 0
+%global with_lua 1
 %global with_portaudio 1
 %global with_GeoIP 1
 
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.2.6
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -64,7 +64,7 @@ BuildRequires:	zlib-devel
 BuildRequires:	GeoIP-devel
 %endif
 %if %{with_lua}
-BuildRequires:	lua-devel
+BuildRequires:	compat-lua-devel
 %endif
 BuildRequires: libtool, automake, autoconf
 Buildrequires: git
@@ -428,6 +428,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri May 19 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.6-3
+- Build with lua support (resolves #1259623)
+
 * Mon May 15 2017 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.6-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_27_Mass_Rebuild
 

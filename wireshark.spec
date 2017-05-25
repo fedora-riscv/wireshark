@@ -244,44 +244,6 @@ mv %{buildroot}%{_bindir}/wireshark %{buildroot}%{_bindir}/wireshark-qt
 
 touch %{buildroot}%{_bindir}/%{name}
 
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
-cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2014 Richard Hughes <richard@hughsie.com> -->
-<!--
-BugReportURL: https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=10479
-SentUpstream: 2014-09-18
--->
-<application>
-  <id type="desktop">wireshark.desktop</id>
-  <metadata_license>CC0-1.0</metadata_license>
-  <description>
-    <p>
-      Wireshark is an essential tool to capture and analyze the packets
-      arriving or leaving the network interface.
-      It is almost a GUI equivalent of the classic unix tool tcpdump.
-    </p>
-    <p>
-      Wireshark has a easy to use GUI to capture the packets matching the
-      filter, on the mentioned interface and save them for later analysis.
-    </p>
-  </description>
-  <url type="homepage">http://www.wireshark.org</url>
-  <screenshots>
-    <screenshot type="default">https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/wireshark/a.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/wireshark/b.png</screenshot>
-  </screenshots>
-  <updatecontact>https://www.wireshark.org/lists/</updatecontact>
-</application>
-EOF
-
 # Remove libtool archives and static libs
 find %{buildroot} -type f -name "*.la" -delete
 

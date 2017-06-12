@@ -4,8 +4,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.2.6
-Release:	5%{?dist}
+Version:	2.2.7
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -395,6 +395,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Mon Jun 12 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.7-1
+- New upstream release 2.2.7
+
 * Thu May 25 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.6-5
 - Add triggerin script to remove old alternatives
 - Remove appdata.xml as it is provided by upstream now

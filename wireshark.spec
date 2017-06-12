@@ -6,8 +6,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.2.6
-Release:	2%{?dist}
+Version:	2.2.7
+Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -438,6 +438,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Tue Jun 20 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.7-1
+- New upstream release 2.2.7
+
 * Fri May 26 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.6-2
 - Stop patching pkg-conf
 

@@ -4,13 +4,13 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.2.7
+Version:	2.4.0rc2
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
 
-Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
+Source0:	https://wireshark.org/download/src/%{name}-%{version}.tar.xz
 Source1:	90-wireshark-usbmon.rules
 
 Requires:	%{name}-cli = %{version}-%{release}
@@ -22,16 +22,12 @@ Patch1:		wireshark-0001-enable-Lua-support.patch
 Patch2:		wireshark-0002-Customize-permission-denied-error.patch
 # Will be proposed upstream
 Patch3:		wireshark-0003-fix-string-overrun-in-plugins-profinet.patch
-# Will be proposed upstream
-Patch4:		wireshark-0004-adds-autoconf-macro-file.patch
 # Fedora-specific
-Patch5:		wireshark-0005-Restore-Fedora-specific-groups.patch
+Patch4:		wireshark-0004-Restore-Fedora-specific-groups.patch
 # Fedora-specific
-Patch8:		wireshark-0008-move-default-temporary-directory-to-var-tmp.patch
+Patch5:		wireshark-0005-Fix-paths-in-a-wireshark.desktop-file.patch
 # Fedora-specific
-Patch9:		wireshark-0009-Fix-paths-in-a-wireshark.desktop-file.patch
-# Fedora-specific, see https://bugzilla.redhat.com/1274831
-Patch10:	wireshark-0010-Patch-fixing-the-wireshark-autoconf-macros.patch
+Patch6:		wireshark-0006-Move-tmp-to-var-tmp.patch
 
 BuildRequires:	bzip2-devel
 BuildRequires:	c-ares-devel
@@ -328,22 +324,25 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %files cli
 %license COPYING
 %doc AUTHORS INSTALL NEWS README*
-%{_bindir}/editcap
-%{_bindir}/tshark
-%{_bindir}/mergecap
-%{_bindir}/text2pcap
-%{_bindir}/dftest
 %{_bindir}/capinfos
 %{_bindir}/captype
+%{_bindir}/dftest
+%{_bindir}/editcap
+%{_bindir}/mergecap
 %{_bindir}/randpkt
 %{_bindir}/reordercap
+%{_bindir}/sharkd
+%{_bindir}/text2pcap
+%{_bindir}/tshark
 %attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=ep) %{_bindir}/dumpcap
 %{_bindir}/rawshark
 %{_udevrulesdir}/90-wireshark-usbmon.rules
 %{python2_sitearch}/*.py*
 %{_libdir}/lib*.so.*
 %dir %{_libdir}/wireshark
+%dir %{_libdir}/wireshark/extcap
 %dir %{_libdir}/wireshark/plugins
+%{_libdir}/wireshark/extcap/udpdump
 %{_libdir}/wireshark/plugins/*.so
 %{_mandir}/man1/editcap.*
 %{_mandir}/man1/tshark.*
@@ -368,7 +367,6 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/applications/wireshark-gtk.desktop
 %{_datadir}/icons/hicolor/*/apps/*
 %{_datadir}/icons/hicolor/*/mimetypes/*
-%{_datadir}/icons/hicolor/scalable/apps/wireshark.svg
 %{_datadir}/mime/packages/wireshark.xml
 %{_bindir}/wireshark-gtk
 %{_mandir}/man1/wireshark.*
@@ -379,7 +377,6 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/applications/wireshark.desktop
 %{_datadir}/icons/hicolor/*/apps/*
 %{_datadir}/icons/hicolor/*/mimetypes/*
-%{_datadir}/icons/hicolor/scalable/apps/wireshark.svg
 %{_datadir}/mime/packages/wireshark.xml
 %{_bindir}/wireshark-qt
 %{_mandir}/man1/wireshark.*
@@ -395,6 +392,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Jun 29 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.4.0rc2-1
+- New upstream version
+
 * Mon Jun 12 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.7-1
 - New upstream release 2.2.7
 

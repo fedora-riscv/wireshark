@@ -4,7 +4,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.2.7
+Version:	2.2.8
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
@@ -12,6 +12,7 @@ Url:		http://www.wireshark.org/
 
 Source0:	http://wireshark.org/download/src/%{name}-%{version}.tar.bz2
 Source1:	90-wireshark-usbmon.rules
+Source2:        https://www.wireshark.org/download/src/all-versions/SIGNATURES-%{version}.txt
 
 Requires:	%{name}-cli = %{version}-%{release}
 # Fedora-specific
@@ -433,6 +434,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Jul 20 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.8-1
+- New upstream release 2.2.8
+
 * Tue Jun 13 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.7-1
 - New upstream release 2.2.7
 

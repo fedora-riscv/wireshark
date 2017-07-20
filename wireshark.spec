@@ -4,14 +4,15 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.4.0rc2
+Version:	2.4.0
 Release:	1%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
 
 Source0:	https://wireshark.org/download/src/%{name}-%{version}.tar.xz
-Source1:	90-wireshark-usbmon.rules
+Source1:        https://www.wireshark.org/download/src/all-versions/SIGNATURES-%{version}.txt
+Source2:	90-wireshark-usbmon.rules
 
 Requires:	%{name}-cli = %{version}-%{release}
 # Fedora-specific
@@ -233,7 +234,7 @@ install -m 644 epan/wmem/*.h		"${IDIR}/epan/wmem"
 install -m 644 wiretap/*.h		"${IDIR}/wiretap"
 install -m 644 wsutil/*.h		"${IDIR}/wsutil"
 install -m 644 ws_diag_control.h	"${IDIR}/"
-install -m 644 %{SOURCE1}		%{buildroot}%{_udevrulesdir}
+install -m 644 %{SOURCE2}		%{buildroot}%{_udevrulesdir}
 
 # Change the program name for 'alternatives'
 mv %{buildroot}%{_bindir}/wireshark %{buildroot}%{_bindir}/wireshark-qt
@@ -392,6 +393,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Jul 20 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.4.0-2
+- New upstream version 2.4.0
+
 * Thu Jun 29 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.4.0rc2-1
 - New upstream version
 

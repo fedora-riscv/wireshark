@@ -5,7 +5,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.4.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -360,7 +360,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %dir %{_datadir}/wireshark
 %{_datadir}/wireshark/*
 %if %{with_lua}
-%exclude %{_datadir}/wireshark/init.lua
+%config(noreplace) %{_datadir}/wireshark/init.lua
 %endif
 
 %files gtk
@@ -385,14 +385,14 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 %files devel
 %doc doc/README.* ChangeLog
-%if %{with_lua}
-%config(noreplace) %{_datadir}/wireshark/init.lua
-%endif
 %{_includedir}/wireshark
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri Jul 21 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.4.0-2
+- Move init.lua file into the main subpackage (rhbz#1463270)
+
 * Thu Jul 20 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.4.0-2
 - New upstream version 2.4.0
 

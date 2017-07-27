@@ -5,7 +5,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.2.8
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -318,6 +318,15 @@ touch --no-create %{_datadir}/icons/gnome &>/dev/null || :
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 touch --no-create %{_datadir}/mime/packages &> /dev/null || :
 gtk-update-icon-cache -t %{_datadir}/icons/hicolor &>/dev/null || :
+if [ "$(which wireshark)" == "/usr/sbin/wireshark" ] || [ "$(which wireshark)" == "/sbin/wireshark" ];
+then
+    /usr/sbin/update-alternatives --remove-all %{name} &> /dev/null || :
+fi
+# This one was used as a workaround during f26 devel phase
+if /usr/sbin/update-alternatives --display wireshark-gui;
+then
+    /usr/sbin/update-alternatives --remove-all %{name}-gui &> /dev/null || :
+fi
 /usr/sbin/update-alternatives --install %{_bindir}/wireshark \
 	%{name} %{_bindir}/wireshark-gtk 10
 
@@ -326,13 +335,17 @@ update-desktop-database &> /dev/null ||:
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 touch --no-create %{_datadir}/mime/packages &> /dev/null || :
 update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
+if [ "$(which wireshark)" == "/usr/sbin/wireshark" ] || [ "$(which wireshark)" == "/sbin/wireshark" ];
+then
+    /usr/sbin/update-alternatives --remove-all %{name} &> /dev/null || :
+fi
+# This one was used as a workaround during f26 devel phase
+if /usr/sbin/update-alternatives --display wireshark-gui;
+then
+    /usr/sbin/update-alternatives --remove-all %{name}-gui &> /dev/null || :
+fi
 /usr/sbin/update-alternatives --install %{_bindir}/wireshark \
 	%{name} %{_bindir}/wireshark-qt 50
-
-%triggerin -- wireshark < 2.2.6-4
-/usr/sbin/update-alternatives --remove-all %{name} &> /dev/null || :
-# This one was used as a workaround during f26 devel phase
-/usr/sbin/update-alternatives --remove-all %{name}-gui &> /dev/null || :
 
 %postun cli -p /sbin/ldconfig
 
@@ -434,6 +447,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Jul 27 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.8-2
+- Improve trigger script to remove sbin alternatives (rhbz#1474251)
+
 * Thu Jul 20 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.8-1
 - New upstream release 2.2.8
 

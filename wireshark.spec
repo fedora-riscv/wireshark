@@ -5,7 +5,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.4.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -390,6 +390,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Fri Jul 21 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.4.0-2
 - Move init.lua file into the main subpackage (rhbz#1463270)
 

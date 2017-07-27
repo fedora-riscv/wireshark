@@ -5,7 +5,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.2.8
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -329,10 +329,16 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 /usr/sbin/update-alternatives --install %{_bindir}/wireshark \
 	%{name} %{_bindir}/wireshark-qt 50
 
-%triggerin -- wireshark < 2.2.6-4
-/usr/sbin/update-alternatives --remove-all %{name} &> /dev/null || :
+%triggerin -- wireshark < 2.2.8-2
+if /usr/sbin/update-alternatives --display wireshark | grep sbin;
+then
+    /usr/sbin/update-alternatives --remove-all %{name} &> /dev/null || :
+fi
 # This one was used as a workaround during f26 devel phase
-/usr/sbin/update-alternatives --remove-all %{name}-gui &> /dev/null || :
+if /usr/sbin/update-alternatives --display wireshark-gui;
+then
+    /usr/sbin/update-alternatives --remove-all %{name}-gui &> /dev/null || :
+fi
 
 %postun cli -p /sbin/ldconfig
 
@@ -434,6 +440,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Jul 27 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.8-2
+- Improve trigger script to remove sbin alternatives (rhbz#1474251)
+
 * Thu Jul 20 2017 Martin Sehnoutka <msehnout@redhat.com> - 2.2.8-1
 - New upstream release 2.2.8
 

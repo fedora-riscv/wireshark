@@ -5,7 +5,8 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.4.0
-Release:	4%{?dist}
+Release:	5%{?dist}
+Epoch:          1
 License:	GPL+
 Group:		Applications/Internet
 Url:		http://www.wireshark.org/
@@ -52,6 +53,8 @@ BuildRequires:	flex
 BuildRequires:	pcre-devel
 BuildRequires:	perl(Pod::Html)
 BuildRequires:	perl(Pod::Man)
+Buildrequires:  libssh-devel
+Buildrequires:  libssh2-devel
 BuildRequires:	qt5-linguist
 BuildRequires:	qt5-qtbase-devel
 BuildRequires:	qt5-qtmultimedia-devel
@@ -343,7 +346,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %dir %{_libdir}/wireshark
 %dir %{_libdir}/wireshark/extcap
 %dir %{_libdir}/wireshark/plugins
+%{_libdir}/wireshark/extcap/ciscodump
 %{_libdir}/wireshark/extcap/udpdump
+%{_libdir}/wireshark/extcap/sshdump
 %{_libdir}/wireshark/plugins/*.so
 %{_mandir}/man1/editcap.*
 %{_mandir}/man1/tshark.*
@@ -356,6 +361,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_mandir}/man1/dftest.*
 %{_mandir}/man1/randpkt.*
 %{_mandir}/man1/reordercap.*
+%{_mandir}/man1/sshdump.*
 %{_mandir}/man4/extcap.*
 %dir %{_datadir}/wireshark
 %{_datadir}/wireshark/*
@@ -390,6 +396,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Aug 03 2017 Martin Sehnoutka <msehnout@redhat.com> - 1:2.4.0-5
+- Add libssh as a build dependency (rhbz#1419131)
+
 * Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 

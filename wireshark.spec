@@ -5,7 +5,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.4.0
-Release:	5%{?dist}
+Release:	6%{?dist}
 Epoch:          1
 License:	GPL+
 Group:		Applications/Internet
@@ -15,7 +15,7 @@ Source0:	https://wireshark.org/download/src/%{name}-%{version}.tar.xz
 Source1:        https://www.wireshark.org/download/src/all-versions/SIGNATURES-%{version}.txt
 Source2:	90-wireshark-usbmon.rules
 
-Requires:	%{name}-cli = %{version}-%{release}
+Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
 # Fedora-specific
 %if %{with_lua}
 Patch1:		wireshark-0001-enable-Lua-support.patch
@@ -76,7 +76,7 @@ Metapackage with installs %{name}-cli and %{name}-qt.
 %package	cli
 Summary:	Network traffic analyzer
 Group:		Applications/Internet
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires(pre):	shadow-utils
 Requires(post): systemd-udev
 
@@ -97,7 +97,7 @@ Wireshark.
 %package	qt
 Summary:	Wireshark's Qt-based GUI
 Group:		Applications/Internet
-Requires:	%{name}-cli = %{version}-%{release}
+Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
 Requires:	xdg-utils
 Requires:	hicolor-icon-theme
 %if %{with_portaudio}
@@ -117,8 +117,8 @@ This package contains the Qt Wireshark GUI and desktop integration files.
 Summary:	Wireshark's GTK+-based GUI
 Group:		Applications/Internet
 
-Requires:	%{name}-cli = %{version}-%{release}
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 # This package used to be called wireshark-gnome.
 Provides:	wireshark-gnome = %{version}-%{release}
 Obsoletes:	wireshark-gnome < 2.0.0
@@ -142,7 +142,7 @@ This package contains the GTK+ Wireshark GUI and desktop integration files.
 %package devel
 Summary:	Development headers and libraries for wireshark
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release} glibc-devel glib2-devel
+Requires:	%{name} = %{epoch}:%{version}-%{release} glibc-devel glib2-devel
 
 %description devel
 The wireshark-devel package contains the header files, developer
@@ -396,6 +396,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Tue Aug 08 2017 Martin Sehnoutka <msehnout@redhat.com> - 1:2.4.0-6
+- Use epoch in Requires (rhbz#1478501)
+
 * Thu Aug 03 2017 Martin Sehnoutka <msehnout@redhat.com> - 1:2.4.0-5
 - Add libssh as a build dependency (rhbz#1419131)
 

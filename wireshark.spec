@@ -5,7 +5,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.4.3
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:          1
 License:	GPL+
 Group:		Applications/Internet
@@ -273,20 +273,10 @@ fi
 /usr/bin/udevadm trigger --subsystem-match=usbmon
 
 %post gtk
-update-desktop-database %{_datadir}/applications &> /dev/null || :
-update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
-touch --no-create %{_datadir}/icons/gnome &>/dev/null || :
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-touch --no-create %{_datadir}/mime/packages &> /dev/null || :
-gtk-update-icon-cache -t %{_datadir}/icons/hicolor &>/dev/null || :
 /usr/sbin/update-alternatives --install %{_bindir}/wireshark \
 	%{name} %{_bindir}/wireshark-gtk 10
 
 %post qt
-update-desktop-database &> /dev/null ||:
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-touch --no-create %{_datadir}/mime/packages &> /dev/null || :
-update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 /usr/sbin/update-alternatives --install %{_bindir}/wireshark \
 	%{name} %{_bindir}/wireshark-qt 50
 
@@ -298,30 +288,14 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %postun cli -p /sbin/ldconfig
 
 %postun gtk
-update-desktop-database &> /dev/null || :
 if [ $1 -eq 0 ] ; then
-	touch --no-create %{_datadir}/icons/gnome &>/dev/null
-	gtk-update-icon-cache %{_datadir}/icons/gnome &>/dev/null || :
-
-	touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-	gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-
-        touch --no-create %{_datadir}/mime/packages &> /dev/null || :
-        update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
-
 	/usr/sbin/update-alternatives --remove %{name} %{_bindir}/wireshark-gtk
 fi
 
 %postun qt
-update-desktop-database &> /dev/null || :
 if [ $1 -eq 0 ] ; then
-        /usr/sbin/update-alternatives --remove %{name} %{_bindir}/wireshark-qt
+	/usr/sbin/update-alternatives --remove %{name} %{_bindir}/wireshark-qt
 fi
-
-%posttrans cli
-gtk-update-icon-cache %{_datadir}/icons/gnome &>/dev/null || :
-gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 
 %files
 
@@ -397,6 +371,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri Jan 05 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1:2.4.3-2
+- Remove obsolete scriptlets
+
 * Wed Dec 20 2017 Michal Ruprich <mruprich@redhat.com> - 1:2.4.3-1
 - New upstream version 2.4.3
 - Contains fixe for CVE-2017-17085, CVE-2017-17084, CVE-2017-17083

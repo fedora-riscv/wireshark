@@ -4,8 +4,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.4.3
-Release:	2%{?dist}
+Version:	2.4.4
+Release:	1%{?dist}
 Epoch:          1
 License:	GPL+
 Group:		Applications/Internet
@@ -371,6 +371,10 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri Jan 19 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.4.4-1
+- New upstream version 2.4.4
+- Contains fix for CVE-2017-17935 
+
 * Fri Jan 05 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1:2.4.3-2
 - Remove obsolete scriptlets
 

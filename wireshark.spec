@@ -5,7 +5,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.4.4
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:          1
 License:	GPL+
 Group:		Applications/Internet
@@ -371,6 +371,9 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri Feb 09 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1:2.4.4-2
+- Escape macros in %%changelog
+
 * Fri Jan 19 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.4.4-1
 - New upstream version 2.4.4
 - Contains fix for CVE-2017-17935 
@@ -523,7 +526,7 @@ fi
 - Dropped patch no. 11 (applied upstream)
 
 * Tue Jun 30 2015 Peter Hatina <phatina@redhat.com> - 1.12.6-4
-- Move plugins to %{_libdir}/wireshark/plugins to avoid
+- Move plugins to %%{_libdir}/wireshark/plugins to avoid
   transaction conflicts
 
 * Fri Jun 26 2015 Peter Hatina <phatina@redhat.com> - 1.12.6-3
@@ -531,7 +534,7 @@ fi
 - Resolves: rhbz#1235830
 
 * Fri Jun 26 2015 Peter Hatina <phatina@redhat.com> - 1.12.6-2
-- Add symlink plugins/current -> plugins/%{version}
+- Add symlink plugins/current -> plugins/%%{version}
 
 * Thu Jun 18 2015 Peter Hatina <phatina@redhat.com> - 1.12.6-1
 - Ver. 1.12.6

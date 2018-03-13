@@ -5,7 +5,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.4.5
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:          1
 License:	GPL+
 Group:		Applications/Internet
@@ -16,6 +16,7 @@ Source1:        https://www.wireshark.org/download/src/all-versions/SIGNATURES-%
 Source2:	90-wireshark-usbmon.rules
 
 Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
+Requires:	%{name}-qt = %{epoch}:%{version}-%{release}
 # Fedora-specific
 %if %{with_lua}
 Patch1:		wireshark-0001-enable-Lua-support.patch
@@ -397,6 +398,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Tue Mar 13 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.4.5-2
+- Added wireshark-qt package to wireshark metapackage (rhbz#1506859)
+
 * Tue Mar 13 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.4.5-1
 - New version 2.4.5
 - Contains fixes for CVE-2018-7419, CVE-2018-7418, CVE-2018-7417, CVE-2018-7420, CVE-2018-7320, CVE-2018-7336, CVE-2018-7337, CVE-2018-7334, CVE-2018-7335, CVE-2018-6836, CVE-2018-5335, CVE-2018-5334, CVE-2017-6014, CVE-2017-9616, CVE-2017-9617, CVE-2017-9766

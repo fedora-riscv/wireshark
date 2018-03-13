@@ -4,8 +4,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.4.4
-Release:	2%{?dist}
+Version:	2.4.5
+Release:	1%{?dist}
 Epoch:          1
 License:	GPL+
 Group:		Applications/Internet
@@ -164,7 +164,7 @@ export PIECFLAGS="-fpie -fPIC"
 export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector-strong/-fstack-protector-all}
 export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
 export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
-export LDFLAGS="$LDFLAGS -pie -fPIC"
+export LDFLAGS="$RPM_OPT_FLAGS $LDFLAGS -pie -fPIC"
 
 autoreconf -ivf
 
@@ -371,6 +371,11 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Tue Mar 13 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.4.5-1
+- New version 2.4.5
+- Contains fixes for CVE-2018-7419, CVE-2018-7418, CVE-2018-7417, CVE-2018-7420, CVE-2018-7320, CVE-2     018-7336, CVE-2018-7337, CVE-2018-7334, CVE-2018-7335, CVE-2018-6836, CVE-2018-5335,  CVE-2018-5334,       CVE-2017-6014, CVE-2017-9616, CVE-2017-9617, CVE-2017-9766
+- Corrected LDFLAGS in the spec (rhbz#1486203)
+
 * Fri Feb 09 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1:2.4.4-2
 - Escape macros in %%changelog
 

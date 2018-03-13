@@ -4,8 +4,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.4.4
-Release:	2%{?dist}
+Version:	2.4.5
+Release:	1%{?dist}
 Epoch:          1
 License:	GPL+
 Group:		Applications/Internet
@@ -15,7 +15,6 @@ Source0:	https://wireshark.org/download/src/%{name}-%{version}.tar.xz
 Source1:        https://www.wireshark.org/download/src/all-versions/SIGNATURES-%{version}.txt
 Source2:	90-wireshark-usbmon.rules
 
-Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
 # Fedora-specific
 %if %{with_lua}
 Patch1:		wireshark-0001-enable-Lua-support.patch
@@ -30,6 +29,19 @@ Patch4:		wireshark-0004-Restore-Fedora-specific-groups.patch
 Patch5:		wireshark-0005-Fix-paths-in-a-wireshark.desktop-file.patch
 # Fedora-specific
 Patch6:		wireshark-0006-Move-tmp-to-var-tmp.patch
+
+#install tshark together with wireshark GUI
+Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
+
+Requires:	xdg-utils
+Requires:	hicolor-icon-theme
+%if %{with_portaudio}
+Requires:	portaudio
+BuildRequires:	portaudio-devel
+%endif
+%if %{with_GeoIP}
+Requires:	GeoIP
+%endif
 
 BuildRequires:	bzip2-devel
 BuildRequires:	c-ares-devel
@@ -71,16 +83,6 @@ Buildrequires: git
 Buildrequires: python2-devel
 
 %description
-Metapackage with installs %{name}-cli and %{name}-qt.
-
-%package	cli
-Summary:	Network traffic analyzer
-Group:		Applications/Internet
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires(pre):	shadow-utils
-Requires(post): systemd-udev
-
-%description cli
 Wireshark allows you to examine protocol data stored in files or as it is
 captured from wired or wireless (WiFi or Bluetooth) networks, USB devices,
 and many other sources.  It supports dozens of protocol capture file formats
@@ -91,53 +93,16 @@ and the ability to reassemble multiple protocol packets in order to, for
 example, view a complete TCP stream, save the contents of a file which was
 transferred over HTTP or CIFS, or play back an RTP audio stream.
 
+%package	cli
+Summary:	Network traffic analyzer
+Group:		Applications/Internet
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires(pre):	shadow-utils
+Requires(post): systemd-udev
+
+%description cli
 This package contains command-line utilities, plugins, and documentation for
 Wireshark.
-
-%package	qt
-Summary:	Wireshark's Qt-based GUI
-Group:		Applications/Internet
-Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
-Requires:	xdg-utils
-Requires:	hicolor-icon-theme
-%if %{with_portaudio}
-Requires:	portaudio
-BuildRequires:	portaudio-devel
-%endif
-%if %{with_GeoIP}
-Requires:	GeoIP
-%endif
-Requires(post):	/usr/sbin/update-alternatives
-Requires(postun):	/usr/sbin/update-alternatives
-
-%description qt
-This package contains the Qt Wireshark GUI and desktop integration files.
-
-%package	gtk
-Summary:	Wireshark's GTK+-based GUI
-Group:		Applications/Internet
-
-Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-# This package used to be called wireshark-gnome.
-Provides:	wireshark-gnome = %{version}-%{release}
-Obsoletes:	wireshark-gnome < 2.0.0
-%if %{with_portaudio}
-Requires:	portaudio
-BuildRequires:	portaudio-devel
-%endif
-%if %{with_GeoIP}
-Requires:	GeoIP
-%endif
-Requires:	xdg-utils
-Requires:	hicolor-icon-theme
-BuildRequires:	desktop-file-utils
-Requires(post):	desktop-file-utils
-Requires(post):	/usr/sbin/update-alternatives
-Requires(postun):	/usr/sbin/update-alternatives
-
-%description gtk
-This package contains the GTK+ Wireshark GUI and desktop integration files.
 
 %package devel
 Summary:	Development headers and libraries for wireshark
@@ -164,7 +129,7 @@ export PIECFLAGS="-fpie -fPIC"
 export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector-strong/-fstack-protector-all}
 export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
 export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
-export LDFLAGS="$LDFLAGS -pie -fPIC"
+export LDFLAGS="$RPM_OPT_FLAGS $LDFLAGS -pie -fPIC"
 
 autoreconf -ivf
 
@@ -173,7 +138,6 @@ autoreconf -ivf
    --with-libsmi \
    --with-gnu-ld \
    --with-pic \
-   --with-gtk=3 \
    --with-qt=5 \
 %if %{with_lua}
    --with-lua \
@@ -211,7 +175,6 @@ mkdir -p %{buildroot}%{python2_sitearch}
 install -m 644 tools/wireshark_be.py tools/wireshark_gen.py  %{buildroot}%{python2_sitearch}
 
 desktop-file-validate %{buildroot}%{_datadir}/applications/wireshark.desktop
-desktop-file-validate %{buildroot}%{_datadir}/applications/wireshark-gtk.desktop
 
 #install devel files (inspired by debian/wireshark-dev.header-files)
 install -d -m 0755  %{buildroot}%{_includedir}/wireshark
@@ -239,9 +202,6 @@ install -m 644 wsutil/*.h		"${IDIR}/wsutil"
 install -m 644 ws_diag_control.h	"${IDIR}/"
 install -m 644 %{SOURCE2}		%{buildroot}%{_udevrulesdir}
 
-# Change the program name for 'alternatives'
-mv %{buildroot}%{_bindir}/wireshark %{buildroot}%{_bindir}/wireshark-qt
-
 touch %{buildroot}%{_bindir}/%{name}
 
 # Remove libtool archives and static libs
@@ -250,54 +210,27 @@ find %{buildroot} -type f -name "*.la" -delete
 # Remove idl2wrs
 rm -f %{buildroot}%{_bindir}/idl2wrs
 
+#remove wireshark-gtk.desktop file since it is still installed in the makefile
+rm -f %{buildroot}%{_datadir}/applications/wireshark-gtk.desktop
+
 %pre cli
 getent group wireshark >/dev/null || groupadd -r wireshark
 getent group usbmon >/dev/null || groupadd -r usbmon
-
-# If we have a pre-alternatives wireshark binary out there, get rid of it.
-# (With 'alternatives' %{_bindir}/wireshark should be a symlink.)
-%pre gtk
-if [ -f %{_bindir}/wireshark ]; then
-	rm -f %{_bindir}/wireshark
-fi
-
-# If we have a pre-alternatives wireshark binary out there, get rid of it.
-# (With 'alternatives' %{_bindir}/wireshark should be a symlink.)
-%pre qt
-if [ -f %{_bindir}/wireshark ]; then
-	rm -f %{_bindir}/wireshark
-fi
 
 %post cli
 /sbin/ldconfig
 /usr/bin/udevadm trigger --subsystem-match=usbmon
 
-%post gtk
-/usr/sbin/update-alternatives --install %{_bindir}/wireshark \
-	%{name} %{_bindir}/wireshark-gtk 10
-
-%post qt
-/usr/sbin/update-alternatives --install %{_bindir}/wireshark \
-	%{name} %{_bindir}/wireshark-qt 50
-
-%triggerin -- wireshark < 2.2.6-4
-/usr/sbin/update-alternatives --remove-all %{name} &> /dev/null || :
-# This one was used as a workaround during f26 devel phase
-/usr/sbin/update-alternatives --remove-all %{name}-gui &> /dev/null || :
-
 %postun cli -p /sbin/ldconfig
 
-%postun gtk
-if [ $1 -eq 0 ] ; then
-	/usr/sbin/update-alternatives --remove %{name} %{_bindir}/wireshark-gtk
-fi
-
-%postun qt
-if [ $1 -eq 0 ] ; then
-	/usr/sbin/update-alternatives --remove %{name} %{_bindir}/wireshark-qt
-fi
-
 %files
+%{_datadir}/appdata/%{name}.appdata.xml
+%{_datadir}/applications/wireshark.desktop
+%{_datadir}/icons/hicolor/*/apps/*
+%{_datadir}/icons/hicolor/*/mimetypes/*
+%{_datadir}/mime/packages/wireshark.xml
+%{_bindir}/wireshark
+%{_mandir}/man1/wireshark.*
 
 %files cli
 %license COPYING
@@ -344,26 +277,6 @@ fi
 %config(noreplace) %{_datadir}/wireshark/init.lua
 %endif
 
-%files gtk
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/wireshark-gtk.desktop
-%{_datadir}/icons/hicolor/*/apps/*
-%{_datadir}/icons/hicolor/*/mimetypes/*
-%{_datadir}/mime/packages/wireshark.xml
-%{_bindir}/wireshark-gtk
-%{_mandir}/man1/wireshark.*
-%ghost %{_bindir}/wireshark
-
-%files qt
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/wireshark.desktop
-%{_datadir}/icons/hicolor/*/apps/*
-%{_datadir}/icons/hicolor/*/mimetypes/*
-%{_datadir}/mime/packages/wireshark.xml
-%{_bindir}/wireshark-qt
-%{_mandir}/man1/wireshark.*
-%ghost %{_bindir}/wireshark
-
 %files devel
 %doc doc/README.* ChangeLog
 %{_includedir}/wireshark
@@ -371,6 +284,13 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri Mar 09 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.4.5-1
+- New upstream version 2.4.5
+- Contains fixes for CVE-2018-7419, CVE-2018-7418, CVE-2018-7417, CVE-2018-7420, CVE-2018-7320, CVE-2018-7336, CVE-2018-7337, CVE-2018-7334, CVE-2018-7335, CVE-2018-6836, CVE-2018-5335,  CVE-2018-5334,  CVE-2017-6014, CVE-2017-9616, CVE-2017-9617, CVE-2017-9766
+- Removed GTK+ based GUI (rhbz#1486203)
+- Corrected LDFLAGS in spec (rhbz#1548665)
+- Alternatives are no longer needed (rhbz#1533701)
+
 * Fri Feb 09 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1:2.4.4-2
 - Escape macros in %%changelog
 

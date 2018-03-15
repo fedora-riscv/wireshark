@@ -5,10 +5,9 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.4.5
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:          1
 License:	GPL+
-Group:		Applications/Internet
 Url:		http://www.wireshark.org/
 
 Source0:	https://wireshark.org/download/src/%{name}-%{version}.tar.xz
@@ -35,7 +34,8 @@ Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
 
 Requires:	xdg-utils
 Requires:	hicolor-icon-theme
-%if %{with_portaudio}
+
+%if %{with_portaudio} && 0%{?fedora}
 Requires:	portaudio
 BuildRequires:	portaudio-devel
 %endif
@@ -95,8 +95,6 @@ transferred over HTTP or CIFS, or play back an RTP audio stream.
 
 %package	cli
 Summary:	Network traffic analyzer
-Group:		Applications/Internet
-Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires(pre):	shadow-utils
 Requires(post): systemd-udev
 
@@ -106,7 +104,6 @@ Wireshark.
 
 %package devel
 Summary:	Development headers and libraries for wireshark
-Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release} glibc-devel glib2-devel
 
 %description devel
@@ -144,7 +141,7 @@ autoreconf -ivf
 %else
    --with-lua=no \
 %endif
-%if %{with_portaudio}
+%if %{with_portaudio} && 0%{?fedora}
    --with-portaudio \
 %else
   --with-portaudio=no \
@@ -284,6 +281,10 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Mar 15 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.4.5-2
+- Removing dependency on wireshark from wireshark-cli (rhbz#1554818)
+- Removing deprecated Group tags
+
 * Fri Mar 09 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.4.5-1
 - New upstream version 2.4.5
 - Contains fixes for CVE-2018-7419, CVE-2018-7418, CVE-2018-7417, CVE-2018-7420, CVE-2018-7320, CVE-2018-7336, CVE-2018-7337, CVE-2018-7334, CVE-2018-7335, CVE-2018-6836, CVE-2018-5335,  CVE-2018-5334,  CVE-2017-6014, CVE-2017-9616, CVE-2017-9617, CVE-2017-9766

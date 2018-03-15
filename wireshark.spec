@@ -5,10 +5,9 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.4.5
-Release:	2%{?dist}
+Release:	3%{?dist}
 Epoch:          1
 License:	GPL+
-Group:		Applications/Internet
 Url:		http://www.wireshark.org/
 
 Source0:	https://wireshark.org/download/src/%{name}-%{version}.tar.xz
@@ -76,8 +75,6 @@ Metapackage with installs %{name}-cli and %{name}-qt.
 
 %package	cli
 Summary:	Network traffic analyzer
-Group:		Applications/Internet
-Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires(pre):	shadow-utils
 Requires(post): systemd-udev
 
@@ -97,7 +94,6 @@ Wireshark.
 
 %package	qt
 Summary:	Wireshark's Qt-based GUI
-Group:		Applications/Internet
 Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
 Requires:	xdg-utils
 Requires:	hicolor-icon-theme
@@ -116,7 +112,6 @@ This package contains the Qt Wireshark GUI and desktop integration files.
 
 %package	gtk
 Summary:	Wireshark's GTK+-based GUI
-Group:		Applications/Internet
 
 Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
 Requires:	%{name} = %{epoch}:%{version}-%{release}
@@ -142,7 +137,6 @@ This package contains the GTK+ Wireshark GUI and desktop integration files.
 
 %package devel
 Summary:	Development headers and libraries for wireshark
-Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release} glibc-devel glib2-devel
 
 %description devel
@@ -372,6 +366,10 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Mar 15 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.4.5-3
+- Removing dependency on wireshark from wireshark-cli (rhbz#1554818)
+- Removing deprecated Group tags
+
 * Tue Mar 13 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.4.5-2
 - Added wireshark-qt package to wireshark metapackage (rhbz#1506859)
 

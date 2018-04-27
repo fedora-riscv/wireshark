@@ -3,10 +3,10 @@ Date: Wed, 4 Sep 2013 10:03:57 +0200
 Subject: [PATCH] fix string overrun in plugins/profinet
 
 
-diff --git a/plugins/profinet/packet-dcom-cba.c b/plugins/profinet/packet-dcom-cba.c
+diff --git a/plugins/epan/profinet/packet-dcom-cba.c b/plugins/epan/profinet/packet-dcom-cba.c
 index 0f1658a..f7fd322 100644
---- a/plugins/profinet/packet-dcom-cba.c
-+++ b/plugins/profinet/packet-dcom-cba.c
+--- a/plugins/epan/profinet/packet-dcom-cba.c
++++ b/plugins/epan/profinet/packet-dcom-cba.c
 @@ -555,7 +555,7 @@ dissect_ICBAPhysicalDevice_get_LogicalDevice_rqst(tvbuff_t *tvb, int offset,
      packet_info *pinfo, proto_tree *tree, dcerpc_info *di, guint8 *drep)
  {

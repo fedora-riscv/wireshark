@@ -1,11 +1,13 @@
 %global with_lua 1
 %global with_portaudio 1
-%global with_GeoIP 1
+#libmaxmind is a substitute for GeoIP
+%global with_maxminddb 1
+%global plugins_version 2.6
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.4.5
-Release:	3%{?dist}
+Version:	2.6.0
+Release:	1%{?dist}
 Epoch:          1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -60,8 +62,8 @@ BuildRequires:	qt5-qtbase-devel
 BuildRequires:	qt5-qtmultimedia-devel
 BuildRequires:	qt5-qtsvg-devel
 BuildRequires:	zlib-devel
-%if %{with_GeoIP}
-BuildRequires:	GeoIP-devel
+%if %{with_maxminddb}
+BuildRequires:  libmaxminddb-devel
 %endif
 %if %{with_lua}
 BuildRequires:	compat-lua-devel
@@ -101,8 +103,8 @@ Requires:	hicolor-icon-theme
 Requires:	portaudio
 BuildRequires:	portaudio-devel
 %endif
-%if %{with_GeoIP}
-Requires:	GeoIP
+%if %{with_maxminddb}
+Requires:	libmaxminddb
 %endif
 Requires(post):	/usr/sbin/update-alternatives
 Requires(postun):	/usr/sbin/update-alternatives
@@ -122,8 +124,8 @@ Obsoletes:	wireshark-gnome < 2.0.0
 Requires:	portaudio
 BuildRequires:	portaudio-devel
 %endif
-%if %{with_GeoIP}
-Requires:	GeoIP
+%if %{with_maxminddb}
+Requires:	libmaxminddb
 %endif
 Requires:	xdg-utils
 Requires:	hicolor-icon-theme
@@ -180,14 +182,13 @@ autoreconf -ivf
 %else
   --with-portaudio=no \
 %endif
-%if %{with_GeoIP}
-   --with-geoip \
+%if %{with_maxminddb}
+  --with-maxminddb \
 %else
-   --with-geoip=no \
+  --with-maxminddb=no \
 %endif
-   --with-ssl \
    --disable-warnings-as-errors \
-   --with-plugins=%{_libdir}/%{name}/plugins \
+   --enable-plugins \
    --with-libnl \
    --disable-androiddump \
    --disable-randpktdump
@@ -220,7 +221,7 @@ mkdir -p "${IDIR}/epan/wmem"
 mkdir -p "${IDIR}/wiretap"
 mkdir -p "${IDIR}/wsutil"
 mkdir -p %{buildroot}%{_udevrulesdir}
-install -m 644 config.h register.h	"${IDIR}/"
+install -m 644 config.h epan/register.h	"${IDIR}/"
 install -m 644 cfile.h file.h		"${IDIR}/"
 install -m 644 ws_symbol_export.h	"${IDIR}/"
 install -m 644 epan/*.h			"${IDIR}/epan/"
@@ -324,8 +325,8 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %license COPYING
 %doc AUTHORS INSTALL NEWS README*
 %{_bindir}/capinfos
+%{_bindir}/mmdbresolve
 %{_bindir}/captype
-%{_bindir}/dftest
 %{_bindir}/editcap
 %{_bindir}/mergecap
 %{_bindir}/randpkt
@@ -344,12 +345,16 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/wireshark/extcap/ciscodump
 %{_libdir}/wireshark/extcap/udpdump
 %{_libdir}/wireshark/extcap/sshdump
-%{_libdir}/wireshark/plugins/*.so
+#the version wireshark uses to store plugins is only x.y, not .z
+%{_libdir}/wireshark/plugins/%{plugins_version}/epan/*.so
+%{_libdir}/wireshark/plugins/%{plugins_version}/wiretap/*.so
 %{_mandir}/man1/editcap.*
 %{_mandir}/man1/tshark.*
 %{_mandir}/man1/mergecap.*
 %{_mandir}/man1/text2pcap.*
 %{_mandir}/man1/capinfos.*
+%{_mandir}/man1/captype.*
+%{_mandir}/man1/ciscodump.*
 %{_mandir}/man1/dumpcap.*
 %{_mandir}/man4/wireshark-filter.*
 %{_mandir}/man1/rawshark.*
@@ -359,6 +364,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_mandir}/man1/sshdump.*
 %{_mandir}/man1/udpdump.*
 %{_mandir}/man4/extcap.*
+%{_mandir}/man1/mmdbresolve.*
 %dir %{_datadir}/wireshark
 %{_datadir}/wireshark/*
 %if %{with_lua}
@@ -392,6 +398,11 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri Apr 27 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.0-1
+- New version 2.6.0
+- Removed GeoIP support, libmaxminddb is used instead
+- Removed dftest binary
+
 * Thu Mar 15 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.4.5-3
 - Removing dependency on wireshark from wireshark-cli (rhbz#1554818)
 - Removing deprecated Group tags

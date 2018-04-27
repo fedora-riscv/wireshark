@@ -7,7 +7,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.6.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:          1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -398,6 +398,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri Apr 27 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.0-2
+- Uploading sources for version 2.6.0
+
 * Fri Apr 27 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.0-1
 - New version 2.6.0
 - Removed GeoIP support, libmaxminddb is used instead

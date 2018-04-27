@@ -34,7 +34,7 @@ index 2f9d2cc..b18e47f 100644
  
          /* Exit with "_exit()", so that we don't close the connection
 @@ -826,6 +830,7 @@ sync_pipe_open_command(char** argv, int *data_read_fd,
-     PROCESS_INFORMATION pi;
+     int i;
  #else
      char errmsg[1024+1];
 +    const char *securitymsg = "";

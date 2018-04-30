@@ -30,7 +30,7 @@ index 22ca841..6bcb527 100644
  #include <wsutil/filesystem.h>
 +#include <wsutil/wstmpdir.h> /* for get_tmp_dir() */
  #include <wsutil/copyright_info.h>
- #include <ws_version_info.h>
+ #include <version_info.h>
  #ifdef HAVE_LIBSMI
 @@ -427,7 +428,7 @@ about_folders_page_new(void)
        "capture files");
@@ -51,17 +51,17 @@ index 31dc581..2f74285 100644
  #include <wsutil/filesystem.h>
 +#include <wsutil/wstmpdir.h> /* for get_tmp_dir() */
  
- #ifdef HAVE_LIBSMI
- #include <epan/oids.h>
-@@ -204,7 +205,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
-     message += about_folders_row("\"File\" dialogs", get_last_open_dir(), "capture files");
+ #include <QDesktopServices>
+ #include <QUrl>
+@@ -206,7 +206,7 @@ FolderListModel::FolderListModel(QObject * parent):
+     appendRow( QStringList() << tr("\"File\" dialogs") << get_last_open_dir() << tr("capture files"));
  
      /* temp */
--    message += about_folders_row("Temp", g_get_tmp_dir(), "untitled capture files");
-+    message += about_folders_row("Temp", get_tmp_dir(), "untitled capture files");
+-    appendRow( QStringList() << tr("Temp") << g_get_tmp_dir() << tr("untitled capture files"));
++    appendRow( QStringList() << tr("Temp") << get_tmp_dir() << tr("untitled capture files"));
  
      /* pers conf */
-     message += about_folders_row("Personal configuration",
+     appendRow( QStringList() << tr("Personal configuration")
 diff --git a/ui/qt/iax2_analysis_dialog.cpp b/ui/qt/iax2_analysis_dialog.cpp
 index ee4e5fd..fe17a95 100644
 --- a/ui/qt/iax2_analysis_dialog.cpp
@@ -137,26 +137,22 @@ diff --git a/wsutil/Makefile.am b/wsutil/Makefile.am
 index 2af1b6c..aa149a2 100644
 --- a/wsutil/Makefile.am
 +++ b/wsutil/Makefile.am
-@@ -91,7 +91,8 @@ libwsutil_nonrepl_INCLUDES = \
- 	ws_mempbrk.h		\
- 	ws_mempbrk_int.h	\
+@@ -90,6 +90,7 @@ WSUTIL_PUBLIC_INCLUDES = \
+ 	ws_pipe.h		\
  	ws_printf.h		\
--	wsjsmn.h
-+	wsjsmn.h		\
-+	wstmpdir.h
- 
- # Header files for functions in libwsutil's ABI on this platform.
- libwsutil_abi_INCLUDES = \
-@@ -155,7 +156,8 @@ libwsutil_la_SOURCES = \
- 	unicode-utils.c		\
- 	ws_mempbrk.c		\
+ 	wsjsmn.h		\
++	wstmpdir.h		\
+ 	wsgcrypt.h		\
+ 	wsgetopt.h		\
+ 	wspcap.h		\
+@@ -168,6 +169,7 @@ libwsutil_la_SOURCES = \
+ 	ws_pipe.c		\
  	wsgcrypt.c		\
--	wsjsmn.c
-+	wsjsmn.c		\
-+	wstmpdir.c
+ 	wsjsmn.c		\
++	wstmpdir.c		\
+ 	xtea.c
  
- if HAVE_MACOS_FRAMEWORKS
- libwsutil_la_SOURCES += cfutils.c cfutils.h
+ if HAVE_PLUGINS
 diff --git a/wsutil/tempfile.c b/wsutil/tempfile.c
 index 8e1f8dc..dcf2f78 100644
 --- a/wsutil/tempfile.c
@@ -169,7 +165,7 @@ index 8e1f8dc..dcf2f78 100644
  
  #ifndef __set_errno
  #define __set_errno(x) errno=(x)
-@@ -142,7 +143,7 @@ mkdtemp (char *path_template)
+@@ -83,13 +83,14 @@ mkstemps(char *path_template, int suffixlen)
   */
  char *get_tempfile_path(const char *filename)
  {
@@ -178,6 +174,14 @@ index 8e1f8dc..dcf2f78 100644
  }
  
  #define MAX_TEMPFILES   3
+ 
+ /**
+- * Create a tempfile with the given prefix (e.g. "wireshark").
++ * Create a tempfile with the given prefix (e.g. "wireshark"). The path
++ * is created using get_tmp_dir and mkdtemp
+  *
+  * @param namebuf If not NULL, receives the full path of the temp file.
+  *                Should NOT be freed.
 @@ -199,7 +200,7 @@ create_tempfile(char **namebuf, const char *pfx, const char *sfx)
      tf[idx].path = (char *)g_malloc(tf[idx].len);
    }
@@ -187,24 +191,6 @@ index 8e1f8dc..dcf2f78 100644
  
  #ifdef _WIN32
    _tzset();
-@@ -237,7 +238,7 @@ create_tempfile(char **namebuf, const char *pfx, const char *sfx)
- 
- /**
-  * Create a directory with the given prefix (e.g. "wireshark"). The path
-- * is created using g_get_tmp_dir and mkdtemp.
-+ * is created using get_tmp_dir and mkdtemp.
-  *
-  * @param namebuf
-  * @param pfx A prefix for the temporary directory.
-@@ -265,7 +266,7 @@ create_tempdir(char **namebuf, const char *pfx)
-   /*
-    * We can't use get_tempfile_path here because we're called from dumpcap.c.
-    */
--  tmp_dir = g_get_tmp_dir();
-+  tmp_dir = get_tmp_dir();
- 
-   while (g_snprintf(td_path[idx], td_path_len[idx], "%s%c%s" TMP_FILE_SUFFIX, tmp_dir, G_DIR_SEPARATOR, pfx) > td_path_len[idx]) {
-     td_path_len[idx] *= 2;
 diff --git a/wsutil/tempfile.h b/wsutil/tempfile.h
 index 1dca2df..bb3160c 100644
 --- a/wsutil/tempfile.h
@@ -217,15 +203,6 @@ index 1dca2df..bb3160c 100644
 + * is created using get_tmp_dir and mkstemp.
   *
   * @param namebuf [in,out] If not NULL, receives the full path of the temp file.
-  *                Must NOT be freed.
-@@ -58,7 +58,7 @@ WS_DLL_PUBLIC int create_tempfile(char **namebuf, const char *pfx, const char *s
- 
- /**
-  * Create a directory with the given prefix (e.g. "wireshark"). The path
-- * is created using g_get_tmp_dir and mkdtemp.
-+ * is created using get_tmp_dir and mkdtemp.
-  *
-  * @param namebuf If not NULL, receives the full path of the temp directory.
   *                Must NOT be freed.
 diff --git a/wsutil/wstmpdir.c b/wsutil/wstmpdir.c
 new file mode 100644

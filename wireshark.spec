@@ -1,11 +1,12 @@
 %global with_lua 1
 %global with_portaudio 1
-%global with_GeoIP 1
+%global with_maxminddb 1
+%global plugins_version 2.6
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.4.5
-Release:	2%{?dist}
+Version:	2.6.0
+Release:	1%{?dist}
 Epoch:          1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -28,6 +29,7 @@ Patch4:		wireshark-0004-Restore-Fedora-specific-groups.patch
 Patch5:		wireshark-0005-Fix-paths-in-a-wireshark.desktop-file.patch
 # Fedora-specific
 Patch6:		wireshark-0006-Move-tmp-to-var-tmp.patch
+Patch7:		wireshark-0007-cmakelists.patch
 
 #install tshark together with wireshark GUI
 Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
@@ -39,8 +41,8 @@ Requires:	hicolor-icon-theme
 Requires:	portaudio
 BuildRequires:	portaudio-devel
 %endif
-%if %{with_GeoIP}
-Requires:	GeoIP
+%if %{with_maxminddb}
+Requires:	libmaxminddb
 %endif
 
 BuildRequires:	bzip2-devel
@@ -72,15 +74,18 @@ BuildRequires:	qt5-qtbase-devel
 BuildRequires:	qt5-qtmultimedia-devel
 BuildRequires:	qt5-qtsvg-devel
 BuildRequires:	zlib-devel
-%if %{with_GeoIP}
-BuildRequires:	GeoIP-devel
+%if %{with_maxminddb}
+BuildRequires:	libmaxminddb-devel
 %endif
 %if %{with_lua}
 BuildRequires:	compat-lua-devel
 %endif
 BuildRequires: libtool, automake, autoconf
 Buildrequires: git
+%if 0%{?fedora}
 Buildrequires: python2-devel
+%endif
+Buildrequires: cmake
 
 %description
 Wireshark allows you to examine protocol data stored in files or as it is
@@ -116,51 +121,30 @@ and plugins.
 %autosetup -S git
 
 %build
-%ifarch s390 s390x sparcv9 sparc64
-export PIECFLAGS="-fPIE -fPIC"
-%else
-export PIECFLAGS="-fpie -fPIC"
-%endif
-
-# FC5+ automatic -fstack-protector-all switch
-export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector-strong/-fstack-protector-all}
-export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
-export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
-export LDFLAGS="$RPM_OPT_FLAGS $LDFLAGS -pie -fPIC"
-
-autoreconf -ivf
-
-%configure \
-   --bindir=%{_bindir} \
-   --with-libsmi \
-   --with-gnu-ld \
-   --with-pic \
-   --with-qt=5 \
+%cmake -G "Unix Makefiles" \
+  -DDISABLE_WERROR=ON \
+  -DBUILD_wireshark=ON \
+  -DENABLE_QT5=ON \
 %if %{with_lua}
-   --with-lua \
+  -DENABLE_LUA=ON \
 %else
-   --with-lua=no \
+  -DENABLE_LUA=OFF \
 %endif
+%if %{with_maxminddb}
+  -DBUILD_mmdbresolve=ON \
+%else
+  -DBUILD_mmdbresolve=OFF \
+%endif
+  -DBUILD_randpktdump=OFF \
+  -DBUILD_androiddump=OFF \
+  -DENABLE_SMI=ON \
 %if %{with_portaudio} && 0%{?fedora}
-   --with-portaudio \
+  -DENABLE_PORTAUDIO=ON \
 %else
-  --with-portaudio=no \
+  -DENABLE_PORTAUDIO=OFF \
 %endif
-%if %{with_GeoIP}
-   --with-geoip \
-%else
-   --with-geoip=no \
-%endif
-   --with-ssl \
-   --disable-warnings-as-errors \
-   --with-plugins=%{_libdir}/%{name}/plugins \
-   --with-libnl \
-   --disable-androiddump \
-   --disable-randpktdump
-
-#remove rpath
-sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+  -DENABLE_PLUGINS=ON \
+  -DENABLE_NETLINK=ON
 
 make %{?_smp_mflags}
 
@@ -168,8 +152,10 @@ make %{?_smp_mflags}
 make DESTDIR=%{buildroot} install
 
 # Install python stuff.
+%if 0%{?fedora}
 mkdir -p %{buildroot}%{python2_sitearch}
 install -m 644 tools/wireshark_be.py tools/wireshark_gen.py  %{buildroot}%{python2_sitearch}
+%endif
 
 desktop-file-validate %{buildroot}%{_datadir}/applications/wireshark.desktop
 
@@ -185,7 +171,7 @@ mkdir -p "${IDIR}/epan/wmem"
 mkdir -p "${IDIR}/wiretap"
 mkdir -p "${IDIR}/wsutil"
 mkdir -p %{buildroot}%{_udevrulesdir}
-install -m 644 config.h register.h	"${IDIR}/"
+install -m 644 config.h epan/register.h	"${IDIR}/"
 install -m 644 cfile.h file.h		"${IDIR}/"
 install -m 644 ws_symbol_export.h	"${IDIR}/"
 install -m 644 epan/*.h			"${IDIR}/epan/"
@@ -208,7 +194,7 @@ find %{buildroot} -type f -name "*.la" -delete
 rm -f %{buildroot}%{_bindir}/idl2wrs
 
 #remove wireshark-gtk.desktop file since it is still installed in the makefile
-rm -f %{buildroot}%{_datadir}/applications/wireshark-gtk.desktop
+#rm -f %{buildroot}%{_datadir}/applications/wireshark-gtk.desktop
 
 %pre cli
 getent group wireshark >/dev/null || groupadd -r wireshark
@@ -234,7 +220,6 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %doc AUTHORS INSTALL NEWS README*
 %{_bindir}/capinfos
 %{_bindir}/captype
-%{_bindir}/dftest
 %{_bindir}/editcap
 %{_bindir}/mergecap
 %{_bindir}/randpkt
@@ -242,10 +227,15 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_bindir}/sharkd
 %{_bindir}/text2pcap
 %{_bindir}/tshark
+%if %{with_maxminddb}
+%{_bindir}/mmdbresolve
+%endif
 %attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=ep) %{_bindir}/dumpcap
 %{_bindir}/rawshark
 %{_udevrulesdir}/90-wireshark-usbmon.rules
+%if 0%{?fedora}
 %{python2_sitearch}/*.py*
+%endif
 %{_libdir}/lib*.so.*
 %dir %{_libdir}/wireshark
 %dir %{_libdir}/wireshark/extcap
@@ -253,7 +243,11 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/wireshark/extcap/ciscodump
 %{_libdir}/wireshark/extcap/udpdump
 %{_libdir}/wireshark/extcap/sshdump
-%{_libdir}/wireshark/plugins/*.so
+%{_libdir}/wireshark/*.cmake
+#the version wireshark uses to store plugins is only x.y, not .z
+%{_libdir}/wireshark/plugins/%{plugins_version}/epan/*.so
+%{_libdir}/wireshark/plugins/%{plugins_version}/wiretap/*.so
+%{_libdir}/wireshark/plugins/%{plugins_version}/codecs/*.so
 %{_mandir}/man1/editcap.*
 %{_mandir}/man1/tshark.*
 %{_mandir}/man1/mergecap.*
@@ -267,12 +261,19 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_mandir}/man1/reordercap.*
 %{_mandir}/man1/sshdump.*
 %{_mandir}/man1/udpdump.*
+%{_mandir}/man1/androiddump.*
+%{_mandir}/man1/captype.*
+%{_mandir}/man1/ciscodump.*
+%{_mandir}/man1/randpktdump.*
 %{_mandir}/man4/extcap.*
+%if %{with_maxminddb}
+%{_mandir}/man1/mmdbresolve.*
+%endif
 %dir %{_datadir}/wireshark
 %{_datadir}/wireshark/*
-%if %{with_lua}
-%config(noreplace) %{_datadir}/wireshark/init.lua
-%endif
+#%%if %{with_lua}
+#%%config(noreplace) %{_datadir}/wireshark/init.lua
+#%%endif
 
 %files devel
 %doc doc/README.* ChangeLog
@@ -281,6 +282,11 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Mon Apr 30 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.0-1
+- New version 2.6.0
+- Fix for CVE-2018-9256, CVE-2018-9257, CVE-2018-9258, CVE-2018-9259, CVE-2018-9260, CVE-2018-9261, CVE-2018-9262, CVE-2018-9263, CVE-2018-9264, CVE-2018-9265, CVE-2018-9266, CVE-2018-9267, CVE-2018-9268, CVE-2018-9269, CVE-2018-9270, CVE-2018-9271, CVE-2018-9272, CVE-2018-9273, CVE-2018-9274
+- Switch from autotools to cmake
+
 * Thu Mar 15 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.4.5-2
 - Removing dependency on wireshark from wireshark-cli (rhbz#1554818)
 - Removing deprecated Group tags

@@ -7,7 +7,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.6.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 Epoch:          1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -32,6 +32,8 @@ Patch4:		wireshark-0004-Restore-Fedora-specific-groups.patch
 Patch5:		wireshark-0005-Fix-paths-in-a-wireshark.desktop-file.patch
 # Fedora-specific
 Patch6:		wireshark-0006-Move-tmp-to-var-tmp.patch
+#codecs installed in wrong path
+Patch7:		wireshark-0007-install-path.patch
 
 BuildRequires:	bzip2-devel
 BuildRequires:	c-ares-devel
@@ -151,18 +153,6 @@ and plugins.
 %autosetup -S git
 
 %build
-%ifarch s390 s390x sparcv9 sparc64
-export PIECFLAGS="-fPIE -fPIC"
-%else
-export PIECFLAGS="-fpie -fPIC"
-%endif
-
-# FC5+ automatic -fstack-protector-all switch
-export RPM_OPT_FLAGS=${RPM_OPT_FLAGS//-fstack-protector-strong/-fstack-protector-all}
-export CFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
-export CXXFLAGS="$RPM_OPT_FLAGS $CPPFLAGS $PIECFLAGS -D_LARGEFILE64_SOURCE"
-export LDFLAGS="$RPM_OPT_FLAGS $LDFLAGS -pie -fPIC"
-
 autoreconf -ivf
 
 %configure \
@@ -347,6 +337,7 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/wireshark/extcap/sshdump
 #the version wireshark uses to store plugins is only x.y, not .z
 %{_libdir}/wireshark/plugins/%{plugins_version}/epan/*.so
+%{_libdir}/wireshark/plugins/%{plugins_version}/codecs/*.so
 %{_libdir}/wireshark/plugins/%{plugins_version}/wiretap/*.so
 %{_mandir}/man1/editcap.*
 %{_mandir}/man1/tshark.*
@@ -398,6 +389,10 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Tue May 15 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.0-3
+- Fixed undefined reference error in tshark (rhbz#1573906)
+- Correcting usage of build flags (rhbz#1548665)
+
 * Fri Apr 27 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.0-2
 - Uploading sources for version 2.6.0
 

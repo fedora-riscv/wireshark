@@ -6,7 +6,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.6.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:          1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -84,6 +84,7 @@ Buildrequires: git
 Buildrequires: python2-devel
 %endif
 Buildrequires: cmake
+Obsoletes: wireshark-qt, wireshark-gtk
 
 %description
 Wireshark allows you to examine protocol data stored in files or as it is
@@ -263,6 +264,9 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Tue May 15 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.0-2
+- Added Obsoletes for wireshark-qt and wireshark-gtk
+
 * Wed May 02 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.0-1
 - New version 2.6.0
 - Fix for CVE-2018-9256, CVE-2018-9257, CVE-2018-9258, CVE-2018-9259, CVE-2018-9260, CVE-2018-9261, CVE-2018-9262, CVE-2018-9263, CVE-2018-9264, CVE-2018-9265, CVE-2018-9266, CVE-2018-9267, CVE-2018-9268, CVE-2018-9269, CVE-2018-9270, CVE-2018-9271, CVE-2018-9272, CVE-2018-9273, CVE-2018-9274

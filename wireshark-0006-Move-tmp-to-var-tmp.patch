@@ -97,8 +97,8 @@ index 5d82e46..8008984 100644
  #include <wsutil/pint.h>
 +#include <wsutil/wstmpdir.h> /* for get_tmp_dir() */
  
- #include <QFileDialog>
  #include <QMessageBox>
+ #include <QPushButton>
 @@ -331,10 +332,10 @@ RtpAnalysisDialog::RtpAnalysisDialog(QWidget &parent, CaptureFile &cf, struct _r
  
      // We keep our temp files open for the lifetime of the dialog. The GTK+

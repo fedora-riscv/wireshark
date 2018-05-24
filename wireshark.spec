@@ -5,8 +5,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.6.0
-Release:	2%{?dist}
+Version:	2.6.1
+Release:	1%{?dist}
 Epoch:          1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -264,6 +264,9 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu May 24 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.1-1
+- New version 2.6.1
+
 * Tue May 15 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.0-2
 - Added Obsoletes for wireshark-qt and wireshark-gtk
 

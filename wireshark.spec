@@ -6,8 +6,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.6.0
-Release:	3%{?dist}
+Version:	2.6.1
+Release:	1%{?dist}
 Epoch:          1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -32,8 +32,6 @@ Patch4:		wireshark-0004-Restore-Fedora-specific-groups.patch
 Patch5:		wireshark-0005-Fix-paths-in-a-wireshark.desktop-file.patch
 # Fedora-specific
 Patch6:		wireshark-0006-Move-tmp-to-var-tmp.patch
-#codecs installed in wrong path
-Patch7:		wireshark-0007-install-path.patch
 
 BuildRequires:	bzip2-devel
 BuildRequires:	c-ares-devel
@@ -389,6 +387,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu May 24 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.1-1
+- New version 2.6.1
+
 * Tue May 15 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.0-3
 - Fixed undefined reference error in tshark (rhbz#1573906)
 - Correcting usage of build flags (rhbz#1548665)

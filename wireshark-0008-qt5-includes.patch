@@ -1,0 +1,63 @@
+From ea197d88a3e85ff238ffebda28baadc36dc34b7d Mon Sep 17 00:00:00 2001
+From: =?utf8?q?Jo=C3=A3o=20Valverde?= <joao.valverde@tecnico.ulisboa.pt>
+Date: Fri, 1 Jun 2018 16:15:47 +0100
+Subject: [PATCH] Fix compilation with Qt 5.11
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf8
+Content-Transfer-Encoding: 8bit
+
+On my system (Arch Linux) with Qt 5.11 these includes are required
+to avoid undefined declarations.
+
+Change-Id: Iffb0aa4d867ea55cf4a5e8fe7df9a6264c5b3be3
+Reviewed-on: https://code.wireshark.org/review/27947
+Petri-Dish: JoÃ£o Valverde <j@v6e.pt>
+Reviewed-by: Roland Knall <rknall@gmail.com>
+Tested-by: Petri Dish Buildbot
+Reviewed-by: JoÃ£o Valverde <j@v6e.pt>
+---
+ ui/qt/packet_format_group_box.cpp | 1 +
+ ui/qt/time_shift_dialog.cpp       | 3 +++
+ ui/qt/wireless_frame.cpp          | 1 +
+ 3 files changed, 5 insertions(+)
+
+diff --git a/ui/qt/packet_format_group_box.cpp b/ui/qt/packet_format_group_box.cpp
+index a80a71a..3c0fff2 100644
+--- a/ui/qt/packet_format_group_box.cpp
++++ b/ui/qt/packet_format_group_box.cpp
+@@ -10,6 +10,7 @@
+ #include <ui_packet_format_group_box.h>
+ 
+ #include <QStyle>
++#include <QStyleOption>
+ 
+ PacketFormatGroupBox::PacketFormatGroupBox(QWidget *parent) :
+     QGroupBox(parent),
+diff --git a/ui/qt/time_shift_dialog.cpp b/ui/qt/time_shift_dialog.cpp
+index 93882c0..7906bd2 100644
+--- a/ui/qt/time_shift_dialog.cpp
++++ b/ui/qt/time_shift_dialog.cpp
+@@ -14,6 +14,9 @@
+ #include <ui/time_shift.h>
+ #include <ui/qt/utils/tango_colors.h>
+ 
++#include <QStyle>
++#include <QStyleOption>
++
+ 
+ TimeShiftDialog::TimeShiftDialog(QWidget *parent, capture_file *cf) :
+     QDialog(parent),
+diff --git a/ui/qt/wireless_frame.cpp b/ui/qt/wireless_frame.cpp
+index bd9076a..46fb2dd 100644
+--- a/ui/qt/wireless_frame.cpp
++++ b/ui/qt/wireless_frame.cpp
+@@ -23,6 +23,7 @@
+ #include <wsutil/frequency-utils.h>
+ 
+ #include <QProcess>
++#include <QAbstractItemView>
+ 
+ // To do:
+ // - Disable or hide invalid channel types.
+-- 
+2.7.4

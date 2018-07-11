@@ -6,7 +6,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.6.1
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:          1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -30,6 +30,7 @@ Patch5:		wireshark-0005-Fix-paths-in-a-wireshark.desktop-file.patch
 # Fedora-specific
 Patch6:		wireshark-0006-Move-tmp-to-var-tmp.patch
 Patch7:		wireshark-0007-cmakelists.patch
+Patch8:		wireshark-0008-qt5-includes.patch
 
 #install tshark together with wireshark GUI
 Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
@@ -264,6 +265,9 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Wed Jul 11 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.1-2
+- Fixing build error with newer qt5 version
+
 * Thu May 24 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.1-1
 - New version 2.6.1
 

@@ -5,8 +5,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.6.1
-Release:	3%{?dist}
+Version:	2.6.2
+Release:	1%{?dist}
 Epoch:          1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -16,7 +16,7 @@ Source1:        https://www.wireshark.org/download/src/all-versions/SIGNATURES-%
 Source2:	90-wireshark-usbmon.rules
 
 # Fedora-specific
-%if %{with_lua}
+%if %{with_lua} && 0%{?fedora}
 Patch1:		wireshark-0001-enable-Lua-support.patch
 %endif
 # Fedora-specific
@@ -30,7 +30,6 @@ Patch5:		wireshark-0005-Fix-paths-in-a-wireshark.desktop-file.patch
 # Fedora-specific
 Patch6:		wireshark-0006-Move-tmp-to-var-tmp.patch
 Patch7:		wireshark-0007-cmakelists.patch
-Patch8:		wireshark-0008-qt5-includes.patch
 
 #install tshark together with wireshark GUI
 Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
@@ -77,7 +76,7 @@ BuildRequires:	zlib-devel
 %if %{with_maxminddb} && 0%{?fedora}
 BuildRequires:	libmaxminddb-devel
 %endif
-%if %{with_lua}
+%if %{with_lua} && 0%{?fedora}
 BuildRequires:	compat-lua-devel
 %endif
 Buildrequires: git
@@ -125,7 +124,7 @@ and plugins.
   -DDISABLE_WERROR=ON \
   -DBUILD_wireshark=ON \
   -DENABLE_QT5=ON \
-%if %{with_lua}
+%if %{with_lua} && 0%{?fedora}
   -DENABLE_LUA=ON \
 %else
   -DENABLE_LUA=OFF \
@@ -265,6 +264,10 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Mon Jul 23 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.2-1
+- New version 2.6.2
+- Contains fixes for CVE-2018-14339, CVE-2018-14340, CVE-2018-14341, CVE-2018-14342, CVE-2018-14343, CVE-2018-14344, CVE-2018-14367, CVE-2018-14368, CVE-2018-14369, CVE-2018-14370
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1:2.6.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 

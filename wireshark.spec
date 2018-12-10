@@ -6,7 +6,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.6.4
+Version:	2.6.5
 Release:	1%{?dist}
 Epoch:          1
 License:	GPL+
@@ -361,6 +361,10 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Mon Dec 10 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.5-1
+- New version 2.6.5
+- Contains fixes for CVE-2018-19622, CVE-2018-19623,  CVE-2018-19624, CVE-2018-19625, CVE-2018-19626, CVE-2018-19627, CVE-2018-19628
+
 * Mon Nov 12 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.4-1
 - New version 2.6.4
 - Contains fixes for CVE-2018-16056, CVE-2018-16057, CVE-2018-16058

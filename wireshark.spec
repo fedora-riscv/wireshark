@@ -6,7 +6,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.6.5
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:          1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -84,6 +84,7 @@ Buildrequires: git
 Buildrequires: python2-devel
 %endif
 Buildrequires: cmake
+BuildRequires: libnghttp2-devel
 Obsoletes: wireshark-qt, wireshark-gtk
 
 %description
@@ -264,6 +265,9 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Jan 03 2019 Michal Ruprich <mruprich@redhat.com> - 1:2.6.5-2
+- Adding libnghttp2-devel as BuildRequires - needed for HTTP2 support(rhbz#1512722)
+
 * Mon Dec 10 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.5-1
 - New version 2.6.5
 - Contains fixes for CVE-2018-19622, CVE-2018-19623,  CVE-2018-19624, CVE-2018-19625, CVE-2018-19626, CVE-2018-19627, CVE-2018-19628

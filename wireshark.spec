@@ -7,7 +7,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	2.6.5
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:          1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -71,6 +71,7 @@ BuildRequires:	compat-lua-devel
 BuildRequires: libtool, automake, autoconf
 Buildrequires: git
 Buildrequires: python2-devel
+BuildRequires: libnghttp2-devel
 
 %description
 Metapackage with installs %{name}-cli and %{name}-qt.
@@ -102,6 +103,7 @@ Requires:	hicolor-icon-theme
 %if %{with_portaudio}
 Requires:	portaudio
 BuildRequires:	portaudio-devel
+BuildRequires:  jack-audio-connection-kit
 %endif
 %if %{with_maxminddb}
 Requires:	libmaxminddb
@@ -123,6 +125,7 @@ Obsoletes:	wireshark-gnome < 2.0.0
 %if %{with_portaudio}
 Requires:	portaudio
 BuildRequires:	portaudio-devel
+BuildRequires:  jack-audio-connection-kit
 %endif
 %if %{with_maxminddb}
 Requires:	libmaxminddb
@@ -361,6 +364,10 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Jan 03 2019 Michal Ruprich <mruprich@redhat.com> - 1:2.6.5-2
+- Adding libnghttp2-devel as BuildRequires - needed for HTTP2 support(rhbz#1512722)
+- Adding jack-audio-connection-kit as a BuildRequire for portaudio
+
 * Mon Dec 10 2018 Michal Ruprich <mruprich@redhat.com> - 1:2.6.5-1
 - New version 2.6.5
 - Contains fixes for CVE-2018-19622, CVE-2018-19623,  CVE-2018-19624, CVE-2018-19625, CVE-2018-19626, CVE-2018-19627, CVE-2018-19628

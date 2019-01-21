@@ -145,7 +145,8 @@ and plugins.
 %endif
   -DENABLE_PLUGINS=ON \
   -DENABLE_NETLINK=ON \
-  -DBUILD_dcerpcidl2wrs=OFF
+  -DBUILD_dcerpcidl2wrs=OFF \
+  .
 
 make %{?_smp_mflags}
 
@@ -268,6 +269,7 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 * Mon Jan 21 2019 Michal Ruprich <mruprich@redhat.com> - 1:2.6.6-1
 - New version 2.6.6 
 - Contains fixes for CVE-2019-5716, CVE-2019-5717, CVE-2019-5718, CVE-2019-5719
+- Add explicit curdir on CMake invokation
 
 * Wed Jan 02 2019 Michal Ruprich <mruprich@redhat.com> - 1:2.6.5-2
 - Adding libnghttp2-devel as BuildRequires - needed for HTTP2 support(rhbz#1512722)

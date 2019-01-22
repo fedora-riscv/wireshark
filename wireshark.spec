@@ -191,10 +191,10 @@ getent group wireshark >/dev/null || groupadd -r wireshark
 getent group usbmon >/dev/null || groupadd -r usbmon
 
 %post cli
-/sbin/ldconfig
+%{?ldconfig}
 /usr/bin/udevadm trigger --subsystem-match=usbmon
 
-%postun cli -p /sbin/ldconfig
+%ldconfig_postun cli
 
 %files
 %{_datadir}/appdata/%{name}.appdata.xml

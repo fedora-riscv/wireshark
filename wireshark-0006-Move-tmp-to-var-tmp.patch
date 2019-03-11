@@ -6,41 +6,18 @@ Subject: [PATCH] Move /tmp to /var/tmp
 Fedora is using tmpfs which is limited by the size of RAM, thus we need
 to use different directory on different filesystem.
 ---
- ui/gtk/about_dlg.c             |  3 +-
  ui/qt/about_dialog.cpp         |  3 +-
  ui/qt/iax2_analysis_dialog.cpp |  5 +--
  ui/qt/rtp_analysis_dialog.cpp  |  5 +--
  ui/qt/rtp_audio_stream.cpp     |  3 +-
- wsutil/Makefile.am             |  6 ++--
  wsutil/tempfile.c              |  9 +++---
  wsutil/tempfile.h              |  4 +--
  wsutil/wstmpdir.c              | 70 ++++++++++++++++++++++++++++++++++++++++++
  wsutil/wstmpdir.h              | 39 +++++++++++++++++++++++
- 10 files changed, 132 insertions(+), 15 deletions(-)
+ 8 files changed, 132 insertions(+), 11 deletions(-)
  create mode 100644 wsutil/wstmpdir.c
  create mode 100644 wsutil/wstmpdir.h
 
-diff --git a/ui/gtk/about_dlg.c b/ui/gtk/about_dlg.c
-index 22ca841..6bcb527 100644
---- a/ui/gtk/about_dlg.c
-+++ b/ui/gtk/about_dlg.c
-@@ -28,6 +28,7 @@
- #include <gtk/gtk.h>
- 
- #include <wsutil/filesystem.h>
-+#include <wsutil/wstmpdir.h> /* for get_tmp_dir() */
- #include <wsutil/copyright_info.h>
- #include <version_info.h>
- #ifdef HAVE_LIBSMI
-@@ -427,7 +428,7 @@ about_folders_page_new(void)
-       "capture files");
- 
-   /* temp */
--  about_folders_row(table, "Temp", g_get_tmp_dir(),
-+  about_folders_row(table, "Temp", get_tmp_dir(),
-       "untitled capture files");
- 
-   /* pers conf */
 diff --git a/ui/qt/about_dialog.cpp b/ui/qt/about_dialog.cpp
 index 31dc581..2f74285 100644
 --- a/ui/qt/about_dialog.cpp
@@ -133,26 +110,6 @@ index fde66c8..b9531d2 100644
      tempfile_ = new QTemporaryFile(tempname, this);
      tempfile_->open();
  
-diff --git a/wsutil/Makefile.am b/wsutil/Makefile.am
-index 2af1b6c..aa149a2 100644
---- a/wsutil/Makefile.am
-+++ b/wsutil/Makefile.am
-@@ -90,6 +90,7 @@ WSUTIL_PUBLIC_INCLUDES = \
- 	ws_pipe.h		\
- 	ws_printf.h		\
- 	wsjsmn.h		\
-+	wstmpdir.h		\
- 	wsgcrypt.h		\
- 	wsgetopt.h		\
- 	wspcap.h		\
-@@ -168,6 +169,7 @@ libwsutil_la_SOURCES = \
- 	ws_pipe.c		\
- 	wsgcrypt.c		\
- 	wsjsmn.c		\
-+	wstmpdir.c		\
- 	xtea.c
- 
- if HAVE_PLUGINS
 diff --git a/wsutil/tempfile.c b/wsutil/tempfile.c
 index 8e1f8dc..dcf2f78 100644
 --- a/wsutil/tempfile.c

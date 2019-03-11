@@ -1,12 +1,11 @@
 %global with_lua 1
-%global with_portaudio 1
 %global with_maxminddb 1
-%global plugins_version 2.6
+%global plugins_version 3.0
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	2.6.6
-Release:	2%{?dist}
+Version:	3.0.0
+Release:	1%{?dist}
 Epoch:          1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -15,10 +14,6 @@ Source0:	https://wireshark.org/download/src/%{name}-%{version}.tar.xz
 Source1:        https://www.wireshark.org/download/src/all-versions/SIGNATURES-%{version}.txt
 Source2:	90-wireshark-usbmon.rules
 
-# Fedora-specific
-%if %{with_lua} && 0%{?fedora}
-Patch1:		wireshark-0001-enable-Lua-support.patch
-%endif
 # Fedora-specific
 Patch2:		wireshark-0002-Customize-permission-denied-error.patch
 # Will be proposed upstream
@@ -37,10 +32,6 @@ Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
 Requires:	xdg-utils
 Requires:	hicolor-icon-theme
 
-%if %{with_portaudio} && 0%{?fedora}
-Requires:	portaudio
-BuildRequires:	portaudio-devel
-%endif
 %if %{with_maxminddb} && 0%{?fedora}
 Requires:	libmaxminddb
 %endif
@@ -51,7 +42,6 @@ BuildRequires:	elfutils-devel
 BuildRequires:	gcc-c++
 BuildRequires:	glib2-devel
 BuildRequires:	gnutls-devel
-BuildRequires:	gtk3-devel
 BuildRequires:	krb5-devel
 BuildRequires:	libcap-devel
 BuildRequires:	libgcrypt-devel
@@ -81,10 +71,13 @@ BuildRequires:	compat-lua-devel
 %endif
 Buildrequires: git
 %if 0%{?fedora}
-Buildrequires: python2-devel
+Buildrequires: python3-devel
 %endif
 Buildrequires: cmake
+#needed for sdjournal external capture interface
+BuildRequires: systemd-devel
 BuildRequires: libnghttp2-devel
+
 Obsoletes: wireshark-qt, wireshark-gtk
 
 %description
@@ -124,7 +117,6 @@ and plugins.
 %cmake -G "Unix Makefiles" \
   -DDISABLE_WERROR=ON \
   -DBUILD_wireshark=ON \
-  -DENABLE_QT5=ON \
 %if %{with_lua} && 0%{?fedora}
   -DENABLE_LUA=ON \
 %else
@@ -138,14 +130,10 @@ and plugins.
   -DBUILD_randpktdump=OFF \
   -DBUILD_androiddump=OFF \
   -DENABLE_SMI=ON \
-%if %{with_portaudio} && 0%{?fedora}
-  -DENABLE_PORTAUDIO=ON \
-%else
-  -DENABLE_PORTAUDIO=OFF \
-%endif
   -DENABLE_PLUGINS=ON \
   -DENABLE_NETLINK=ON \
   -DBUILD_dcerpcidl2wrs=OFF \
+  -DBUILD_sdjournal=ON \
   .
 
 make %{?_smp_mflags}
@@ -230,7 +218,9 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/wireshark/extcap/ciscodump
 %{_libdir}/wireshark/extcap/udpdump
 %{_libdir}/wireshark/extcap/sshdump
-%{_libdir}/wireshark/*.cmake
+%{_libdir}/wireshark/extcap/sdjournal
+%{_libdir}/wireshark/extcap/dpauxmon
+%{_libdir}/wireshark/cmake/*.cmake
 #the version wireshark uses to store plugins is only x.y, not .z
 %{_libdir}/wireshark/plugins/%{plugins_version}/epan/*.so
 %{_libdir}/wireshark/plugins/%{plugins_version}/wiretap/*.so
@@ -252,12 +242,15 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_mandir}/man1/captype.*
 %{_mandir}/man1/ciscodump.*
 %{_mandir}/man1/randpktdump.*
+%{_mandir}/man1/dpauxmon.*
+%{_mandir}/man1/sdjournal.*
 %{_mandir}/man4/extcap.*
 %if %{with_maxminddb} && 0%{?fedora}
 %{_mandir}/man1/mmdbresolve.*
 %endif
 %dir %{_datadir}/wireshark
 %{_datadir}/wireshark/*
+%{_docdir}/wireshark/*.html
 
 %files devel
 %doc doc/README.* ChangeLog
@@ -266,6 +259,9 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Mon Mar 11 2019 Michal Ruprich <mruprich@redhat.com> - 1:3.0.0-1
+- New version 3.0.0
+
 * Sun Feb 03 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1:2.6.6-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 

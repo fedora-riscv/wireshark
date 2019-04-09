@@ -4,9 +4,9 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.0.0
+Version:	3.0.1
 Release:	1%{?dist}
-Epoch:          1
+Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
 
@@ -259,6 +259,10 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Tue Apr 09 2019 Michal Ruprich <mruprich@redhat.com> - 1:3.0.1-1
+- New version 3.0.1
+- Fixes CVE-2019-10894, CVE-2019-10895, CVE-2019-10896, CVE-2019-10897, CVE-2019-10898, CVE-2019-10899, CVE-2019-10900, CVE-2019-10901, CVE-2019-10902, CVE-2019-10903
+
 * Mon Mar 11 2019 Michal Ruprich <mruprich@redhat.com> - 1:3.0.0-1
 - New version 3.0.0
 

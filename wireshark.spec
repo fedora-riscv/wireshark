@@ -1,6 +1,6 @@
 %global with_lua 1
 %global with_maxminddb 1
-%global plugins_version 3.0
+%global plugins_version 3.2
 
 Summary:	Network traffic analyzer
 Name:		wireshark

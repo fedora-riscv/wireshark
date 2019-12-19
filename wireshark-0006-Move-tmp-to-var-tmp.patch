@@ -31,14 +31,14 @@ index 31dc581..2f74285 100644
  #include <QDesktopServices>
  #include <QUrl>
 @@ -206,7 +206,7 @@ FolderListModel::FolderListModel(QObject * parent):
-     appendRow( QStringList() << tr("\"File\" dialogs") << get_last_open_dir() << tr("capture files"));
+     appendRow(QStringList() << tr("\"File\" dialogs") << get_last_open_dir() << tr("capture files"));
  
      /* temp */
--    appendRow( QStringList() << tr("Temp") << g_get_tmp_dir() << tr("untitled capture files"));
-+    appendRow( QStringList() << tr("Temp") << get_tmp_dir() << tr("untitled capture files"));
+-    appendRow(QStringList() << tr("Temp") << g_get_tmp_dir() << tr("untitled capture files"));
++    appendRow(QStringList() << tr("Temp") << get_tmp_dir() << tr("untitled capture files"));
  
      /* pers conf */
-     appendRow( QStringList() << tr("Personal configuration")
+     appendRow(QStringList() << tr("Personal configuration")
 diff --git a/ui/qt/iax2_analysis_dialog.cpp b/ui/qt/iax2_analysis_dialog.cpp
 index ee4e5fd..fe17a95 100644
 --- a/ui/qt/iax2_analysis_dialog.cpp

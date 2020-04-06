@@ -4,7 +4,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.2.0
+Version:	3.2.2
 Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
@@ -259,6 +259,9 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Mon Apr 06 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.2-1
+- New version 3.2.2
+
 * Thu Dec 19 2019 Michal Ruprich <mruprich@redhat.com> - 1:3.2.0-1
 - New version 3.2.0
 

@@ -4,7 +4,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.2.2
+Version:	3.2.3
 Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
@@ -74,9 +74,14 @@ Buildrequires: git
 Buildrequires: python3-devel
 %endif
 Buildrequires: cmake
-BuildRequires: libnghttp2-devel
 #needed for sdjournal external capture interface
 BuildRequires: systemd-devel
+BuildRequires: libnghttp2-devel
+<<<<<<< HEAD
+#needed for sdjournal external capture interface
+BuildRequires: systemd-devel
+=======
+>>>>>>> f31
 
 Obsoletes: wireshark-qt, wireshark-gtk
 
@@ -133,7 +138,11 @@ and plugins.
   -DENABLE_PLUGINS=ON \
   -DENABLE_NETLINK=ON \
   -DBUILD_dcerpcidl2wrs=OFF \
+<<<<<<< HEAD
   -DENABLE_sdjournal=ON \
+=======
+  -DBUILD_sdjournal=ON \
+>>>>>>> f31
   .
 
 make %{?_smp_mflags}
@@ -259,8 +268,14 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
-* Mon Apr 06 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.2-1
+* Mon Apr 13 2020 Gwyn Ciesla <gwync@protonmail.com> - 1:3.2.3-1
+- 3.2.3
+
+* Fri Apr 03 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.2-1
 - New version 3.2.2
+
+* Fri Jan 31 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.2.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
 * Thu Dec 19 2019 Michal Ruprich <mruprich@redhat.com> - 1:3.2.0-1
 - New version 3.2.0
@@ -272,6 +287,12 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 - New version 3.0.3
 - Fixes CVE-2019-13619
 
+<<<<<<< HEAD
+=======
+* Sat Jul 27 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.0.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
+>>>>>>> f31
 * Tue Apr 09 2019 Michal Ruprich <mruprich@redhat.com> - 1:3.0.1-1
 - New version 3.0.1
 - Fixes CVE-2019-10894, CVE-2019-10895, CVE-2019-10896, CVE-2019-10897, CVE-2019-10898, CVE-2019-10899, CVE-2019-10900, CVE-2019-10901, CVE-2019-10902, CVE-2019-10903

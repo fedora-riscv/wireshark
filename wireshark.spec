@@ -4,7 +4,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.2.2
+Version:	3.2.3
 Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
@@ -259,7 +259,10 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
-* Mon Apr 06 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.2-1
+* Mon Apr 13 2020 Gwyn Ciesla <gwync@protonmail.com> - 1:3.2.3-1
+- 3.2.3
+
+* Fri Apr 03 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.2-1
 - New version 3.2.2
 
 * Fri Jan 31 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.2.0-2

@@ -77,11 +77,8 @@ Buildrequires: cmake
 #needed for sdjournal external capture interface
 BuildRequires: systemd-devel
 BuildRequires: libnghttp2-devel
-<<<<<<< HEAD
 #needed for sdjournal external capture interface
 BuildRequires: systemd-devel
-=======
->>>>>>> f31
 
 Obsoletes: wireshark-qt, wireshark-gtk
 
@@ -138,11 +135,8 @@ and plugins.
   -DENABLE_PLUGINS=ON \
   -DENABLE_NETLINK=ON \
   -DBUILD_dcerpcidl2wrs=OFF \
-<<<<<<< HEAD
   -DENABLE_sdjournal=ON \
-=======
   -DBUILD_sdjournal=ON \
->>>>>>> f31
   .
 
 make %{?_smp_mflags}

@@ -4,7 +4,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.2.3
+Version:	3.2.4
 Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
@@ -128,7 +128,7 @@ and plugins.
   -DBUILD_mmdbresolve=OFF \
 %endif
   -DBUILD_randpktdump=OFF \
-  -DBUILD_androiddump=OFF \
+  -DBUILD_androiddump=ON \
   -DENABLE_SMI=ON \
   -DENABLE_PLUGINS=ON \
   -DENABLE_NETLINK=ON \
@@ -220,6 +220,7 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/wireshark/extcap/sshdump
 %{_libdir}/wireshark/extcap/sdjournal
 %{_libdir}/wireshark/extcap/dpauxmon
+%{_libdir}/wireshark/extcap/androiddump
 %{_libdir}/wireshark/cmake/*.cmake
 #the version wireshark uses to store plugins is only x.y, not .z
 %{_libdir}/wireshark/plugins/%{plugins_version}/epan/*.so
@@ -259,6 +260,10 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri May 22 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.4-1
+- New version 3.2.4
+- Enabling build with androiddump (rhbz#1834367)
+
 * Mon Apr 13 2020 Gwyn Ciesla <gwync@protonmail.com> - 1:3.2.3-1
 - 3.2.3
 

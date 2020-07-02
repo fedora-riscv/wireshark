@@ -4,7 +4,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.2.4
+Version:	3.2.5
 Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
@@ -260,6 +260,9 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Jul 02 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.5-1
+- New version 3.2.5
+
 * Fri May 22 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.4-1
 - New version 3.2.4
 - Enabling build with androiddump (rhbz#1834367)

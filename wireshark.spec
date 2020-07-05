@@ -1,3 +1,4 @@
+%undefine __cmake_in_source_build
 %global with_lua 1
 %global with_maxminddb 1
 %global plugins_version 3.2
@@ -134,12 +135,12 @@ and plugins.
   -DENABLE_NETLINK=ON \
   -DBUILD_dcerpcidl2wrs=OFF \
   -DBUILD_sdjournal=ON \
-  .
+  %{nil}
 
-make %{?_smp_mflags}
+%cmake_build
 
 %install
-make DESTDIR=%{buildroot} install
+%cmake_install
 
 desktop-file-validate %{buildroot}%{_datadir}/applications/wireshark.desktop
 
@@ -155,7 +156,7 @@ mkdir -p "${IDIR}/epan/wmem"
 mkdir -p "${IDIR}/wiretap"
 mkdir -p "${IDIR}/wsutil"
 mkdir -p %{buildroot}%{_udevrulesdir}
-install -m 644 config.h epan/register.h	"${IDIR}/"
+install -m 644 %{_vpath_builddir}/config.h epan/register.h	"${IDIR}/"
 install -m 644 cfile.h file.h		"${IDIR}/"
 install -m 644 ws_symbol_export.h	"${IDIR}/"
 install -m 644 epan/*.h			"${IDIR}/epan/"

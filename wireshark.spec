@@ -5,7 +5,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	3.2.5
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -221,8 +221,13 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/wireshark/extcap/sdjournal
 %{_libdir}/wireshark/extcap/dpauxmon
 %{_libdir}/wireshark/extcap/androiddump
+%dir %{_libdir}/wireshark/cmake
 %{_libdir}/wireshark/cmake/*.cmake
 #the version wireshark uses to store plugins is only x.y, not .z
+%dir %{_libdir}/wireshark/plugins/%{plugins_version}
+%dir %{_libdir}/wireshark/plugins/%{plugins_version}/epan
+%dir %{_libdir}/wireshark/plugins/%{plugins_version}/wiretap
+%dir %{_libdir}/wireshark/plugins/%{plugins_version}/codecs
 %{_libdir}/wireshark/plugins/%{plugins_version}/epan/*.so
 %{_libdir}/wireshark/plugins/%{plugins_version}/wiretap/*.so
 %{_libdir}/wireshark/plugins/%{plugins_version}/codecs/*.so
@@ -260,6 +265,9 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Jul 30 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.5-2
+- Adding ownership for dirs created by wireshark (rhbz#1860650)
+
 * Thu Jul 02 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.5-1
 - New version 3.2.5
 

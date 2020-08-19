@@ -4,8 +4,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.2.5
-Release:	2%{?dist}
+Version:	3.2.6
+Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -265,6 +265,10 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Wed Aug 19 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.6-1
+- New version 3.2.6
+- Fix for CVE-2020-17498
+
 * Thu Jul 30 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.5-2
 - Adding ownership for dirs created by wireshark (rhbz#1860650)
 

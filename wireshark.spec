@@ -2,11 +2,13 @@
 %global with_lua 1
 %global with_maxminddb 1
 %global plugins_version 3.2
+# added temporarily due to errors in libqt5core
+%define _lto_cflags %{nil}
 
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	3.2.6
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -266,17 +268,20 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
-* Wed Aug 19 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.6-1
+* Thu Sep 10 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.6-2
+- Temporarily disabling LTO due to errors in libqt5core
+
+* Wed Aug 19 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.6-1
 - New version 3.2.6
 - Fix for CVE-2020-17498
 
-* Thu Jul 30 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.5-3
+* Thu Jul 30 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.5-3
 - Adding ownership for dirs created by wireshark (rhbz#1860650)
 
 * Wed Jul 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.2.5-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
-* Thu Jul 02 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.5-1
+* Thu Jul 02 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.5-1
 - New version 3.2.5
 
 * Fri May 22 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.4-1
@@ -286,7 +291,7 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 * Mon Apr 13 2020 Gwyn Ciesla <gwync@protonmail.com> - 1:3.2.3-1
 - 3.2.3
 
-* Fri Apr 03 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.2-1
+* Fri Apr 03 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.2-1
 - New version 3.2.2
 
 * Fri Jan 31 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.2.0-2

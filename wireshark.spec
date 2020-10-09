@@ -7,7 +7,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.2.6
+Version:	3.2.7
 Release:	2%{?dist}
 Epoch:		1
 License:	GPL+
@@ -268,6 +268,10 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri Oct 09 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.7-1
+- New version 3.2.7
+- Fix for CVE-2020-25862, CVE-2020-25863, CVE-2020-25866
+
 * Thu Sep 10 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.6-2
 - Temporarily disabling LTO due to errors in libqt5core
 

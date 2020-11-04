@@ -1,0 +1,13 @@
+/test:
+    summary:
+        CI plan, picks Tier1 tests, runs in beakerlib.
+    description:
+        This special plan has to be named ci.fmf to run in CI.
+        It selects test which have 'tier 1' in their main.fmf file
+    discover:
+      - name: tier1
+        how: fmf
+        filter: 'tier: 1'
+        repository: "https://src.fedoraproject.org/tests/wireshark.git"
+    execute:
+        how: beakerlib

@@ -1,14 +1,14 @@
 %undefine __cmake_in_source_build
 %global with_lua 1
 %global with_maxminddb 1
-%global plugins_version 3.2
+%global plugins_version 3.4
 # added temporarily due to errors in libqt5core
 %define _lto_cflags %{nil}
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.2.7
-Release:	2%{?dist}
+Version:	3.4.0
+Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -60,7 +60,8 @@ BuildRequires:	flex
 BuildRequires:	pcre-devel
 BuildRequires:	perl(Pod::Html)
 BuildRequires:	perl(Pod::Man)
-Buildrequires:  libssh-devel
+BuildRequires:	perl(open)
+Buildrequires:	libssh-devel
 BuildRequires:	qt5-linguist
 BuildRequires:	qt5-qtbase-devel
 BuildRequires:	qt5-qtmultimedia-devel
@@ -268,6 +269,10 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Dec 03 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.4.0-1
+- New version 3.4.0
+- Fix for CVE-2020-26575, CVE-2020-28030
+
 * Fri Oct 09 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.7-1
 - New version 3.2.7
 - Fix for CVE-2020-25862, CVE-2020-25863, CVE-2020-25866

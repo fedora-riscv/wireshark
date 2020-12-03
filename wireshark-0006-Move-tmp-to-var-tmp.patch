@@ -111,43 +111,50 @@ index fde66c8..b9531d2 100644
      tempfile_->open();
  
 diff --git a/wsutil/tempfile.c b/wsutil/tempfile.c
-index 8e1f8dc..dcf2f78 100644
+index 5082452..f751a7c 100644
 --- a/wsutil/tempfile.c
 +++ b/wsutil/tempfile.c
-@@ -36,6 +36,7 @@
- 
+@@ -12,10 +12,12 @@
+
+ #include <glib.h>
  #include "tempfile.h"
- #include <wsutil/file_util.h>
++#include <wsutil/file_util.h>
 +#include <wsutil/wstmpdir.h> /* for get_tmp_dir() */
- 
- #ifndef __set_errno
- #define __set_errno(x) errno=(x)
-@@ -83,13 +83,14 @@ mkstemps(char *path_template, int suffixlen)
-  */
- char *get_tempfile_path(const char *filename)
- {
--  return g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", g_get_tmp_dir(), filename);
-+  return g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", get_tmp_dir(), filename);
- }
- 
- #define MAX_TEMPFILES   3
- 
- /**
-- * Create a tempfile with the given prefix (e.g. "wireshark").
-+ * Create a tempfile with the given prefix (e.g. "wireshark"). The path
-+ * is created using get_tmp_dir and mkdtemp
+
+  /**
+  * Create a tempfile with the given prefix (e.g. "wireshark"). The path
+- * is created using g_file_open_tmp.
++ * is created using get_tmp_dir.
   *
-  * @param namebuf If not NULL, receives the full path of the temp file.
-  *                Should NOT be freed.
-@@ -199,7 +200,7 @@ create_tempfile(char **namebuf, const char *pfx, const char *sfx)
-     tf[idx].path = (char *)g_malloc(tf[idx].len);
-   }
- 
--  tmp_dir = g_get_tmp_dir();
+  * @param namebuf [in,out] If not NULL, receives the full path of the temp file.
+  *                Must be freed.
+@@ -30,6 +31,9 @@ create_tempfile(gchar **namebuf, const char *pfx, const char *sfx, GError **err)
+ {
+   int fd;
+   gchar *safe_pfx = NULL;
++  gchar *tmp_file;
++  const char *tmp_dir;
++  int old_mask;
+
+   if (pfx) {
+     /* The characters in "delimiters" come from:
+@@ -49,7 +53,15 @@ create_tempfile(gchar **namebuf, const char *pfx, const char *sfx, GError **err)
+   gchar* filetmpl = g_strdup_printf("%sXXXXXX%s", safe_pfx ? safe_pfx : "", sfx ? sfx : "");
+   g_free(safe_pfx);
+
+-  fd = g_file_open_tmp(filetmpl, namebuf, err);
 +  tmp_dir = get_tmp_dir();
- 
- #ifdef _WIN32
-   _tzset();
++  tmp_file = g_strconcat(tmp_dir, "/", filetmpl, NULL);
++
++  if (namebuf)
++    *namebuf = tmp_file;
++
++  old_mask = ws_umask(0077);
++  fd = mkstemps(tmp_file, sfx ? (int) strlen(sfx) : 0);
++  ws_umask(old_mask);
+
+   g_free(filetmpl);
+   return fd;
 diff --git a/wsutil/tempfile.h b/wsutil/tempfile.h
 index 1dca2df..bb3160c 100644
 --- a/wsutil/tempfile.h
@@ -156,17 +163,17 @@ index 1dca2df..bb3160c 100644
  
  /**
   * Create a tempfile with the given prefix (e.g. "wireshark"). The path
-- * is created using g_get_tmp_dir and mkstemp.
+- * is created using g_file_open_tmp.
 + * is created using get_tmp_dir and mkstemp.
   *
   * @param namebuf [in,out] If not NULL, receives the full path of the temp file.
-  *                Must NOT be freed.
+  *                Must be freed.
 diff --git a/wsutil/wstmpdir.c b/wsutil/wstmpdir.c
 new file mode 100644
 index 0000000..d8b733b
 --- /dev/null
 +++ b/wsutil/wstmpdir.c
-@@ -0,0 +1,70 @@
+@@ -0,0 +1,71 @@
 +/* wstmpdir.c
 + *
 + * Copyright (C) 2013 Red Hat, Inc. All right reserved.
@@ -224,6 +231,7 @@ index 0000000..d8b733b
 +            k = strlen(tmp);
 +            if (k > 1 && G_IS_DIR_SEPARATOR(tmp[k - 1]))
 +                tmp[k - 1] = '\0';
++            fprintf(stderr, "Using P_tmpdir: %s\n", P_tmpdir);
 +        }
 +#endif /* P_tmpdir */
 +

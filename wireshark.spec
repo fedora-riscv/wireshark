@@ -1,10 +1,10 @@
 %global with_lua 1
 %global with_maxminddb 1
-%global plugins_version 3.2
+%global plugins_version 3.4
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.2.7
+Version:	3.4.0
 Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
@@ -57,7 +57,8 @@ BuildRequires:	flex
 BuildRequires:	pcre-devel
 BuildRequires:	perl(Pod::Html)
 BuildRequires:	perl(Pod::Man)
-Buildrequires:  libssh-devel
+BuildRequires:	perl(open)
+Buildrequires:	libssh-devel
 BuildRequires:	qt5-linguist
 BuildRequires:	qt5-qtbase-devel
 BuildRequires:	qt5-qtmultimedia-devel
@@ -265,28 +266,32 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Dec 03 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.4.0-1
+- New version 3.4.0
+- Fix for CVE-2020-26575, CVE-2020-28030
+
 * Fri Oct 09 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.7-1
 - New version 3.2.7
 - Fix for CVE-2020-25862, CVE-2020-25863, CVE-2020-25866
 
-* Wed Aug 19 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.6-1
+* Wed Aug 19 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.6-1
 - New version 3.2.6
 - Fix for CVE-2020-17498
 
-* Thu Jul 30 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.5-2
+* Thu Jul 30 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.5-2
 - Adding ownership for dirs created by wireshark (rhbz#1860650)
 
-* Thu Jul 02 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.5-1
+* Thu Jul 02 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.5-1
 - New version 3.2.5
 
-* Fri May 22 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.4-1
+* Fri May 22 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.4-1
 - New version 3.2.4
 - Enabling build with androiddump (rhbz#1834367)
 
 * Mon Apr 13 2020 Gwyn Ciesla <gwync@protonmail.com> - 1:3.2.3-1
 - 3.2.3
 
-* Fri Apr 03 2020 Michal Ruprich <michalruprich@gmail.com> - 1:3.2.2-1
+* Fri Apr 03 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.2.2-1
 - New version 3.2.2
 
 * Fri Jan 31 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.2.0-2

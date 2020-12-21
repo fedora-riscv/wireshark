@@ -184,7 +184,11 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 
 %post cli
 %{?ldconfig}
-/usr/bin/udevadm trigger --subsystem-match=usbmon
+# skip triggering if udevd isn't even accessible, e.g. containers or
+# rpm-ostree-based systems
+if [ -S /run/udev/control ]; then
+    /usr/bin/udevadm trigger --subsystem-match=usbmon
+fi
 
 %ldconfig_postun cli
 

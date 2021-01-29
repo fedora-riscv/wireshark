@@ -7,8 +7,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.4.0
-Release:	2%{?dist}
+Version:	3.4.2
+Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -273,6 +273,10 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri Jan 29 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.2-1
+- New version 3.4.2
+- Fix for CVE-2020-26418, CVE-2020-26419, CVE-2020-26420, CVE-2020-26421
+
 * Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.4.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 

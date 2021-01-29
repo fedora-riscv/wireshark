@@ -4,7 +4,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.4.0
+Version:	3.4.2
 Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
@@ -181,7 +181,11 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 
 %post cli
 %{?ldconfig}
-/usr/bin/udevadm trigger --subsystem-match=usbmon
+# skip triggering if udevd isn't even accessible, e.g. containers or
+# rpm-ostree-based systems
+if [ -S /run/udev/control ]; then
+	/usr/bin/udevadm trigger --subsystem-match=usbmon
+fi
 
 %ldconfig_postun cli
 
@@ -266,6 +270,10 @@ getent group usbmon >/dev/null || groupadd -r usbmon
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri Jan 29 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.2-1
+- New version 3.4.2
+- Fix for CVE-2020-26418, CVE-2020-26419, CVE-2020-26420, CVE-2020-26421
+
 * Thu Dec 03 2020 Michal Ruprich <mruprich@redhat.com> - 1:3.4.0-1
 - New version 3.4.0
 - Fix for CVE-2020-26575, CVE-2020-28030

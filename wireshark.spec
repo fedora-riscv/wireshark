@@ -8,7 +8,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	3.4.3
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -29,6 +29,7 @@ Patch5:		wireshark-0005-Fix-paths-in-a-wireshark.desktop-file.patch
 Patch6:		wireshark-0006-Move-tmp-to-var-tmp.patch
 Patch7:		wireshark-0007-cmakelists.patch
 Patch8:		wireshark-0008-move-glib.patch
+Patch9:		wireshark-0009-smc-support.patch
 
 #install tshark together with wireshark GUI
 Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
@@ -274,6 +275,9 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Mon Feb 22 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.3-2
+- Adding SMC-R, SMC-D and SMC-D v2
+
 * Tue Feb 16 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.3-1
 - New version 3.4.3
 - Fix for CVE-2021-22173, CVE-2021-22174

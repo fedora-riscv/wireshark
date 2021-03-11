@@ -8,6 +8,6 @@
       - name: tier1
         how: fmf
         filter: 'tier: 1'
-        repository: "https://src.fedoraproject.org/tests/wireshark.git"
+        url: "https://src.fedoraproject.org/tests/wireshark.git"
     execute:
         how: beakerlib

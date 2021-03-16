@@ -7,8 +7,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.4.3
-Release:	3%{?dist}
+Version:	3.4.4
+Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -275,6 +275,10 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Tue Mar 16 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.4-1
+- New version 3.4.4
+- Fix for CVE-2021-22191
+
 * Tue Feb 23 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.3-3
 - Adding more commits to make SMC complete
 

@@ -7,7 +7,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.4.4
+Version:	3.4.5
 Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
@@ -28,7 +28,6 @@ Patch5:		wireshark-0005-Fix-paths-in-a-wireshark.desktop-file.patch
 # Fedora-specific
 Patch6:		wireshark-0006-Move-tmp-to-var-tmp.patch
 Patch7:		wireshark-0007-cmakelists.patch
-Patch8:		wireshark-0008-move-glib.patch
 Patch9:		wireshark-0009-smc-support.patch
 
 #install tshark together with wireshark GUI
@@ -275,6 +274,10 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu May 27 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.5-1
+- New version 3.4.5
+- Fix for CVE-2021-22207
+
 * Tue Mar 16 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.4-1
 - New version 3.4.4
 - Fix for CVE-2021-22191

@@ -7,7 +7,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.4.6
+Version:	3.4.7
 Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
@@ -73,7 +73,7 @@ BuildRequires:	libmaxminddb-devel
 %if %{with_lua} && 0%{?fedora}
 BuildRequires:	compat-lua-devel
 %endif
-Buildrequires: git
+Buildrequires: git-core
 %if 0%{?fedora}
 Buildrequires: python3-devel
 %endif
@@ -273,6 +273,9 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Jul 15 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.7-1
+- New version 3.4.7
+
 * Thu Jun 10 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.6-1
 - New version 3.4.6
 - Fix for CVE-2021-22207

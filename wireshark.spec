@@ -8,7 +8,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	3.4.8
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -16,6 +16,7 @@ Url:		http://www.wireshark.org/
 Source0:	https://wireshark.org/download/src/%{name}-%{version}.tar.xz
 Source1:        https://www.wireshark.org/download/src/all-versions/SIGNATURES-%{version}.txt
 Source2:	90-wireshark-usbmon.rules
+Source3:	wireshark.sysusers
 
 # Fedora-specific
 Patch2:		wireshark-0002-Customize-permission-denied-error.patch
@@ -82,6 +83,7 @@ Buildrequires: cmake
 #needed for sdjournal external capture interface
 BuildRequires: systemd-devel
 BuildRequires: libnghttp2-devel
+BuildRequires: systemd-rpm-macros
 
 Obsoletes: wireshark-qt, wireshark-gtk
 
@@ -173,6 +175,7 @@ install -m 644 wiretap/*.h		"${IDIR}/wiretap"
 install -m 644 wsutil/*.h		"${IDIR}/wsutil"
 install -m 644 ws_diag_control.h	"${IDIR}/"
 install -m 644 %{SOURCE2}		%{buildroot}%{_udevrulesdir}
+install -Dpm 644 %{SOURCE3}		%{buildroot}%{_sysusersdir}/%{name}.conf
 
 touch %{buildroot}%{_bindir}/%{name}
 
@@ -180,8 +183,7 @@ touch %{buildroot}%{_bindir}/%{name}
 find %{buildroot} -type f -name "*.la" -delete
 
 %pre cli
-getent group wireshark >/dev/null || groupadd -r wireshark
-getent group usbmon >/dev/null || groupadd -r usbmon
+%sysusers_create_compat %{SOURCE3}
 
 %post cli
 %{?ldconfig}
@@ -201,6 +203,7 @@ fi
 %{_datadir}/mime/packages/wireshark.xml
 %{_bindir}/wireshark
 %{_mandir}/man1/wireshark.*
+%{_sysusersdir}/%{name}.conf
 
 %files cli
 %license COPYING
@@ -274,6 +277,9 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Mon Sep 06 2021 Timothée Ravier <tim@siosm.fr> - 1:3.4.8-2
+- Use system sysusers config to create groups
+
 * Tue Aug 31 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.8-1
 - New version 3.4.8
 

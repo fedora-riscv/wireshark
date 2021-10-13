@@ -7,8 +7,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.4.8
-Release:	2%{?dist}
+Version:	3.4.9
+Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -276,6 +276,9 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Wed Oct 13 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.9-1
+- New version
+
 * Wed Sep 22 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.8-2
 - Use system sysusers config to create groups
 

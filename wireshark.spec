@@ -1,13 +1,13 @@
 %undefine __cmake_in_source_build
 %global with_lua 1
 %global with_maxminddb 1
-%global plugins_version 3.4
+%global plugins_version 3.6
 # added temporarily due to errors in libqt5core
 %define _lto_cflags %{nil}
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.4.9
+Version:	3.6.0
 Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
@@ -29,7 +29,6 @@ Patch5:		wireshark-0005-Fix-paths-in-a-wireshark.desktop-file.patch
 # Fedora-specific
 Patch6:		wireshark-0006-Move-tmp-to-var-tmp.patch
 Patch7:		wireshark-0007-cmakelists.patch
-Patch9:		wireshark-0009-smc-support.patch
 
 #install tshark together with wireshark GUI
 Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
@@ -69,6 +68,7 @@ BuildRequires:	qt5-qtbase-devel
 BuildRequires:	qt5-qtmultimedia-devel
 BuildRequires:	qt5-qtsvg-devel
 BuildRequires:	zlib-devel
+BuildRequires:	asciidoctor
 %if %{with_maxminddb} && 0%{?fedora}
 BuildRequires:	libmaxminddb-devel
 %endif
@@ -148,7 +148,7 @@ and plugins.
 %install
 %cmake_install
 
-desktop-file-validate %{buildroot}%{_datadir}/applications/wireshark.desktop
+desktop-file-validate %{buildroot}%{_datadir}/applications/org.wireshark.Wireshark.desktop
 
 #install devel files (inspired by debian/wireshark-dev.header-files)
 install -d -m 0755  %{buildroot}%{_includedir}/wireshark
@@ -170,7 +170,6 @@ install -m 644 epan/crypt/*.h		"${IDIR}/epan/crypt"
 install -m 644 epan/ftypes/*.h		"${IDIR}/epan/ftypes"
 install -m 644 epan/dfilter/*.h		"${IDIR}/epan/dfilter"
 install -m 644 epan/dissectors/*.h	"${IDIR}/epan/dissectors"
-install -m 644 epan/wmem/*.h		"${IDIR}/epan/wmem"
 install -m 644 wiretap/*.h		"${IDIR}/wiretap"
 install -m 644 wsutil/*.h		"${IDIR}/wsutil"
 install -m 644 ws_diag_control.h	"${IDIR}/"
@@ -196,11 +195,11 @@ fi
 %ldconfig_postun cli
 
 %files
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/wireshark.desktop
+%{_datadir}/applications/org.wireshark.Wireshark.desktop
 %{_datadir}/icons/hicolor/*/apps/*
 %{_datadir}/icons/hicolor/*/mimetypes/*
-%{_datadir}/mime/packages/wireshark.xml
+%{_datadir}/mime/packages/*.xml
+%{_datadir}/metainfo/*.xml
 %{_bindir}/wireshark
 %{_mandir}/man1/wireshark.*
 %{_sysusersdir}/%{name}.conf
@@ -262,13 +261,13 @@ fi
 %{_mandir}/man1/randpktdump.*
 %{_mandir}/man1/dpauxmon.*
 %{_mandir}/man1/sdjournal.*
+%{_mandir}/man1/etwdump.*
 %{_mandir}/man4/extcap.*
 %if %{with_maxminddb} && 0%{?fedora}
 %{_mandir}/man1/mmdbresolve.*
 %endif
 %dir %{_datadir}/wireshark
 %{_datadir}/wireshark/*
-%{_docdir}/wireshark/*.html
 
 %files devel
 %doc doc/README.* ChangeLog
@@ -277,6 +276,10 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Nov 25 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.6.0-1
+- New version 3.6.0
+- Fix for CVE-2021-39920, CVE-2021-39921, CVE-2021-39922, CVE-2021-39923, CVE-2021-39924, CVE-2021-39925, CVE-2021-39926, CVE-2021-39928, CVE-2021-39929
+
 * Wed Oct 13 2021 Michal Ruprich <mruprich@redhat.com> - 1:3.4.9-1
 - New version 3.4.9
 

@@ -8,7 +8,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	3.6.1
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -276,6 +276,9 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Sat Jan 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.6.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
 * Wed Jan 12 2022 Michal Ruprich <mruprich@redhat.com> - 1:3.6.1-1
 - New version 3.6.1
 - Fix for CVE-2021-4181, CVE-2021-4182, CVE-2021-4183, CVE-2021-4184, CVE-2021-4185, CVE-2021-4190

@@ -7,8 +7,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.6.1
-Release:	2%{?dist}
+Version:	3.6.2
+Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -276,6 +276,10 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Wed Feb 16 2022 Michal Ruprich <mruprich@redhat.com> - 1:3.6.2-1
+- New version 3.6.2
+- Fix for CVE-2022-0581, CVE-2022-0582, CVE-2022-0583, CVE-2022-0585, CVE-2022-0586
+
 * Sat Jan 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.6.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 

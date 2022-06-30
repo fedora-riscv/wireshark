@@ -8,7 +8,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	3.6.7
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -76,9 +76,7 @@ BuildRequires:	libmaxminddb-devel
 BuildRequires:	compat-lua-devel
 %endif
 Buildrequires: git-core
-%if 0%{?fedora}
 Buildrequires: python3-devel
-%endif
 Buildrequires: cmake
 #needed for sdjournal external capture interface
 BuildRequires: systemd-devel
@@ -276,6 +274,9 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Mon Aug 01 2022 Davide Cavalca <dcavalca@fedoraproject.org> - 1:3.6.7-2
+- Drop gating for python3-devel dependency
+
 * Thu Jul 28 2022 Michal Ruprich <mruprich@redhat.com> - 1:3.6.7-1
 - New version 3.6.7
 

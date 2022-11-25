@@ -5,7 +5,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	4.0.0
+Version:	4.0.1
 Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
@@ -199,7 +199,6 @@ fi
 %{_datadir}/icons/hicolor/*/mimetypes/*
 %{_bindir}/wireshark
 %{_mandir}/man1/wireshark.*
-%{_sysusersdir}/%{name}.conf
 
 %files cli
 %license COPYING
@@ -267,6 +266,7 @@ fi
 %endif
 %dir %{_datadir}/wireshark
 %{_datadir}/wireshark/*
+%{_sysusersdir}/%{name}.conf
 
 %files devel
 %doc doc/README.* ChangeLog
@@ -275,6 +275,11 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri Nov 25 2022 Michal Ruprich <mruprich@redhat.com> - 1:4.0.1-1
+- New version 4.0.1
+- Fix for rhbz #2148308
+- Fix for CVE-2022-3725
+
 * Fri Oct 14 2022 Michal Ruprich <mruprich@redhat.com> - 1:4.0.0-1
 - New version 4.0.0
 

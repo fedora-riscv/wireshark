@@ -1,0 +1,8 @@
+---
+ownership:
+  #dumpcap is the only binary that has group wireshark
+  ignore:
+    - /usr/bin/dumpcap
+
+inspections:
+  xml: off

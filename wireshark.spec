@@ -5,7 +5,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	4.0.2
+Version:	4.0.3
 Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
@@ -275,6 +275,9 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Feb 02 2023 Michal Ruprich <mruprich@redhat.com> - 1:4.0.3-1
+- New version 4.0.3
+
 * Thu Dec 08 2022 Michal Ruprich <mruprich@redhat.com> - 1:4.0.2-1
 - New version 4.0.2
 

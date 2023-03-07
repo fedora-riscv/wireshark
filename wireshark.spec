@@ -7,7 +7,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	3.6.11
+Version:	3.6.12
 Release:	1%{?dist}
 Epoch:		1
 License:	GPL+
@@ -276,6 +276,9 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Tue Mar 07 2023 Michal Ruprich <mruprich@redhat.com> - 1:3.6.12-1
+- New version 3.6.12
+
 * Thu Feb 02 2023 Michal Ruprich <mruprich@redhat.com> - 1:3.6.11-1
 - New version 3.6.11
 

@@ -262,7 +262,7 @@ fi
 %{_mandir}/man1/randpktdump.*
 %{_mandir}/man1/dpauxmon.*
 %{_mandir}/man1/sdjournal.*
-%{_mandir}/man1/etwdump.1.gz
+%{_mandir}/man1/etwdump.*
 %{_mandir}/man4/extcap.*
 %if %{with_maxminddb} && 0%{?fedora}
 %{_mandir}/man1/mmdbresolve.*

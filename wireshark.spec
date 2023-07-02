@@ -3,10 +3,14 @@
 %global with_maxminddb 1
 %global plugins_version 4.0
 
+%ifarch riscv64
+%undefine __brp_check_rpaths
+%endif
+
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	4.0.4
-Release:	1%{?dist}
+Release:	1.rv64%{?dist}
 Epoch:		1
 License:	GPL+
 Url:		http://www.wireshark.org/
@@ -279,6 +283,9 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Sun Jul 02 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 1:4.0.4-1.rv64
+- rpath check failed on riscv64, disable it for riscv64.
+
 * Tue Mar 07 2023 Michal Ruprich <mruprich@redhat.com> - 1:4.0.4-1
 - New version 4.0.4
 

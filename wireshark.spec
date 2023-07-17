@@ -28,6 +28,7 @@ Patch5:		wireshark-0005-Fix-paths-in-a-wireshark.desktop-file.patch
 Patch6:		wireshark-0006-Move-tmp-to-var-tmp.patch
 Patch7:		wireshark-0007-cmakelists.patch
 Patch8:		wireshark-0008-glib2-g_strdup-build.patch
+Patch9:		wireshark-0009-fix-asn2wrs-cmake.patch
 
 #install tshark together with wireshark GUI
 Requires:	%{name}-cli = %{epoch}:%{version}-%{release}

@@ -5,8 +5,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	4.0.7
-Release:	3%{?dist}
+Version:	4.0.8
+Release:	1%{?dist}
 Epoch:		1
 License:	BSD-1-Clause AND BSD-2-Clause AND BSD-3-Clause AND MIT AND GPL-2.0-or-later AND LGPL-2.0-or-later AND Zlib AND ISC AND (BSD-3-Clause OR GPL-2.0-only) AND (GPL-2.0-or-later AND Zlib)
 Url:		http://www.wireshark.org/
@@ -280,6 +280,10 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Tue Aug 29 2023 Michal Ruprich <mruprich@redhat.com> - 1:4.0.8-1
+- New version 4.0.8
+- Resolves: #2235577 - possible Denial of Service via crafted package
+
 * Fri Jul 28 2023 Michal Ruprich <mruprich@redhat.com> - 1:4.0.7-3
 - Resolves: #2227004 - capinfos aborts in FIPS
 

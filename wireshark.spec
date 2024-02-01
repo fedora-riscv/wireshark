@@ -5,8 +5,8 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	4.0.8
-Release:	2%{?dist}
+Version:	4.0.12
+Release:	1%{?dist}
 Epoch:		1
 License:	BSD-1-Clause AND BSD-2-Clause AND BSD-3-Clause AND MIT AND GPL-2.0-or-later AND LGPL-2.0-or-later AND Zlib AND ISC AND (BSD-3-Clause OR GPL-2.0-only) AND (GPL-2.0-or-later AND Zlib)
 Url:		http://www.wireshark.org/
@@ -28,9 +28,8 @@ Patch5:   wireshark-0005-Fix-paths-in-a-wireshark.desktop-file.patch
 Patch6:   wireshark-0006-Move-tmp-to-var-tmp.patch
 Patch7:   wireshark-0007-cmakelists.patch
 Patch8:   wireshark-0008-glib2-g_strdup-build.patch
-Patch9:   wireshark-0009-fix-asn2wrs-cmake.patch
-Patch10:  wireshark-0010-ripemd-fips-core-dump.patch
-Patch11:  wireshark-0011-manage-interfaces-crash.patch
+Patch9:   wireshark-0009-ripemd-fips-core-dump.patch
+Patch10:  wireshark-0010-manage-interfaces-crash.patch
 
 #install tshark together with wireshark GUI
 Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
@@ -281,6 +280,9 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Thu Feb 01 2024 Michal Ruprich <mruprich@redhat.com> - 1:4.0.12-1
+- New version 4.0.12
+
 * Thu Aug 31 2023 Michal Ruprich <mruprich@redhat.com> - 1:4.0.8-2
 - Resolves: #2236246 - wireshark crash in managed interfaces
 

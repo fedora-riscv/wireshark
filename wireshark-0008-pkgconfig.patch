@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 27fa752..7bdc036 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4037,9 +4037,6 @@ install(
+ 		"${CMAKE_BINARY_DIR}/wireshark.pc"
+ 	DESTINATION
+ 		${CMAKE_INSTALL_LIBDIR}/pkgconfig
+-	COMPONENT
+-		"Development"
+-	EXCLUDE_FROM_ALL
+ )
+ 
+ install(

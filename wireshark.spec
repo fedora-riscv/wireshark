@@ -6,7 +6,7 @@
 Summary:	Network traffic analyzer
 Name:		wireshark
 Version:	4.2.2
-Release:	3%{?dist}
+Release:	4%{?dist}
 Epoch:		1
 License:	BSD-1-Clause AND BSD-2-Clause AND BSD-3-Clause AND MIT AND GPL-2.0-or-later AND LGPL-2.0-or-later AND Zlib AND ISC AND (BSD-3-Clause OR GPL-2.0-only) AND (GPL-2.0-or-later AND Zlib)
 Url:		http://www.wireshark.org/
@@ -125,6 +125,9 @@ and plugins.
 %cmake -G "Unix Makefiles" \
   -DDISABLE_WERROR=ON \
   -DBUILD_wireshark=ON \
+%ifarch riscv64
+  -DCMAKE_SKIP_RPATH:BOOL=TRUE \
+%endif
 %if %{with_lua} && 0%{?fedora}
   -DENABLE_LUA=ON \
 %else
@@ -280,6 +283,9 @@ fi
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Fri Feb 23 2024 Jiasheng Zhao <JasenChao@gmail.com> - 1:4.2.2-4
+- Fix build on riscv64.
+
 * Sun Feb 18 2024 Yaakov Selkowitz <yselkowi@redhat.com> - 1:4.2.2-3
 - Install more devel headers
 
